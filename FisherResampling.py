@@ -30,6 +30,9 @@ class FisherResamplingTest:
         if self.indexNormed > 0.5:
             self.indexNormed = abs(self.indexNormed-1)
         
+        if self.indexNormed == 0.0:
+            self.indexNormed = 1.0/self.resampleN
+
         self.pValue = self.indexNormed*2 # because this is a two sided test
 
         return self.pValue
@@ -53,7 +56,7 @@ class FisherResamplingTest:
             return self.calculateTest_medianDifferences(dataA,dataB)
         
         elif self.func == 'meanDiff':
-            return self.calculateTest_medanDifferences(dataA,dataB)
+            return self.calculateTest_meanDifferences(dataA,dataB)
         
         else:
             raise ValueError(f'FisherResamplingTest: calculateTest: the testType {self.func} is not implemented')
@@ -66,14 +69,3 @@ class FisherResamplingTest:
         return np.mean(np.array(dataA)) - np.mean(np.array(dataB))
 
 
-
-
-
-dataSetA = [1,223,237,3.56,.2500,4,.365,304]
-dataSetB = [12,22,33,66,221,147,339,21,6,34.59]
-frt = FisherResamplingTest(dataSetA,dataSetB,'medianDiff')
-frt.main()
-
-
-#df = pd.read_hdf('/home/bgeurten/PyProjects/dallas-dlc-seperate-multi-animal-analysis/BjoernDataMedianCILongInd4BoxPlotBest.h5',key='df')
-#print(df)

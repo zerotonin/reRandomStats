@@ -2,7 +2,7 @@ import random
 from itertools import combinations
 
 class getNofK:
-    def __init__(self,dataSetA,dataSetB,combinationN, mode='resampling', maxLenPossible4Perms=20,resamplingN = 20000):
+    def __init__(self,dataSetA,dataSetB,combinationN, mode='resampling', maxLenPossible4Perms=20,resamplingN = 50000):
         self.dataSetA = list(dataSetA)
         self.dataSetB = list(dataSetB)
         self.combinationN = combinationN
@@ -48,7 +48,7 @@ class getNofK:
         while (len(combinations) < self.resamplingN) and not desperation :
             combinations.add(tuple(sorted(random.sample(allIndiceList,self.shortLen))))
             tries += 1
-            if tries > self.combinationsN*2:
+            if tries > self.combinationN*2:
                 desperation = True
                 print(f'getNofK: getRandomCombinations: Could not produce more than {len(combinations)} in {tries} tries. So I use those ')
         return [tuple(x) for x in combinations]
