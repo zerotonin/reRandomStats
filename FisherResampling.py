@@ -7,14 +7,23 @@ class FisherResamplingTest:
         self.dataA = dataA
         self.dataB = dataB
         self.func  = func
-        self.nOk   = getNofK(dataA,dataB,'all')
+
+
+
+    def getShuffeldIndices(self):
+        self.nOk   = getNofK(self.dataA,self.dataB,'all')
         self.nOk.main() 
         self.resampleN = self.nOk.combinationN
 
     
     def main(self):
+        # do the shuffeling
+        self.getShuffeldIndices()
+        # get the original difference
         self.originalTestResult = self.calculateTest(self.dataA,self.dataB)
+        # calculate the shuffeld results
         self.shuffeldResults = sorted(self.bootStrapper()) # we sort to find the original in the next step
+        # find the original result and normalise to the number of results we produced
         self.indexOrigInShuffeld = self.getIndexOfTheMemberWithClosestsValue(self.shuffeldResults,self.originalTestResult)
         self.indexNormed = self.indexOrigInShuffeld/self.resampleN
         # the resulting bootstrapped distribution is parametric and therefore it does not matter if we are 0->1 or 1<-0
