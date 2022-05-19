@@ -46,7 +46,6 @@ class FisherResamplingTest:
         for i in range(self.resampleN):
             dataShuffleA, dataShuffelB = self.nOk.getShuffeldSet(i)
             result.append(self.calculateTest(dataShuffleA,dataShuffelB))
-        
         return result
 
     
