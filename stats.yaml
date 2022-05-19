@@ -11,6 +11,8 @@ dependencies:
   - pandas
   - numpy
   - scipy
+  - openpyxl
+  - seaborn
   - tqdm
   - pip:
       - matplotlib
