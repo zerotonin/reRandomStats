@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
+import scipy.stats as stats
 from itertools import combinations
 from FisherResampling import FisherResamplingTest
 import statsmodels.api as sm
+from tqdm import tqdm
 
 class multiGroupTest:
 
@@ -76,7 +78,7 @@ class multiGroupTest:
         # get all dataSet combinations
         pValues = list()
         self.testObj = self.chooseTest()
-        for groupIndices in self.groupCombis:
+        for groupIndices in tqdm(self.groupCombis,'testing group combinations'):
             self.testObj.dataA = self.groupedData[groupIndices[0]]
             self.testObj.dataB = self.groupedData[groupIndices[1]]
             pVal = self.testObj.main()
@@ -88,5 +90,7 @@ class multiGroupTest:
 
         if testFamily == 'Fisher':
             return FisherResamplingTest([],[], specificTest)
+        #elif testFamily == 'MannWhitneyU':
+        #    return stats.mannwhitneyu([],[])
         else:
             raise ValueError(f'multiTestAnalysis: chooseTest: the test family {testFamily} is not implemented')
