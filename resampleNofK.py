@@ -2,7 +2,7 @@ import random
 from itertools import combinations
 
 class getNofK:
-    def __init__(self,dataSetA,dataSetB,combinationN, mode='resampling', maxLenPossible4Perms=20,resamplingN = 50000):
+    def __init__(self,dataSetA,dataSetB,combinationN, mode='resampling', maxLenPossible4Perms=12,resamplingN = 50000):
         self.dataSetA = list(dataSetA)
         self.dataSetB = list(dataSetB)
         self.combinationN = combinationN
