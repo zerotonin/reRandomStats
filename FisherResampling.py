@@ -3,17 +3,29 @@ from resampleNofK import  getNofK
 
 class FisherResamplingTest:
 
-    def __init__(self,dataA,dataB,func):
+    def __init__(self, dataA, dataB, func):
+        """
+        Initializes the class with two data sets and a function to be used for comparison.
+
+        Args:
+            dataA (list): the first data set for comparison
+            dataB (list): the second data set for comparison
+            func (function): the function to be used for comparison of the data sets
+        """
         self.dataA = dataA
         self.dataB = dataB
         self.func  = func
 
-
-
-    def getShuffeldIndices(self):
-        self.nOk   = getNofK(self.dataA,self.dataB,'all')
-        self.nOk.main() 
-        self.resampleN = self.nOk.combinationN
+    def get_shuffled_indices(self):
+        """
+        This function generates shuffled indices for both data sets A and B. It uses the getNofK function to 
+        calculate the number of elements in the combined data set and the number of elements in each of the 
+        original data sets.
+        """
+        # get the number of elements in the combined data set and the number of elements in each of the original data sets
+        self.n_of_k = getNofK(self.dataA, self.dataB, 'all')
+        self.n_of_k.main() 
+        self.resampleN = self.n_of_k.combinationN
 
     
     def main(self):
@@ -44,7 +56,7 @@ class FisherResamplingTest:
     def bootStrapper(self):
         result = list()
         for i in range(self.resampleN):
-            dataShuffleA, dataShuffelB = self.nOk.getShuffeldSet(i)
+            dataShuffleA, dataShuffelB = self.n_of_k.getShuffeldSet(i)
             result.append(self.calculateTest(dataShuffleA,dataShuffelB))
         return result
 
