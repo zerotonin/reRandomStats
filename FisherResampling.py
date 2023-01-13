@@ -1,5 +1,5 @@
 import numpy as np
-from resampleNofK import  getNofK
+from resampleNofK import getNofK
 
 class FisherResamplingTest:
 
@@ -59,33 +59,76 @@ class FisherResamplingTest:
         return self.p_value
 
 
-    def getIndexOfTheMemberWithClosestsValue(self,a_list,value2match): 
-        return min(range(len(a_list)), key=lambda i: abs(a_list[i]-value2match))
+    def get_index_of_closest_value(self, values_list, value_to_match):
+        """
+        This function takes a list of values and a target value, and returns the index of the element in the list that is closest to the target value.
+        """
+        return min(range(len(values_list)), key=lambda i: abs(values_list[i]-value_to_match))
 
-    def bootStrapper(self):
-        result = list()
+    def bootstrap_resampling(self):
+        """
+        This function performs a bootstrap resampling of the data sets provided in the class initialization.
+        It shuffles the data sets and calculates the test statistic for the shuffled data sets.
+        It returns a list of test statistics for the resampled data sets.
+        """
+        resampled_results = []
         for i in range(self.resampleN):
-            dataShuffleA, dataShuffelB = self.n_of_k.getShuffeldSet(i)
-            result.append(self.calculateTest(dataShuffleA,dataShuffelB))
-        return result
+            shuffled_data_set_a, shuffled_data_set_b = self.n_of_k.get_shuffled_set(i)
+            resampled_results.append(self.calculate_test(shuffled_data_set_a, shuffled_data_set_b))
+        return resampled_results
+
 
     
-    def calculateTest(self,dataA,dataB):
-        
+    def caclulate_test(self, dataA, dataB):
+        """
+        This function is used to calculate the test statistic for the two data sets. The test statistic is determined by the value of the func attribute, which can be either 'medianDiff' or 'meanDiff'.
+        Args:
+            dataA (list): The first data set to be compared
+            dataB (list): The second data set to be compared
+
+        Returns:
+            float: The calculated test statistic
+
+        Raises:
+            ValueError: If the value of the `func` attribute is not 'medianDiff' or 'meanDiff'
+        """
         if self.func == 'medianDiff':
-            return self.calculateTest_medianDifferences(dataA,dataB)
-        
+            return self.calculateTest_medianDifferences(dataA, dataB)
         elif self.func == 'meanDiff':
-            return self.calculateTest_meanDifferences(dataA,dataB)
-        
+            return self.calculateTest_meanDifferences(dataA, dataB)
         else:
             raise ValueError(f'FisherResamplingTest: calculateTest: the testType {self.func} is not implemented')
 
     
     def calculateTest_medianDifferences(self,dataA,dataB):
+        """
+        This function calculates the test statistic for the two data sets as the difference in medians.
+
+        Copy code
+        Args:
+            dataA (list): The first data set to be compared
+            dataB (list): The second data set to be compared
+
+        Returns:
+            float: The calculated test statistic
+        """
         return np.median(np.array(dataA)) - np.median(np.array(dataB))
 
     def calculateTest_meanDifferences(self,dataA,dataB):
+        """
+        This function calculates the test statistic for the two data sets as the difference in means.
+
+        Copy code
+        Args:
+            dataA (list): The first data set to be compared
+            dataB (list): The second data set to be compared
+
+        Returns:
+            float: The calculated test statistic
+        """
         return np.mean(np.array(dataA)) - np.mean(np.array(dataB))
+
+
+
 
 
