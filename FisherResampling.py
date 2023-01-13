@@ -5,7 +5,7 @@ class FisherResamplingTest:
 
     def __init__(self, dataA, dataB, func):
         """
-        Initializes the class with two data sets and a function to be used for comparison.
+            This class performs resampling statistics using the method of Ronald Fisher to compare two data sets.
 
         Args:
             dataA (list): the first data set for comparison
@@ -29,25 +29,34 @@ class FisherResamplingTest:
 
     
     def main(self):
-        # do the shuffeling
-        self.getShuffeldIndices()
-        # get the original difference
-        self.originalTestResult = self.calculateTest(self.dataA,self.dataB)
-        # calculate the shuffeld results
-        self.shuffeldResults = sorted(self.bootStrapper()) # we sort to find the original in the next step
-        # find the original result and normalise to the number of results we produced
-        self.indexOrigInShuffeld = self.getIndexOfTheMemberWithClosestsValue(self.shuffeldResults,self.originalTestResult)
-        self.indexNormed = self.indexOrigInShuffeld/self.resampleN
-        # the resulting bootstrapped distribution is parametric and therefore it does not matter if we are 0->1 or 1<-0
-        if self.indexNormed > 0.5:
-            self.indexNormed = abs(self.indexNormed-1)
+        """
+        Performs a resampling test of Ronald Fisher to compare two data sets. 
         
-        if self.indexNormed == 0.0:
-            self.indexNormed = 1.0/self.resampleN
-
-        self.pValue = self.indexNormed*2 # because this is a two sided test
-
-        return self.pValue
+        The method first gets shuffled indices of the data sets by calling the `get_shuffled_indices()` method. 
+        Then it calculates the original difference between the two data sets by calling the `calculate_test()` method. 
+        Next, it calculates the shuffled results by calling the `boot_strapper()` method and sorts the results. 
+        It finds the original result in the shuffled results and normalizes it to the number of results produced. 
+        Finally, it calculates the p-value and returns it.
+        
+        Returns:
+            float: The p-value of the resampling test.
+        """
+        # Get shuffled indices of the data sets
+        self.get_shuffled_indices()
+        # Get the original difference between the data sets
+        self.original_test_result = self.calculate_test(self.dataA, self.dataB)
+        # Calculate shuffled results
+        self.shuffled_results = sorted(self.boot_strapper())
+        # Find original result in shuffled results and normalize to the number of results produced
+        self.index_of_original_in_shuffled = self.get_index_of_member_with_closest_value(self.shuffled_results, self.original_test_result)
+        self.index_normalized = self.index_of_original_in_shuffled / self.resample_n
+        # Calculate the p-value
+        if self.index_normalized > 0.5:
+            self.index_normalized = abs(self.index_normalized - 1)
+        if self.index_normalized == 0.0:
+            self.index_normalized = 1.0 / self.resample_n
+        self.p_value = self.index_normalized * 2
+        return self.p_value
 
 
     def getIndexOfTheMemberWithClosestsValue(self,a_list,value2match): 
