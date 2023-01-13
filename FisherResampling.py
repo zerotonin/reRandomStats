@@ -79,7 +79,7 @@ class FisherResamplingTest:
 
 
     
-    def caclulate_test(self, dataA, dataB):
+    def calculate_test(self, dataA, dataB):
         """
         This function is used to calculate the test statistic for the two data sets. The test statistic is determined by the value of the func attribute, which can be either 'medianDiff' or 'meanDiff'.
         Args:

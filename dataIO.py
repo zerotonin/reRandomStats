@@ -95,6 +95,6 @@ class DataIO:
 
 
 
-x = DataIO()  
-print(x.wide_table_csv_to_long_table("/home/bgeurten/ownCloud/Anne_Stats/SEM_SEL_Development.csv" ))  
+#x = DataIO()  
+#print(x.wide_table_csv_to_long_table("/home/bgeurten/ownCloud/Anne_Stats/SEM_SEL_Development.csv" ))  
 

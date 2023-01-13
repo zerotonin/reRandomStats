@@ -77,7 +77,7 @@ class multiGroupTest:
     def runTests(self):
         # get all dataSet combinations
         pValues = list()
-        self.testObj = self.chooseTest()
+        self.testObj = self.choose_test()
         for groupIndices in tqdm(self.groupCombis,'testing group combinations'):
             self.testObj.dataA = self.groupedData[groupIndices[0]]
             self.testObj.dataB = self.groupedData[groupIndices[1]]
