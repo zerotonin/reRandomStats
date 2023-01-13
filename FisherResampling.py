@@ -25,7 +25,7 @@ class FisherResamplingTest:
         # get the number of elements in the combined data set and the number of elements in each of the original data sets
         self.n_of_k = getNofK(self.dataA, self.dataB, 'all')
         self.n_of_k.main() 
-        self.resampleN = self.n_of_k.combinationN
+        self.resample_n = self.n_of_k.combinationN
 
     
     def main(self):
@@ -46,9 +46,9 @@ class FisherResamplingTest:
         # Get the original difference between the data sets
         self.original_test_result = self.calculate_test(self.dataA, self.dataB)
         # Calculate shuffled results
-        self.shuffled_results = sorted(self.boot_strapper())
+        self.shuffled_results = sorted(self.bootstrap_resampling())
         # Find original result in shuffled results and normalize to the number of results produced
-        self.index_of_original_in_shuffled = self.get_index_of_member_with_closest_value(self.shuffled_results, self.original_test_result)
+        self.index_of_original_in_shuffled = self.get_index_of_closest_value(self.shuffled_results, self.original_test_result)
         self.index_normalized = self.index_of_original_in_shuffled / self.resample_n
         # Calculate the p-value
         if self.index_normalized > 0.5:
@@ -72,8 +72,8 @@ class FisherResamplingTest:
         It returns a list of test statistics for the resampled data sets.
         """
         resampled_results = []
-        for i in range(self.resampleN):
-            shuffled_data_set_a, shuffled_data_set_b = self.n_of_k.get_shuffled_set(i)
+        for i in range(self.resample_n):
+            shuffled_data_set_a, shuffled_data_set_b = self.n_of_k.getShuffeldSet(i)
             resampled_results.append(self.calculate_test(shuffled_data_set_a, shuffled_data_set_b))
         return resampled_results
 
