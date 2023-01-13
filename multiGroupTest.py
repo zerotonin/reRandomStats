@@ -84,13 +84,39 @@ class multiGroupTest:
             pVal = self.testObj.main()
             pValues.append(pVal)
         return pValues
-    
-    def chooseTest(self):
-        testFamily,specificTest = self.test.split(':')
 
-        if testFamily == 'Fisher':
-            return FisherResamplingTest([],[], specificTest)
-        #elif testFamily == 'MannWhitneyU':
-        #    return stats.mannwhitneyu([],[])
+    def choose_test(self):
+        """
+        This function chooses a test to use based on the test family and specific test specified.
+        It splits the test string into test family and specific test, then checks if the test family is 'Fisher' or ...
+        If the test family is 'Fisher', it returns a FisherResamplingTest object with specific test.
+        Else, it raises a ValueError if the test family is not implemented
+        
+        Args:
+        self: The instance of the class
+        
+        Returns:
+        A test object of the following options
+        FisherResamplingTest: A Roland Fisher resampling test object from FisherResamplin.py
+        
+        Raises:
+        ValueError: if the test family is not implemented
+        
+        Example:
+        
+        test_instance = MyTestClass()
+        test_instance.test = 'Fisher:test1'
+        chosen_test = test_instance.choose_test()
+        print(chosen_test) # FisherResamplingTest([],[], 'test1')
+        """
+        # split the test string into test family and specific test
+        test_family, specific_test = self.test.split(':')
+
+        # if the test family is 'Fisher', return a FisherResamplingTest object with specific test
+        if test_family == 'Fisher':
+            return FisherResamplingTest([],[], specific_test)
+        # elif test_family == 'MannWhitneyU':
+        #     return stats.mannwhitneyu([],[])
+        # if the test family is not implemented, raise a ValueError
         else:
-            raise ValueError(f'multiTestAnalysis: chooseTest: the test family {testFamily} is not implemented')
+            raise ValueError(f'multiTestAnalysis: chooseTest: the test family {test_family} is not implemented')
