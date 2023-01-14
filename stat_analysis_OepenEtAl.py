@@ -1,5 +1,10 @@
 import multiGroupTest,dataIO
 '''
+Script:    stat_analysis_OepenEtAl.py
+Written by: Bart R.H. Geurten
+Date:      15. Jan 2023
+Purpose:   Statistical analysis of the results of the Open et al. 2023 article.
+
 This script is used for statistical analysis of the results of the Open et al. 2023 article. 
 It uses the `multiGroupTest` class to perform multiple statistical tests on the data, and the 
 `dataIO` class to read and manipulate the data. 
