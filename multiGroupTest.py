@@ -68,19 +68,31 @@ class multiGroupTest:
     def createOutput(self):
         firstDataSet = [self.groupNames[x[0]] for x in self.groupCombis]
         secondDataSet = [self.groupNames[x[1]] for x in self.groupCombis]
-        return pd.DataFrame({'groupA':firstDataSet,'groupB':secondDataSet,'p value':self.pValues,'p value corrected':self.pValsCorr,'h':self.sig})
+        sig_level = [self.get_significance_level(p) for p in self.pValsCorr]
+        return pd.DataFrame({'groupA':firstDataSet,'groupB':secondDataSet,'p value':self.pValues,'p value corrected':self.pValsCorr,'h':self.sig,'sig. level':sig_level})
 
     def getCombinations(self):
         return list(combinations(range(len(self.groupNames)),2))
 
     
+    def get_significance_level(self,p_value):
+
+        if p_value > 0.05:
+            return 'n.s.'
+        if p_value >0.01:
+            return '*'
+        if p_value > 0.001:
+            return '**'
+        if p_value < 0.001:
+            return '***'
+
     def runTests(self):
         # get all dataSet combinations
         pValues = list()
         self.testObj = self.choose_test()
         for groupIndices in tqdm(self.groupCombis,'testing group combinations'):
-            self.testObj.dataA = self.groupedData[groupIndices[0]]
-            self.testObj.dataB = self.groupedData[groupIndices[1]]
+            self.testObj.data_a = self.groupedData[groupIndices[0]]
+            self.testObj.data_b = self.groupedData[groupIndices[1]]
             pVal = self.testObj.main()
             pValues.append(pVal)
         return pValues
