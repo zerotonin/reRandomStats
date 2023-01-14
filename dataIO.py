@@ -90,6 +90,36 @@ class DataIO:
         id_str = self.split_csv_headers()
         id_list, value_list = self.wide_table_to_value_id_list(data, id_str)
         return (id_list, value_list)
+    
+    def get_subset_of_data(self,id_list,value_list,id_subset):
+        """
+        Given two lists of ids and values, and a subset of ids, the function returns two lists of ids and values, 
+        containing only the ids and values that are in the subset.
+
+        Args:
+            id_list (list): A list of ids.
+            value_list (list): A list of values corresponding to the ids in `id_list`.
+            id_subset (list): A subset of ids.
+
+        Returns:
+            tuple: A tuple containing two lists of ids and values that are in the subset.
+
+        Example:
+            > id_list = ["a","b","b","c","d"]
+            > value_list = [1,2,3,4,5]
+            > id_subset = ["a","d"]
+            > get_subset_of_data(id_list,value_list,id_subset)
+            (["a", "d"], [1, 5])
+        """
+        id_short_list = list()
+        value_short_list = list()
+
+        for i in range(len(id_list)):
+            if id_list[i] in id_subset:
+                id_short_list.append(id_list[i])
+                value_short_list.append(value_list[i])
+        return (id_short_list,value_short_list)
+
 
 
 
