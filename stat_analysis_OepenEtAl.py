@@ -48,8 +48,8 @@ for i in range(len(file_path)):
     # Get the subset of data specified in the data_sub sets list using the get_subset_of_data method
     id_subset,data_subset=dio.get_subset_of_data(id_list,data,subset)
     # Create a multiGroupTest object and set the data, group and test parameters
-    x = multiGroupTest.multiGroupTest(data_subset,id_subset,'Fisher:medianDiff')
+    mgt = multiGroupTest.multiGroupTest(data_subset,id_subset,'Fisher:medianDiff')
     # Run the main method of the multiGroupTest object
-    result_df = x.main()
+    result_df = mgt.main()
     # Save the result to a csv file
     result_df.to_csv(save_file)
