@@ -87,3 +87,15 @@ x = multiGroupTest(list(df2['power spectral density']),idList,'Fisher:medianDiff
 res = x.main()
 
 res.to_csv('/media/gwdg-backup/BackUp/Bjoern/statsMedianDiff_maleDirection_FDR_BH.csv')
+#%%
+import multiGroupTest,dataIO
+
+dio = dataIO.DataIO()  
+id_list,data=dio.wide_table_csv_to_long_table("/home/bgeurten/ownCloud/Anne_Stats/SEM_SEL_Development.csv")
+
+
+id_subset,data_subset=dio.get_subset_of_data(id_list,data,set(['12h', '18h', 'Adult', 'L3']))
+x = multiGroupTest.multiGroupTest(data_subset,id_subset,'Fisher:meanDiff')
+res = x.main()
+res.to_csv('/home/bgeurten/ownCloud/Anne_Stats/SEM_SEL_Development_medianDiff_FDR_BH.csv')
+
