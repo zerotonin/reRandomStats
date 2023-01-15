@@ -23,12 +23,12 @@ All p-values were later corrected with a false discovery rate detection routine 
 
 
 # file_path contains a list of file paths to csv files containing the original data
-file_path = ['/home/bgeurten/ownCloud/Anne_Stats/PAL_Development.csv',
-             '/home/bgeurten/ownCloud/Anne_Stats/PAM_Development.csv',
-             '/home/bgeurten/ownCloud/Anne_Stats/PPL1_Development.csv',
-             '/home/bgeurten/ownCloud/Anne_Stats/PPL2_Development.csv',
-             '/home/bgeurten/ownCloud/Anne_Stats/PPM_Development.csv',
-             '/home/bgeurten/ownCloud/Anne_Stats/SEM_SEL_Development.csv']
+file_path = ['./Data/PAL_Development.csv',
+             './Data/PAM_Development.csv',
+             './Data/PPL1_Development.csv',
+             './Data/PPL2_Development.csv',
+             './Data/PPM_Development.csv',
+             './Data/SEM_SEL_Development.csv']
 
 # data_subsets contains a list of sets of elements that are used to select specific subsets of the data
 standard_set = set(['12h', '18h', 'Adult', 'L3'])
