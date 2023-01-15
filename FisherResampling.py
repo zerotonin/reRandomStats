@@ -60,11 +60,34 @@ class FisherResamplingTest:
         self.p_value = self.index_normalized * 2
         return self.p_value
 
+
     def get_index_of_closest_value(self, values_list, value_to_match):
         """
-        This function takes a list of values and a target value, and returns the index of the element in the list that is closest to the target value.
+        This function takes a list of values and a target value, and returns the index of the element in the list 
+        that is closest to the target value.
+        
+        Args:
+            values_list (list): A list of numeric values to be searched
+            value_to_match (float): The target value for which closest index is to be searched
+        Returns:
+            int: The index of the element in the list that is closest to the target value.
+
+        IMPORTANT: 
+        Easier solutions to this problem exist (see commented line) but do not cover edge cases. 
+        If, for example, all values in samples a and b are identical, a minimum search on the result would falsely 
+        always return the first index. If multiple minima in the sorted list of bootstrapped results exist, 
+        the middle position for this combination should be used.
         """
-        return min(range(len(values_list)), key=lambda i: abs(values_list[i]-value_to_match))
+        #return min(range(len(values_list)), key=lambda i: abs(values_list[i]-value_to_match))
+        values_list = np.array(values_list) # Convert list to numpy array
+        values_list.sort() # Sort the array
+        abs_diff_to_original = np.array([ abs(value - value_to_match) for value  in values_list]) # Get the absolute difference between each element and target value
+        min_diff_to_original = np.min(abs_diff_to_original) # Get the minimum difference
+        min_indices = [index for index,value in enumerate(abs_diff_to_original) if value == min_diff_to_original] # Get the indices of the minimum difference
+        return np.median(min_indices) # Return the median of the indices
+        
+
+
 
     def bootstrap_resampling(self):
         """
@@ -133,5 +156,6 @@ class FisherResamplingTest:
 
 
 
-
+#tfr = FisherResamplingTest([0,0,0],[0,0,0,0],'medianDiff')
+#tfr.main()
 
