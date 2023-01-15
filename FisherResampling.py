@@ -1,6 +1,5 @@
 import numpy as np
 from resampleNofK import getNofK
-import random
 class FisherResamplingTest:
 
     def __init__(self, data_a, data_b, func):
