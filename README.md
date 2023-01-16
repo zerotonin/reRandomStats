@@ -23,6 +23,11 @@ These packages can be easily installed using pip:
 
     pip install numpy scipy pandas statsmodels
 
+or via conda:
+
+ install: conda env create -f reRandomStats.yaml 
+
+
 ## Usage
 
 To use the scripts in this repository, clone the repository and navigate to the appropriate branch for the journal article you are interested in. The scripts and data will be located in the corresponding folder.

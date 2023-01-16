@@ -1,7 +1,7 @@
-# stats.yaml 
+# reRandomStats.yaml 
 
-# install: conda env create -f stats.yaml 
-# update:  conda env update -f stats.yaml 
+# install: conda env create -f reRandomStats.yaml 
+# update:  conda env update -f reRandomStats.yaml 
 name: stats
 dependencies:
   - python=3.7
