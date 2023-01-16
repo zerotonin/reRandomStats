@@ -25,7 +25,7 @@ These packages can be easily installed using pip:
 
 or via conda:
 
- install: conda env create -f reRandomStats.yaml 
+    install: conda env create -f reRandomStats.yaml 
 
 
 ## Usage
