@@ -46,6 +46,7 @@ class getNofK:
             self.mode = 'combinations'
         else:
             self.mode = 'resampling'
+            self.resampling_n = combination_n
 
         if self.mode == 'combinations' and self.max_len_possible_4_perms < self.short_len:
             self.mode = 'resampling'
