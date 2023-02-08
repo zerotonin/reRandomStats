@@ -2,7 +2,7 @@ import numpy as np
 from resampleNofK import getNofK
 class FisherResamplingTest:
 
-    def __init__(self, data_a, data_b, func):
+    def __init__(self, data_a, data_b, func,combination_n):
         """
             This class performs resampling statistics using the method of Ronald Fisher to compare two data sets.
 
@@ -12,10 +12,12 @@ class FisherResamplingTest:
             func (function): the function to be used for comparison of the data sets
             max_n (int): the combined maximum length of both datasets, for which all n out of k pairings can be calculated. 
                          all n out of k are 9! combinations which are 362.880 pairtings. After this the system draws 100.000 pairings
+            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations
         """
         self.data_a = data_a
         self.data_b = data_b
         self.func  = func
+        self.combination_n = combination_n
 
     def get_shuffled_indices(self):
         """
@@ -25,7 +27,7 @@ class FisherResamplingTest:
         """
         # get the number of elements in the combined data set and the number of elements in each of the original data sets
      
-        self.n_of_k = getNofK(self.data_a, self.data_b, 'all')
+        self.n_of_k = getNofK(self.data_a, self.data_b, self.combination_n)
         self.n_of_k.main() 
         self.resample_n = self.n_of_k.combination_n
 

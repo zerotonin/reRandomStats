@@ -9,7 +9,7 @@ class multiGroupTest:
     A class for running multiple statistical tests on grouped data and applying multiple test correction.
     """
 
-    def __init__(self,data,group,test,correction_type='fdr_bh'):
+    def __init__(self,data,group,test,combination_n,correction_type='fdr_bh'):
         """
         Initialize a multiGroupTest object.
         
@@ -17,6 +17,7 @@ class multiGroupTest:
             data (list): A list of numerical values representing the data set to be tested.
             group (list): A list of strings representing the group names corresponding to each element of the data set.
             test (str): A string representing the statistical test to be used. The format should be test-family:test-name, e.g 'ttest:ind'
+            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations
             correction_type (str, optional): The method used for testing and adjustment of pvalues. Can be either the full name or initial letters. Default is 'fdr_bh'. Available methods are:
                 
                 'bonferroni' : one-step correction
@@ -43,6 +44,7 @@ class multiGroupTest:
         self.group = group
         self.test  = test
         self.correction_type = correction_type
+        self.combination_n  = combination_n 
     
 
     def rearrange_data(self):
@@ -179,7 +181,7 @@ class multiGroupTest:
 
         # if the test family is 'Fisher', return a FisherResamplingTest object with specific test
         if test_family == 'Fisher':
-            return FisherResamplingTest([],[], specific_test)
+            return FisherResamplingTest([],[], specific_test,self.combination_n)
         # elif test_family == 'MannWhitneyU':
         #     return stats.mannwhitneyu([],[])
         # if the test family is not implemented, raise a ValueError
