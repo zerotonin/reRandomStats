@@ -93,7 +93,7 @@ class getNofK:
         return list(combinations(range(self.combined_len), self.short_len))
 
 
-    def get_random_combinations(self):
+    def get_unique_random_combinations(self):
         """
         This function generates a set of n unique tuples, each containing k randomly selected indices from a list of length N.
         If the function is unable to generate n unique tuples after a certain number of tries, it will return the tuples generated so far.
@@ -113,6 +113,22 @@ class getNofK:
                 desperation = True
                 print(f'getNofK: get_random_combinations: Could not produce more than {len(combinations)} in {tries} tries. So I use those ')
         return [tuple(x) for x in combinations]
+    
+    def get_random_combinations(self):
+        """
+        This function generates a set of n tuples, each containing k randomly selected indices from a list of length N.
+        This function can create multiple identical combinations
+        
+        Returns:
+            list: A list of tuples containing k randomly selected indices from a list of length N.
+        """
+        combinations = list()
+        all_indice_list = list(range(self.combined_len))
+        while (len(combinations) < self.resampling_n):
+            # Add a tuple of k randomly selected indices to the set
+            combinations.append(tuple(sorted(random.sample(all_indice_list, self.short_len))))
+        return combinations
+
 
 
     def complement_indices(self):
@@ -136,8 +152,13 @@ class getNofK:
         """
         if self.mode == 'combinations':
             self.combinations = self.get_all_combinations()
-        if self.mode == 'resampling':
+        elif self.mode == 'resampling':
             self.combinations = self.get_random_combinations()
+        elif self.mode == 'resample_unique':
+            self.combinations = self.get_unique_random_combinations()
+        else:
+            raise ValueError(f'resampleNofK:main: self.mode unknown {self.mode}')
+        
         self.complement_indices()
         self.combination_n = len(self.combinations)
 
