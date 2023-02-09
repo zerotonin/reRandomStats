@@ -1,7 +1,0 @@
-,groupA,groupB,p value,p value corrected,h,sig. level
-0,L3,Adult,0.00023,0.00048,True,***
-1,L3,18h,0.00024,0.00048,True,***
-2,L3,12h,1e-05,6.000000000000001e-05,True,***
-3,Adult,18h,0.0011,0.00132,True,**
-4,Adult,12h,0.07078,0.07078,False,n.s.
-5,18h,12h,0.0007999999999999119,0.0011999999999998678,True,**
