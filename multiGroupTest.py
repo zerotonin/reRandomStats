@@ -1,6 +1,7 @@
 import pandas as pd
 from itertools import combinations
 from FisherResampling import FisherResamplingTest
+from FisherExact import FisherExactTest
 import statsmodels.api as sm
 from tqdm import tqdm
 
@@ -181,7 +182,10 @@ class multiGroupTest:
 
         # if the test family is 'Fisher', return a FisherResamplingTest object with specific test
         if test_family == 'Fisher':
-            return FisherResamplingTest([],[], specific_test,self.combination_n)
+            if specific_test == 'exact':
+                return FisherExactTest((),())
+            else:
+                return FisherResamplingTest([],[], specific_test,self.combination_n)
         # elif test_family == 'MannWhitneyU':
         #     return stats.mannwhitneyu([],[])
         # if the test family is not implemented, raise a ValueError
