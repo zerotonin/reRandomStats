@@ -11,8 +11,9 @@ class DataIO:
         Initialize the class and preallocate variables.
         """
         self.raw_data = None
+        self.german_csv = False
 
-    def read_csv(self, file_path):
+    def read_csv(self, file_path) :
         """
         Reads in a CSV file and saves it to the `raw_data` variable.
 
@@ -22,7 +23,10 @@ class DataIO:
         with open(file_path, 'r', encoding='utf-8-sig') as f:
             reader = csv.reader(f)
             # the replace is needed because German Excel uses ; instead of , to seperate. Thanks Bill!
-            self.raw_data = [row[0].replace(";",",") for row in reader]
+            if self.german_csv:
+                self.raw_data = [row[:].replace(";",",") for row in reader]
+            else:
+                self.raw_data = [row for row in reader]
 
     def make_square_np_matrix(self, values):
         """
@@ -34,9 +38,14 @@ class DataIO:
         Returns:
             numpy.ndarray: A square matrix with `np.nan` values for empty cells.
         """
-        nrows = len(values)
-        ncols = max([row.count(",") for row in values]) + 1
-        values = [row.split(",") for row in values]
+        if self.german_csv:
+            nrows = len(values)
+            ncols = max([row.count(",") for row in values]) + 1
+            values = [row.split(",") for row in values]
+        else:
+            nrows = len(values)
+            ncols = len(values[0])
+
         matrix = np.empty((nrows, ncols))
         matrix[:] = np.nan
         for i, row in enumerate(values):
@@ -52,7 +61,11 @@ class DataIO:
         Returns:
             list: A list of headers.
         """
-        return self.raw_data[0].split(",")
+        if self.german_csv:
+            return self.raw_data[0].split(",")
+        else:
+            return self.raw_data[0]
+        
 
     def wide_table_to_value_id_list(self, values, col_header):
         """
