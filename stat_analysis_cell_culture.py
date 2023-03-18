@@ -1,24 +1,24 @@
 import multiGroupTest,dataIO
+import matplotlib.pyplot as plt
+from binominal_stats import exact_CI
 '''
-Script:     stat_analysis_OepenEtAl.py
+Script: stat_analysis_GargEtAl_2023B.py
 Written by: Bart R.H. Geurten
-Date:       15. Jan 2023
-Purpose:    Statistical analysis of the results of the Open et al. 2023 article.
+Date: 18. Mar 2023
+Purpose: Statistical analysis of the immunohisto analysis cell cultures for the Garg et al. 2023B article.
 
-This script is used for statistical analysis of the results of the Open et al. 2023 article. 
-It uses the `multiGroupTest` class to perform multiple statistical tests on the data, and the 
-`dataIO` class to read and manipulate the data. 
+This script is used for the statistical analysis of the immunohisto analysis cell cultures in the Garg et al. 2023B article.
+It aims to test whether there is a difference in mitochondria presence between wildtype and mutant zebrafish. The analysis
+employs multiple chi-square tests, which are corrected with the Benjamini Hochberg False Discovery Rate (FDR).
 
-The `file_path` variable contains a list of file paths to the csv files containing the original data. 
-The `data_subsets` variable contains a list of sets of elements used to select specific subsets of the data.
+The multiGroupTest class is used to perform multiple statistical tests on the data, and the dataIO class is used to read
+and manipulate the data.
 
-The script iterates over the file paths, reads the data, selects the desired subset, 
-creates a `multiGroupTest` object, runs the statistical tests, and saves the results to a csv file. 
+The file_path variable contains a list of file paths to the csv files containing the original data. The script iterates over
+the file paths, reads the data, creates a multiGroupTest object, runs the statistical tests, and saves the results to a csv file.
 
-The statistical test used is a Ronald Fisher permutation test to test for differences in median of all 
-combinations of two counts. We opted for median differences as the original data are integer counts.
-In this case, all possible n out of k combinations of the datasets were calculated. 
-All p-values were later corrected with a false discovery rate detection routine from Benjamini and Hochberg.
+The statistical test used is a chi-square test to test for differences in the presence of mitochondria between wildtype and
+mutant zebrafish. All p-values are corrected with the Benjamini Hochberg FDR detection routine.
 '''
 
 
@@ -41,3 +41,5 @@ for i in range(len(file_path)):
     result_df = mgt.main()
     # Save the result to a csv file
     result_df.to_csv(save_file)
+
+
