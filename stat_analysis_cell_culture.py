@@ -1,6 +1,7 @@
 import multiGroupTest,dataIO
 import matplotlib.pyplot as plt
 from binominal_stats import exact_CI
+import numpy as np
 '''
 Script: stat_analysis_GargEtAl_2023B.py
 Written by: Bart R.H. Geurten
@@ -43,3 +44,42 @@ for i in range(len(file_path)):
     result_df.to_csv(save_file)
 
 
+temp = np.array([data[0:8],data[8::]])
+conf_int = list()
+for i in range(temp.shape[1]):
+    conf_int.append(exact_CI(temp[0,i],temp[1,i]))
+
+import matplotlib.pyplot as plt
+
+def plot_bar_with_error_bars(group1, group2, ci_lower1, ci_upper1, ci_lower2, ci_upper2, color1='teal', color2='orange',g_name1='wt',g_name2='mut'):
+    labels = ['1', '2', '3', '4']
+    x = range(len(labels))
+    width = 0.4
+
+    fig, ax = plt.subplots()
+    
+    # Calculate error bars for group 1
+    error_bars1 = [[group1[i] - ci_lower1[i] for i in range(len(group1))], [ci_upper1[i] - group1[i] for i in range(len(group1))]]
+    ax.bar([i - width/2 for i in x], group1, width, yerr=error_bars1, label=g_name1, color=color1)
+    
+    # Calculate error bars for group 2
+    error_bars2 = [[group2[i] - ci_lower2[i] for i in range(len(group2))], [ci_upper2[i] - group2[i] for i in range(len(group2))]]
+    ax.bar([i + width/2 for i in x], group2, width, yerr=error_bars2, label=g_name2, color=color2)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    plt.show()
+    return fig,ax
+
+
+fig,ax =plot_bar_with_error_bars([x['Proportion']for x in conf_int[0:4]], 
+                                 [x['Proportion']for x in conf_int[4::]], 
+                                 [x['Lower CI']for x in conf_int[0:4]], 
+                                 [x['Upper CI']for x in conf_int[0:4]], 
+                                 [x['Lower CI']for x in conf_int[4::]], 
+                                 [x['Upper CI']for x in conf_int[4::]])
+
+ax.set_xlabel('anatomical location')
+ax.set_ylabel('cell positive, in percent')
