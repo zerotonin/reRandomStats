@@ -1,24 +1,25 @@
 import multiGroupTest,dataIO
+import matplotlib.pyplot as plt
+from binominal_stats import exact_CI
+import numpy as np
 '''
-Script:     stat_analysis_OepenEtAl.py
+Script: stat_analysis_GargEtAl_2023B.py
 Written by: Bart R.H. Geurten
-Date:       15. Jan 2023
-Purpose:    Statistical analysis of the results of the Open et al. 2023 article.
+Date: 18. Mar 2023
+Purpose: Statistical analysis of the immunohisto analysis cell cultures for the Garg et al. 2023B article.
 
-This script is used for statistical analysis of the results of the Open et al. 2023 article. 
-It uses the `multiGroupTest` class to perform multiple statistical tests on the data, and the 
-`dataIO` class to read and manipulate the data. 
+This script is used for the statistical analysis of the immunohisto analysis cell cultures in the Garg et al. 2023B article.
+It aims to test whether there is a difference in mitochondria presence between wildtype and mutant zebrafish. The analysis
+employs multiple chi-square tests, which are corrected with the Benjamini Hochberg False Discovery Rate (FDR).
 
-The `file_path` variable contains a list of file paths to the csv files containing the original data. 
-The `data_subsets` variable contains a list of sets of elements used to select specific subsets of the data.
+The multiGroupTest class is used to perform multiple statistical tests on the data, and the dataIO class is used to read
+and manipulate the data.
 
-The script iterates over the file paths, reads the data, selects the desired subset, 
-creates a `multiGroupTest` object, runs the statistical tests, and saves the results to a csv file. 
+The file_path variable contains a list of file paths to the csv files containing the original data. The script iterates over
+the file paths, reads the data, creates a multiGroupTest object, runs the statistical tests, and saves the results to a csv file.
 
-The statistical test used is a Ronald Fisher permutation test to test for differences in median of all 
-combinations of two counts. We opted for median differences as the original data are integer counts.
-In this case, all possible n out of k combinations of the datasets were calculated. 
-All p-values were later corrected with a false discovery rate detection routine from Benjamini and Hochberg.
+The statistical test used is a chi-square test to test for differences in the presence of mitochondria between wildtype and
+mutant zebrafish. All p-values are corrected with the Benjamini Hochberg FDR detection routine.
 '''
 
 
@@ -41,3 +42,44 @@ for i in range(len(file_path)):
     result_df = mgt.main()
     # Save the result to a csv file
     result_df.to_csv(save_file)
+
+
+temp = np.array([data[0:8],data[8::]])
+conf_int = list()
+for i in range(temp.shape[1]):
+    conf_int.append(exact_CI(temp[0,i],temp[1,i]))
+
+import matplotlib.pyplot as plt
+
+def plot_bar_with_error_bars(group1, group2, ci_lower1, ci_upper1, ci_lower2, ci_upper2, color1='teal', color2='orange',g_name1='wt',g_name2='mut'):
+    labels = ['1', '2', '3', '4']
+    x = range(len(labels))
+    width = 0.4
+
+    fig, ax = plt.subplots()
+    
+    # Calculate error bars for group 1
+    error_bars1 = [[group1[i] - ci_lower1[i] for i in range(len(group1))], [ci_upper1[i] - group1[i] for i in range(len(group1))]]
+    ax.bar([i - width/2 for i in x], group1, width, yerr=error_bars1, label=g_name1, color=color1)
+    
+    # Calculate error bars for group 2
+    error_bars2 = [[group2[i] - ci_lower2[i] for i in range(len(group2))], [ci_upper2[i] - group2[i] for i in range(len(group2))]]
+    ax.bar([i + width/2 for i in x], group2, width, yerr=error_bars2, label=g_name2, color=color2)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    plt.show()
+    return fig,ax
+
+
+fig,ax =plot_bar_with_error_bars([x['Proportion']for x in conf_int[0:4]], 
+                                 [x['Proportion']for x in conf_int[4::]], 
+                                 [x['Lower CI']for x in conf_int[0:4]], 
+                                 [x['Upper CI']for x in conf_int[0:4]], 
+                                 [x['Lower CI']for x in conf_int[4::]], 
+                                 [x['Upper CI']for x in conf_int[4::]])
+
+ax.set_xlabel('anatomical location')
+ax.set_ylabel('cell positive, in percent')
