@@ -1,6 +1,6 @@
 from scipy.stats import beta, binom_test
 
-class BinomialStats:
+class binominal_stats:
     def __init__(self, heads, total_flips, alpha=0.05, alternative='two-sided'):
         self.heads = heads
         self.total_flips = total_flips
