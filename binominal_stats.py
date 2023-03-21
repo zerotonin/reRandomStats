@@ -1,5 +1,11 @@
 from scipy.stats import beta
+import scipy.stats as stats
 
+def binomial_test(heads, total_flips, alpha=0.05,alternative='two-sided'):
+    # Null hypothesis: the coin is fair (p = 0.5)
+    return stats.binom_test(heads, total_flips, p=0.5, alternative=alternative)
+    
+    
 # Calculate CI and p-Value for binominal distribution
 def exact_CI(x, N, alpha=0.95):
     """
