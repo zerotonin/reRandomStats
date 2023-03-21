@@ -1,41 +1,49 @@
-from scipy.stats import beta
-import scipy.stats as stats
+from scipy.stats import beta, binom_test
 
-def binomial_test(heads, total_flips, alpha=0.05,alternative='two-sided'):
-    # Null hypothesis: the coin is fair (p = 0.5)
-    return stats.binom_test(heads, total_flips, p=0.5, alternative=alternative)
-    
-    
-# Calculate CI and p-Value for binominal distribution
-def exact_CI(x, N, alpha=0.95):
-    """
-    Calculate the exact confidence interval of a proportion 
-    where there is a wide range in the sample size or the proportion.
+class BinomialStats:
+    def __init__(self, heads, total_flips, alpha=0.05, alternative='two-sided'):
+        self.heads = heads
+        self.total_flips = total_flips
+        self.alpha = alpha
+        self.alternative = alternative
 
-    This method avoids the assumption that data are normally distributed. The sample size
-    and proportion are desctibed by a beta distribution.
+    def binomial_test(self):
+        """
+        Perform a binomial test to check if a coin is fair.
 
-    Parameters
-    ----------
+        Args:
+            heads (int): Number of heads observed.
+            total_flips (int): Total number of coin flips.
+            alpha (float, optional): Significance level. Defaults to 0.05.
+            alternative (str, optional): Type of test to perform ('two-sided', 'greater', or 'less'). Defaults to 'two-sided'.
 
-    x: the number of cases from which the proportion is calulated as a positive integer.
+        Returns:
+            float: p-value of the test.
+        """
+        # Null hypothesis: the coin is fair (p = 0.5)
+        return binom_test(self.heads, self.total_flips, p=0.5, alternative=self.alternative)
 
-    N: the sample size as a positive integer.
+    def exact_CI(self):
+        """
+        Calculate the exact confidence interval of a proportion where there is a wide range in the sample size or the proportion.
 
-    alpha : set at 0.95 for 95% confidence intervals.
+        This method avoids the assumption that data are normally distributed. The sample size and proportion are described by a beta distribution.
 
-    Returns
-    -------
-    The proportion with the lower and upper confidence intervals as a dict.
+        Args:
+            heads (int): Number of heads observed.
+            total_flips (int): Total number of coin flips.
+            alpha (float, optional): Confidence level. Defaults to 0.95.
 
-    """
-    x = float(x)
-    N = float(N)
-    p = round((x/N)*100,2)
+        Returns:
+            dict: The proportion with the lower and upper confidence intervals.
+        """
+        x = float(self.heads)
+        N = float(self.total_flips)
+        p = round((x/N)*100, 2)
 
-    intervals = [round(i,4)*100 for i in beta.interval(alpha,x,N-x+1)]
-    intervals.insert(0,p)
+        intervals = [round(i, 4)*100 for i in beta.interval(self.alpha, x, N-x+1)]
+        intervals.insert(0, p)
 
-    result = {'Proportion': intervals[0], 'Lower CI': intervals[1], 'Upper CI': intervals[2]}
+        result = {'Proportion': intervals[0], 'Lower CI': intervals[1], 'Upper CI': intervals[2]}
 
-    return result
+        return result
