@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from binominal_stats import exact_CI
+import binominal_stats
 
 #%% Load and clean database
 df = pd.read_csv("./Data/student_quiz.csv")
