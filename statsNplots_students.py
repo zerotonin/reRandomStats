@@ -37,7 +37,9 @@ df = df.rename(columns={"Age":"age","Gender":"sex",
                         "1*2*3*4*5*6*7*8*9 R2 // 9*8*7*6*5*4*3*2*1R1":"approximated result",
                         "Which words are more often in the english language?":"k_position",
                         "In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ ing ": "letter_ing",
-                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_n__"})
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_n__",
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l y': "letter_ly",
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",})
 
 # getting the proper groupnames for micorframing
 df["microframingID"] = ""
@@ -48,6 +50,10 @@ df.loc[df["Group"] == 2, "microframingID"] = "1->9"
 
 df = replace_letter_test_questions(df,"letter_ing") 
 df = replace_letter_test_questions(df,"letter_n__") 
+df = replace_letter_test_questions(df,"letter_ly") 
+df = replace_letter_test_questions(df,"letter_l_") 
+
+
 
 
 #%% Age Sex Overview
@@ -88,3 +94,23 @@ ax.set_title(f"p value: {p_value}")
 plt.show()
 
 #%%  ____n__ vs _____ing
+
+# make df only with letter questions
+boxplot_df = df[["letter_ing","letter_n__","letter_ly","letter_l_"]]
+# Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
+boxplot_df = boxplot_df.melt(var_name='question', value_name='word_count')
+# Remove rows with missing values in the 'word_count' column
+boxplot_df = boxplot_df.dropna(subset=['word_count'])
+# Reset the index
+boxplot_df.reset_index(drop=True, inplace=True)
+
+# Load a colorblind-friendly palette
+palette = sns.color_palette("colorblind")
+
+sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
+            notch=True, showcaps=False,
+            flierprops={"marker": "x"}, dodge=False,
+            palette=palette)
+plt.show()
+
+
