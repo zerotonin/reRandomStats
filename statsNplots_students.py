@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-import binominal_stats
+import binominalStats, multiGroupTest
+import scipy.stats as stats
 
 def replace_letter_test_questions(df, column_name):
     """
@@ -39,19 +40,27 @@ df = df.rename(columns={"Age":"age","Gender":"sex",
                         "In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ ing ": "letter_ing",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_n__",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l y': "letter_ly",
-                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",})
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",
+                        "Suppose there is an a test for brain tumors, which is 99% specific and sensitive. Meaning there are 1 % false positives. Suppose only 0.5% of the population have brain tumors. How high is the chance that I have a brain tumor if the test was positive?":"tumor",
+                        "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"disease"})
 
 # getting the proper groupnames for micorframing
 df["microframingID"] = ""
 df.loc[df["Group"] == 1, "microframingID"] = "9->1"
 df.loc[df["Group"] == 2, "microframingID"] = "1->9"
+df["framingID"] = ""
+df.loc[df["Group"] == 1, "framingID"] = "positive"
+df.loc[df["Group"] == 2, "framingID"] = "negative"
+
 
 # quantifying the ing and _n_ questions
-
 df = replace_letter_test_questions(df,"letter_ing") 
 df = replace_letter_test_questions(df,"letter_n__") 
 df = replace_letter_test_questions(df,"letter_ly") 
 df = replace_letter_test_questions(df,"letter_l_") 
+
+# bringing the tumor question to percentage
+df.tumor = df.tumor * 10
 
 
 
@@ -79,7 +88,7 @@ plt.show()
 result = df.k_position.value_counts()
 total  = np.sum(result.values)
 k_in_start = result["More words have the letter k at the third position, than at the beginning"]
-binom=binominal_stats.binominal_stats(k_in_start,total)
+binom=binominalStats.binominalStats(k_in_start,total)
 ci_dict = binom.exact_CI()
 p_value = binom.binomial_test()
 
@@ -93,7 +102,7 @@ ax.set_title(f"p value: {p_value}")
 
 plt.show()
 
-#%%  ____n__ vs _____ing
+#%%  ____n__ vs _____ing ease of recall / availability
 
 # make df only with letter questions
 boxplot_df = df[["letter_ing","letter_n__","letter_ly","letter_l_"]]
@@ -107,10 +116,47 @@ boxplot_df.reset_index(drop=True, inplace=True)
 # Load a colorblind-friendly palette
 palette = sns.color_palette("colorblind")
 
+mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
+stat_result = mtg.main()
+
+f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
             notch=True, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette)
 plt.show()
+#%% tumor question base rate fallacy
+# The real propability is 33.2%
+tumor_test_prob = 33.2
 
+# Calculate the median
+median_value = df["tumor"].median()
+# Perform a one-sample Wilcoxon signed-rank test
+stat, p_value = stats.wilcoxon(df["tumor"] - tumor_test_prob)
+print(f'Statistic: {stat}, p-value: {p_value}')
 
+# Create a violin plot
+ax = sns.violinplot(data=df, y="tumor", inner="quartile", scale="width")
+# Add vertical lines for the median and the mathematical value
+plt.axhline(y=median_value, color='r', linestyle='--', label=f'Median: {median_value:.2f}')
+plt.axhline(y=tumor_test_prob, color='g', linestyle='--', label=f'Statistical probability')
+# Add a legend
+plt.legend()
+
+# Determine if the median is significantly different from the mathematical value
+alpha = 0.05
+if p_value < alpha:
+    ax.set_title(f"Median, and statistical probability sig. different! p-value: {p_value:.3e}")
+else:
+    ax.set_title("Fail to reject the null hypothesis. p-value: {p_value:.3e}")
+
+# Show the plot
+plt.show()
+
+#%% disease framing
+# make df only with letter questions
+disease_df = df[["disease","framingID"]]
+# Drop rows that do not start with 'P' in the response column
+disease_df = disease_df[disease_df['disease'].str.startswith('P') == True]
+# Count rows that start with 'Programm B' and have 'positive' in the second column
+total_n = disease_df.value_counts()
