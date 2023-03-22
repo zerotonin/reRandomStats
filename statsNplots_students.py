@@ -1,3 +1,24 @@
+"""
+Title: Statistical Data Analysis and Visualization of Cognitive Biases
+Author: Bart Geurten
+Publication: Geurten 2023
+
+This script is for the statistical data analysis and visualization of data collected from quizzes on
+cognitive biases. The data is loaded from a CSV file containing student responses to various questions
+designed to measure cognitive biases such as base-rate fallacy, availability bias, and framing effect.
+
+The script performs the following steps:
+1. Load and clean the data
+2. Visualize age and sex distribution of the respondents
+3. Analyze and visualize the microframing effect on approximation
+4. Analyze and visualize the position of the letter 'k' in words (availability bias)
+5. Analyze and visualize the word count for different word forms (ease of recall)
+6. Analyze and visualize the base rate fallacy in the brain tumor question
+7. Analyze and visualize the framing effect in the disease question
+8. Analyze and visualize the base rate fallacy in the 'Steve' question
+9. Analyze and visualize the conjunction fallacy in the 'Linda' question
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -32,6 +53,12 @@ def replace_letter_test_questions(df, column_name):
 
 
 #%% Load and clean database
+
+# ┌────────────────────────────────────┐
+# │ ░▒▓█ LOAD AND CLEAN THE DATA █▓▒░  │
+# └────────────────────────────────────┘
+
+
 df = pd.read_csv("./Data/student_quiz.csv")
 # renaming columns for accesibility
 df = df.rename(columns={"Age":"age","Gender":"sex",
@@ -69,11 +96,20 @@ df.tumor = df.tumor * 10
 
 #%% Age Sex Overview
 
+# ┌───────────────────────────────────────────────────────────┐
+# │ ░▒▓█ VISUALIZE AGE & SEX DISTRIBUTION OF RESPONDENTS █▓▒░ │
+# └───────────────────────────────────────────────────────────┘
+
 f, ax = plt.subplots(figsize=(7, 6))
 sns.displot(data=df, x="age", hue="sex", kde=True)
 
 plt.show()
 #%% Microframing Factorial
+
+# ┌───────────────────────────────────────────────────┐
+# │ ░▒▓█ ANALYZE & VISUALIZE MICROFRAMING EFFECT █▓▒░ │
+# └───────────────────────────────────────────────────┘
+
 micro_df = df[["approximated result","microframingID"]]
 micro_df = micro_df.dropna()
 micro_df = micro_df[pd.to_numeric(micro_df['approximated result'], errors='coerce').notna()]
@@ -100,6 +136,10 @@ plt.show()
 
 #%% letter k position availability bias / ease of recall
 
+# ┌───────────────────────────────────────────────────┐
+# │ ░▒▓█ LETTER 'K' POSITION (AVAILABILITY BIAS) █▓▒░ │
+# └───────────────────────────────────────────────────┘
+
 result = df.k_position.value_counts()
 total  = np.sum(result.values)
 k_in_start = result["More words have the letter k at the third position, than at the beginning"]
@@ -118,6 +158,10 @@ ax.set_title(f"p value: {p_value:.3e}")
 plt.show()
 
 #%%  ____n__ vs _____ing ease of recall / availability
+
+# ┌───────────────────────────────────────────────┐
+# │ ░▒▓█ WORD COUNT FOR DIFFERENT WORD FORMS █▓▒░ │
+# └───────────────────────────────────────────────┘
 
 # make df only with letter questions
 boxplot_df = df[["letter_ing","letter_n__","letter_ly","letter_l_"]]
@@ -142,6 +186,11 @@ sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
             palette=palette)
 plt.show()
 #%% tumor question base rate fallacy
+
+# ┌────────────────────────────────────────────────────┐
+# │ ░▒▓█ BRAIN TUMOR QUESTION (BASE RATE FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────────┘
+
 # The real propability is 33.2%
 tumor_test_prob = 33.2
 
@@ -170,6 +219,11 @@ else:
 plt.show()
 
 #%% disease framing
+
+# ┌─────────────────────────────────────────────┐
+# │ ░▒▓█ DISEASE QUESTION (FRAMING EFFECT) █▓▒░ │
+# └─────────────────────────────────────────────┘
+
 # make df only with letter questions
 disease_df = df[["disease","framingID"]]
 # Drop rows that do not start with 'P' in the response column
@@ -201,6 +255,10 @@ plt.show()
 
 #%% Steve base rate fallacy
 
+# ┌────────────────────────────────────────────────┐
+# │ ░▒▓█ 'STEVE' QUESTION (BASE RATE FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────┘
+
 steve_count=df.Steve.value_counts()
 base_rate = 50000/950000
 binom=binominalStats.binominalStats(steve_count[0],steve_count.sum())
@@ -215,6 +273,10 @@ ax.set_ylabel("Percentage of students believing that Steve is a farmer")
 ax.set_title(f"p value: {p_value:.3e}")
 plt.show()
 #%% Linda
+
+# ┌──────────────────────────────────────────────────┐
+# │ ░▒▓█ 'LINDA' QUESTION (CONJUNCTION FALLACY) █▓▒░ │
+# └──────────────────────────────────────────────────┘
 
 linda_count=df.Linda.value_counts()
 binom=binominalStats.binominalStats(linda_count[0],linda_count.sum())
