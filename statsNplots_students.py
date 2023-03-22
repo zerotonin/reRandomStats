@@ -43,7 +43,8 @@ df = df.rename(columns={"Age":"age","Gender":"sex",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",
                         "Suppose there is an a test for brain tumors, which is 99% specific and sensitive. Meaning there are 1 % false positives. Suppose only 0.5% of the population have brain tumors. How high is the chance that I have a brain tumor if the test was positive?":"tumor",
                         "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"disease",
-                        'An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?':"Steve"})
+                        'An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?':"Steve",
+                        'Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more likely?':"Linda"})
 
 # getting the proper groupnames for micorframing
 df["microframingID"] = ""
@@ -190,3 +191,26 @@ steve_count=df.Steve.value_counts()
 base_rate = 50000/950000
 binom=binominalStats.binominalStats(steve_count[0],steve_count.sum())
 ci_dict = binom.exact_CI()
+p_value = binom.binomial_test()
+
+f, ax = plt.subplots(figsize=(7, 6))
+ax.bar("Steve is a farmer", ci_dict['Proportion'])
+ax.errorbar("Steve is a farmer", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.plot([-1,1],[50, 50],'k--')
+ax.set_ylabel("Percentage of students believing that Steve is a farmer")
+ax.set_title(f"p value: {p_value:.3e}")
+plt.show()
+#%% Linda
+
+linda_count=df.Linda.value_counts()
+binom=binominalStats.binominalStats(linda_count[0],linda_count.sum())
+ci_dict = binom.exact_CI()
+p_value = binom.binomial_test()
+
+f, ax = plt.subplots(figsize=(7, 6))
+ax.bar("Linda is a feminist and bankteller", ci_dict['Proportion'])
+ax.errorbar("Linda is a feminist and bankteller", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.plot([-1,1],[50, 50],'k--')
+ax.set_ylabel("Percentage of students believing that Linda is a feminist and bankteller")
+ax.set_title(f"p value: {p_value:.3e}")
+plt.show()
