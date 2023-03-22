@@ -100,19 +100,31 @@ df.tumor = df.tumor * 10
 # │ ░▒▓█ VISUALIZE AGE & SEX DISTRIBUTION OF RESPONDENTS █▓▒░ │
 # └───────────────────────────────────────────────────────────┘
 
+# Create a new plot with a specified size
 f, ax = plt.subplots(figsize=(7, 6))
+
+# Create a distribution plot of the 'age' column with 'sex' as the hue, including a kernel density estimate
 sns.displot(data=df, x="age", hue="sex", kde=True)
 
+# Display the plot
 plt.show()
+
 #%% Microframing Factorial
 
 # ┌───────────────────────────────────────────────────┐
 # │ ░▒▓█ ANALYZE & VISUALIZE MICROFRAMING EFFECT █▓▒░ │
 # └───────────────────────────────────────────────────┘
 
+# Create a DataFrame with 'approximated result' and 'microframingID' columns
 micro_df = df[["approximated result","microframingID"]]
+
+# Drop rows with missing values
 micro_df = micro_df.dropna()
+
+# Keep only rows with numeric values in the 'approximated result' column
 micro_df = micro_df[pd.to_numeric(micro_df['approximated result'], errors='coerce').notna()]
+
+# Perform Fisher's resampling test on the medians
 frs = FisherResampling.FisherResamplingTest(micro_df.loc[micro_df["microframingID"]=="1->9", "approximated result"],
                                             micro_df.loc[micro_df["microframingID"]=="9->1", "approximated result"],
                                             "medianDiff",10000)
@@ -120,33 +132,46 @@ p_value = frs.main()
 
 # Load a colorblind-friendly palette
 palette = sns.color_palette("colorblind")
+
+# Create a boxplot to visualize the microframing effect
 ax = sns.boxplot(x="microframingID", y="approximated result", data=micro_df,hue="microframingID",
             notch=False, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette,
             width=.6)
+
 # Add in points to show each observation
 sns.stripplot(x="microframingID", y="approximated result", data=micro_df,
               size=4, color=".3", linewidth=0)
 
+# Set the title and scale
 ax.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
 ax.set_yscale("log")
+
+# Display the plot
 plt.show()
 
 
 #%% letter k position availability bias / ease of recall
-
 # ┌───────────────────────────────────────────────────┐
 # │ ░▒▓█ LETTER 'K' POSITION (AVAILABILITY BIAS) █▓▒░ │
 # └───────────────────────────────────────────────────┘
 
+# Get the value counts for the 'k_position' column in the DataFrame
 result = df.k_position.value_counts()
+
+# Calculate the total count
 total  = np.sum(result.values)
+
+# Get the count of responses indicating more words have 'k' at the third position than at the beginning
 k_in_start = result["More words have the letter k at the third position, than at the beginning"]
+
+# Perform binomial statistics analysis
 binom=binominalStats.binominalStats(k_in_start,total)
 ci_dict = binom.exact_CI()
 p_value = binom.binomial_test()
 
+# Create a bar plot to visualize the percentage of students believing in K>k
 f, ax = plt.subplots(figsize=(7, 6))
 ax.bar("More words starting with k", ci_dict['Proportion'])
 ax.errorbar("More words starting with k", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
@@ -154,7 +179,7 @@ ax.plot([-1,1],[50, 50],'k--')
 ax.set_ylabel("Percentage of students believing in K>k")
 ax.set_title(f"p value: {p_value:.3e}")
 
-
+# Display the plot
 plt.show()
 
 #%%  ____n__ vs _____ing ease of recall / availability
@@ -163,94 +188,117 @@ plt.show()
 # │ ░▒▓█ WORD COUNT FOR DIFFERENT WORD FORMS █▓▒░ │
 # └───────────────────────────────────────────────┘
 
-# make df only with letter questions
+# Create a DataFrame with only letter-related columns
 boxplot_df = df[["letter_ing","letter_n__","letter_ly","letter_l_"]]
+
 # Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
 boxplot_df = boxplot_df.melt(var_name='question', value_name='word_count')
+
 # Remove rows with missing values in the 'word_count' column
 boxplot_df = boxplot_df.dropna(subset=['word_count'])
+
 # Reset the index
 boxplot_df.reset_index(drop=True, inplace=True)
 
 # Load a colorblind-friendly palette
 palette = sns.color_palette("colorblind")
 
+# Perform multi-group test using Fisher's mean difference
 mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
 stat_result = mtg.main()
+
+# Save the statistical results to a CSV file
 stat_result.to_csv("./Data/letter_stats.csv")
 
+# Create a boxplot to visualize the word count for different word forms
 f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
             notch=True, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette)
+
+# Display the plot
 plt.show()
+
 #%% tumor question base rate fallacy
 
 # ┌────────────────────────────────────────────────────┐
 # │ ░▒▓█ BRAIN TUMOR QUESTION (BASE RATE FALLACY) █▓▒░ │
 # └────────────────────────────────────────────────────┘
 
-# The real propability is 33.2%
+# The actual probability is 33.2%
 tumor_test_prob = 33.2
 
-# Calculate the median
+# Calculate the median of tumor column values
 median_value = df["tumor"].median()
-# Perform a one-sample Wilcoxon signed-rank test
+
+# Perform a one-sample Wilcoxon signed-rank test comparing tumor values to the actual probability
 stat, p_value = stats.wilcoxon(df["tumor"] - tumor_test_prob)
 print(f'Statistic: {stat}, p-value: {p_value}')
 
-# Create a violin plot
+# Create a violin plot of the tumor column values
 ax = sns.violinplot(data=df, y="tumor", inner="quartile", scale="width")
-# Add vertical lines for the median and the mathematical value
+
+# Add vertical lines for the median and the actual probability
 plt.axhline(y=median_value, color='r', linestyle='--', label=f'Median: {median_value:.2f}')
 plt.axhline(y=tumor_test_prob, color='g', linestyle='--', label=f'Statistical probability')
+
 # Add a legend
 plt.legend()
 
-# Determine if the median is significantly different from the mathematical value
+# Determine if the median is significantly different from the actual probability
 alpha = 0.05
 if p_value < alpha:
     ax.set_title(f"Median, and statistical probability sig. different! p-value: {p_value:.3e}")
 else:
-    ax.set_title("Fail to reject the null hypothesis. p-value: {p_value:.3e}")
+    ax.set_title(f"Fail to reject the null hypothesis. p-value: {p_value:.3e}")
 
-# Show the plot
+# Display the plot
 plt.show()
 
-#%% disease framing
+
+##%% disease framing
 
 # ┌─────────────────────────────────────────────┐
 # │ ░▒▓█ DISEASE QUESTION (FRAMING EFFECT) █▓▒░ │
 # └─────────────────────────────────────────────┘
 
-# make df only with letter questions
-disease_df = df[["disease","framingID"]]
-# Drop rows that do not start with 'P' in the response column
+# Create a DataFrame containing only disease and framingID columns
+disease_df = df[["disease", "framingID"]]
+
+# Remove rows that do not start with 'P' in the disease column
 disease_df = disease_df[disease_df['disease'].str.startswith('P') == True]
-# Count rows that start with 'Programm B' and have 'positive' in the second column
+
+# Count occurrences of each combination of disease and framingID
 total_n = disease_df.value_counts()
 print(total_n)
-pos_frame = np.array([total_n[3],total_n[1]])
-neg_frame = np.array([total_n[0],total_n[2]])
 
-mbt = binominalStats.MultipleBinominalTests(pos_frame,neg_frame)
+# Calculate the positive and negative frame counts
+pos_frame = np.array([total_n[3], total_n[1]])
+neg_frame = np.array([total_n[0], total_n[2]])
+
+# Perform multiple binomial tests between positive and negative framings
+mbt = binominalStats.MultipleBinominalTests(pos_frame, neg_frame)
 p_value = mbt.perform_test()
 
-binom=binominalStats.binominalStats(pos_frame[0],pos_frame.sum())
+# Calculate the exact confidence interval for the positive framing
+binom = binominalStats.binominalStats(pos_frame[0], pos_frame.sum())
 ci_dict_pos = binom.exact_CI()
 
-binom=binominalStats.binominalStats(neg_frame[0],neg_frame.sum())
+# Calculate the exact confidence interval for the negative framing
+binom = binominalStats.binominalStats(neg_frame[0], neg_frame.sum())
 ci_dict_neg = binom.exact_CI()
 
+# Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
 ax.bar(["positive", "negative"], [ci_dict_pos['Proportion'], ci_dict_neg['Proportion']])
 ax.errorbar("positive", ci_dict_pos['Proportion'], yerr=[[ci_dict_pos['Proportion']-ci_dict_pos['Lower CI']], [ci_dict_pos['Upper CI']-ci_dict_pos['Proportion']]], fmt='none', capsize=5, color='black')
 ax.errorbar("negative", ci_dict_neg['Proportion'], yerr=[[ci_dict_neg['Proportion']-ci_dict_neg['Lower CI']], [ci_dict_neg['Upper CI']-ci_dict_neg['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-0.5,1.5],[50, 50],'k--')
+ax.plot([-0.5, 1.5], [50, 50], 'k--')
 ax.set_ylabel("Percentage of students chosing to gamble")
 ax.set_title(f"p value: {p_value:.3}")
-# Show the plot
+
+# Display the plot
 plt.show()
 
 #%% Steve base rate fallacy
@@ -259,34 +307,57 @@ plt.show()
 # │ ░▒▓█ 'STEVE' QUESTION (BASE RATE FALLACY) █▓▒░ │
 # └────────────────────────────────────────────────┘
 
-steve_count=df.Steve.value_counts()
-base_rate = 50000/950000
-binom=binominalStats.binominalStats(steve_count[0],steve_count.sum())
+# Count the occurrences of each answer option for the Steve question
+steve_count = df.Steve.value_counts()
+
+# Calculate the base rate for Steve being a librarian
+base_rate = 50000 / 950000
+
+# Calculate binomial statistics for the "Steve is a librarian" option
+binom = binominalStats.binominalStats(steve_count[0], steve_count.sum())
+
+# Calculate the exact confidence interval for the proportion of this option
 ci_dict = binom.exact_CI()
+
+# Perform a binomial test to determine the p-value
 p_value = binom.binomial_test()
 
+# Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("Steve is a farmer", ci_dict['Proportion'])
-ax.errorbar("Steve is a farmer", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1,1],[50, 50],'k--')
-ax.set_ylabel("Percentage of students believing that Steve is a farmer")
+ax.bar("Steve is a librarian", ci_dict['Proportion'])
+ax.errorbar("Steve is a librarian", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.plot([-1, 1], [50, 50], 'k--')
+ax.set_ylabel("Percentage of students believing that Steve is a librarian")
 ax.set_title(f"p value: {p_value:.3e}")
+
+# Display the plot
 plt.show()
+
 #%% Linda
 
 # ┌──────────────────────────────────────────────────┐
 # │ ░▒▓█ 'LINDA' QUESTION (CONJUNCTION FALLACY) █▓▒░ │
 # └──────────────────────────────────────────────────┘
 
-linda_count=df.Linda.value_counts()
-binom=binominalStats.binominalStats(linda_count[0],linda_count.sum())
+# Count the occurrences of each answer option for the Linda question
+linda_count = df.Linda.value_counts()
+
+# Calculate binomial statistics for the "Linda is a feminist and bankteller" option
+binom = binominalStats.binominalStats(linda_count[0], linda_count.sum())
+
+# Calculate the exact confidence interval for the proportion of this option
 ci_dict = binom.exact_CI()
+
+# Perform a binomial test to determine the p-value
 p_value = binom.binomial_test()
 
+# Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
 ax.bar("Linda is a feminist and bankteller", ci_dict['Proportion'])
 ax.errorbar("Linda is a feminist and bankteller", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1,1],[50, 50],'k--')
+ax.plot([-1, 1], [50, 50], 'k--')
 ax.set_ylabel("Percentage of students believing that Linda is a feminist and bankteller")
 ax.set_title(f"p value: {p_value:.3e}")
+
+# Display the plot
 plt.show()
