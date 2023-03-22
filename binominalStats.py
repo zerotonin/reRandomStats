@@ -9,7 +9,7 @@ class binominalStats:
         self.alpha = alpha
         self.alternative = alternative
 
-    def binomial_test(self):
+    def binomial_test(self, base_rate=0.5):
         """
         Perform a binomial test to check if a coin is fair.
 
@@ -23,7 +23,7 @@ class binominalStats:
             float: p-value of the test.
         """
         # Null hypothesis: the coin is fair (p = 0.5)
-        return binom_test(self.heads, self.total_flips, p=0.5, alternative=self.alternative)
+        return binom_test(self.heads, self.total_flips, p=base_rate, alternative=self.alternative)
 
     def exact_CI(self):
         """

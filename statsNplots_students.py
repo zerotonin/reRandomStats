@@ -42,7 +42,8 @@ df = df.rename(columns={"Age":"age","Gender":"sex",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l y': "letter_ly",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",
                         "Suppose there is an a test for brain tumors, which is 99% specific and sensitive. Meaning there are 1 % false positives. Suppose only 0.5% of the population have brain tumors. How high is the chance that I have a brain tumor if the test was positive?":"tumor",
-                        "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"disease"})
+                        "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"disease",
+                        'An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?':"Steve"})
 
 # getting the proper groupnames for micorframing
 df["microframingID"] = ""
@@ -160,3 +161,32 @@ disease_df = df[["disease","framingID"]]
 disease_df = disease_df[disease_df['disease'].str.startswith('P') == True]
 # Count rows that start with 'Programm B' and have 'positive' in the second column
 total_n = disease_df.value_counts()
+print(total_n)
+pos_frame = np.array([total_n[3],total_n[1]])
+neg_frame = np.array([total_n[0],total_n[2]])
+
+mbt = binominalStats.MultipleBinominalTests(pos_frame,neg_frame)
+p_value = mbt.perform_test()
+
+binom=binominalStats.binominalStats(pos_frame[0],pos_frame.sum())
+ci_dict_pos = binom.exact_CI()
+
+binom=binominalStats.binominalStats(neg_frame[0],neg_frame.sum())
+ci_dict_neg = binom.exact_CI()
+
+f, ax = plt.subplots(figsize=(7, 6))
+ax.bar(["positive", "negative"], [ci_dict_pos['Proportion'], ci_dict_neg['Proportion']])
+ax.errorbar("positive", ci_dict_pos['Proportion'], yerr=[[ci_dict_pos['Proportion']-ci_dict_pos['Lower CI']], [ci_dict_pos['Upper CI']-ci_dict_pos['Proportion']]], fmt='none', capsize=5, color='black')
+ax.errorbar("negative", ci_dict_neg['Proportion'], yerr=[[ci_dict_neg['Proportion']-ci_dict_neg['Lower CI']], [ci_dict_neg['Upper CI']-ci_dict_neg['Proportion']]], fmt='none', capsize=5, color='black')
+ax.plot([-0.5,1.5],[50, 50],'k--')
+ax.set_ylabel("Percentage of students chosing to gamble")
+ax.set_title(f"p value: {p_value:.3}")
+# Show the plot
+plt.show()
+
+#%% Steve base rate fallacy
+
+steve_count=df.Steve.value_counts()
+base_rate = 50000/950000
+binom=binominalStats.binominalStats(steve_count[0],steve_count.sum())
+ci_dict = binom.exact_CI()
