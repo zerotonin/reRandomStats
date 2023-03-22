@@ -1,4 +1,6 @@
 from scipy.stats import beta, binom_test
+import numpy as np
+import scipy.stats as stats
 
 class binominalStats:
     def __init__(self, heads, total_flips, alpha=0.05, alternative='two-sided'):
@@ -47,3 +49,54 @@ class binominalStats:
         result = {'Proportion': intervals[0], 'Lower CI': intervals[1], 'Upper CI': intervals[2]}
 
         return result
+
+
+class MultipleBinominalTests:
+    """
+    A class to perform multiple binominal tests for comparing the fairness of multiple categories.
+    """
+
+    def __init__(self, *categories):
+        """
+        Initialize the MultipleBinominalTests class with a variable number of categories.
+
+        Args:
+        *categories (numpy.ndarray): Observed frequencies for each category (format: [count1, count2]).
+        """
+        self.categories = categories
+
+    def perform_test(self, alpha=0.05):
+        """
+        Perform the Chi-square test for independence and return the p-value.
+
+        Args:
+        alpha (float): Significance level for the test, default is 0.05.
+
+        Returns:
+        float: The p-value of the test.
+        """
+        # Create the contingency table
+        contingency_table = np.vstack(self.categories)
+
+        # Perform the Chi-square test for independence
+        chi2_stat, p_value, dof, expected_freq = stats.chi2_contingency(contingency_table)
+
+        return p_value
+
+    def test_result(self, alpha=0.05):
+        """
+        Determine if the categories have significantly different fairness based on the p-value and alpha.
+
+        Args:
+        alpha (float): Significance level for the test, default is 0.05.
+
+        Returns:
+        bool: True if the categories have significantly different fairness, False otherwise.
+        """
+        p_value = self.perform_test(alpha)
+
+        # Compare the p-value to the significance level
+        if p_value < alpha:
+            return True
+        else:
+            return False
