@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-import binominalStats, multiGroupTest
+import binominalStats, multiGroupTest,FisherResampling
 import scipy.stats as stats
 
 def replace_letter_test_questions(df, column_name):
@@ -74,14 +74,27 @@ sns.displot(data=df, x="age", hue="sex", kde=True)
 
 plt.show()
 #%% Microframing Factorial
+micro_df = df[["approximated result","microframingID"]]
+micro_df = micro_df.dropna()
+micro_df = micro_df[pd.to_numeric(micro_df['approximated result'], errors='coerce').notna()]
+frs = FisherResampling.FisherResamplingTest(micro_df.loc[micro_df["microframingID"]=="1->9", "approximated result"],
+                                            micro_df.loc[micro_df["microframingID"]=="9->1", "approximated result"],
+                                            "medianDiff",10000)
+p_value = frs.main()
 
-f, ax = plt.subplots(figsize=(7, 6))
-ax.set_yscale("log")
-sns.boxplot(x="microframingID", y="approximated result", data=df,
+# Load a colorblind-friendly palette
+palette = sns.color_palette("colorblind")
+ax = sns.boxplot(x="microframingID", y="approximated result", data=micro_df,hue="microframingID",
+            notch=False, showcaps=False,
+            flierprops={"marker": "x"}, dodge=False,
+            palette=palette,
             width=.6)
 # Add in points to show each observation
-sns.stripplot(x="microframingID", y="approximated result", data=df,
+sns.stripplot(x="microframingID", y="approximated result", data=micro_df,
               size=4, color=".3", linewidth=0)
+
+ax.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
+ax.set_yscale("log")
 plt.show()
 
 
@@ -99,7 +112,7 @@ ax.bar("More words starting with k", ci_dict['Proportion'])
 ax.errorbar("More words starting with k", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
 ax.plot([-1,1],[50, 50],'k--')
 ax.set_ylabel("Percentage of students believing in K>k")
-ax.set_title(f"p value: {p_value}")
+ax.set_title(f"p value: {p_value:.3e}")
 
 
 plt.show()
@@ -120,6 +133,7 @@ palette = sns.color_palette("colorblind")
 
 mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
 stat_result = mtg.main()
+stat_result.to_csv("./Data/letter_stats.csv")
 
 f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
