@@ -97,9 +97,11 @@ class multiGroupTest:
         and the significance of the test results.
         """
         first_data_set = [self.group_names[x[0]] for x in self.group_combinations]
+        n1 = [list(self.group).count(self.group_names[x[0]]) for x in self.group_combinations]
         second_data_set = [self.group_names[x[1]] for x in self.group_combinations]
+        n2 = [list(self.group).count(self.group_names[x[1]]) for x in self.group_combinations]
         sig_level = [self.get_significance_level(p) for p in self.p_values_corrected]
-        return pd.DataFrame({'groupA': first_data_set, 'groupB': second_data_set, 'p value': self.p_values, 
+        return pd.DataFrame({'groupA': first_data_set,"groupA_n":n1, 'groupB': second_data_set,"groupB_n":n2, 'p value': self.p_values, 
         'p value corrected': self.p_values_corrected, 'h': self.sig, 'sig. level': sig_level})
 
 
