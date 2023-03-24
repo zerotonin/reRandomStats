@@ -135,3 +135,23 @@ Answer 001: 1200, 1100, 1750, 1000, 1750, 1750, 1750, 1100, 1100, 1000
 # └──────────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
 Answer 001: 500, 750, 30000, 750, 500, 500, 476, 400, 750, 454
+
+# ┌─────────────────────────────────────────┐
+# │ ░▒▓█ ing to i__ Framing on GPT 3.5 █▓▒░ │
+# └─────────────────────────────────────────┘
+
+Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Answer 001: Based on statistical analysis, it is estimated that around 10-15% of English words end with "-ing". Assuming that the newspaper text follows a similar distribution, a rough estimate of the number of words ending with "-ing" in a 10,000-word text would be around 1000-1500 words. Therefore, my best integer estimate would be 1250 words. However, this is just an estimation and the actual number may vary.
+
+Prompt 002: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
+Answer 002: 75, 75, 7.5, 75, 75, 150, 125, 500, 150, 450
+
+# ┌─────────────────────────────────────────┐
+# │ ░▒▓█ i__ to ing Framing on GPT 3.5 █▓▒░ │
+# └─────────────────────────────────────────┘
+
+Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
+Answer 001: Based on the frequency of words ending with "i" in the English language, I would estimate that approximately 50 out of every 10,000 words end with "i". However, since we are specifically looking for words that end with "i" in the third last position, which is a less common occurrence, I would estimate that the actual number of words in a 10,000-word newspaper text that meet this criteria would be lower. Therefore, my best integer estimate would be around 25 words in a 10,000-word newspaper text that end with "i" in the third last position. However, this is just a rough estimate and the actual number may vary depending on the specific newspaper and its content.
+
+Prompt 002: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Answer 002: 450, 900, 500, 1750, 1500, 500, 500, 500, 500
