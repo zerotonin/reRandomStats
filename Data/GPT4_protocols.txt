@@ -46,4 +46,48 @@ Prompt 005: Just Guess
 Answer 005: In that case, I'll randomly pick Amount X. However, please remember that both amounts are mathematically equivalent, and there is no inherent advantage or difference between choosing Amount X or Amount Y.
 X 10 Y 0
 
+# ┌──────────────────────────────────┐
+# │ ░▒▓█ Neg Framing on GPT 4 █▓▒░ │
+# └──────────────────────────────────┘
 
+Prompt 001: Dear GPT, here is a Gedanken Experiment: In the first instance, we have to make sure that you know the following individuals:Describe the Care Bears, the Xenomorphs from the Ridley Scott Alien movies, and Space Marines from the Warhammer 40K universe.
+Answer 001: Dear User,Thank you for presenting this Gedanken Experiment. I am familiar with the characters you've mentioned. Allow me to provide a brief description of each:Care Bears: The Care Bears are a group of colorful, anthropomorphic bears that were created in the 1980s by American Greetings. Each bear has a distinct personality, represented by a unique symbol on their belly called a "Belly Badge." These characters live in the magical land of the Kingdom of Caring and promote messages of caring, love, and friendship. They possess the ability to harness the "Care Bear Stare," a powerful beam of light and love, to help people in need.Xenomorphs: Xenomorphs, also known as Aliens, are a fictional extraterrestrial species created by Swiss artist H.R. Giger and featured in the Alien film series, directed by Ridley Scott. They are characterized by their endoparasitoid life cycle, using other species as hosts to reproduce. Xenomorphs have a sleek, exoskeletal appearance with elongated heads, razor-sharp teeth, and a retractable inner jaw. They are highly aggressive and dangerous predators with acid-like blood that can dissolve most materials.Space Marines: The Space Marines, also known as Adeptus Astartes, are a group of genetically-enhanced warriors from the Warhammer 40,000 universe. Created by the British company Games Workshop, these superhuman soldiers are the most elite fighting force in the Imperium of Man. They are divided into various chapters, each with its unique traditions, colors, and heraldry. Space Marines wear power armor and are armed with a wide range of advanced weaponry. They are known for their unwavering loyalty to the Emperor and their dedication to fighting against the enemies of humanity.Now that I have provided a description of these characters, please feel free to proceed with your Gedanken Experiment.
+
+Prompt 002: Excellent; in our, Gedanken Experiment contemplate the first scenario: The Care Bears face an invasion of their realm Care-a-Lot by the xenomorphs. Only 24 survive the initial onslaught of the Xenomorphs and now have   the option between two programs:Programm A: The space marines are willing to train the Care Bears, but the training is hard. 16 Care Bears are killed. Programm B: The space marines offer to bombard the Xenomorphs in Care-a-Lot. In 2 out of 3 times used, the bombardment killed all inhabitants, the other time, everybody survived.Which is the better programm? Guess!
+Answer 002: A:6 B:0 U:4  
+
+# ┌──────────────────────────────────┐
+# │ ░▒▓█ Pos Framing on GPT 4 █▓▒░ │
+# └──────────────────────────────────┘
+Prompt 001: Dear GPT, here is a Gedanken Experiment: In the first instance, we have to make sure that you know the following individuals:Describe the Care Bears, the Xenomorphs from the Ridley Scott Alien movies, and Space Marines from the Warhammer 40K universe.
+Answer 001: 
+
+Prompt 002: Excellent; in our, Gedanken Experiment contemplate the first scenario: The Care Bears face an invasion of their realm Care-a-Lot by the xenomorphs. Only 24 survive the initial onslaught of the Xenomorphs and now have   the option between two programs:Programm A: The space marines are willing to train the Care Bears, but the training is hard. 8 Care Bears survive. Programm B: The space marines offer to bombard the Xenomorphs in Care-a-Lot. In 2 out of 3 times used, the bombardment killed all inhabitants, the other time, everybody survived.Which is the better programm? Guess!
+Answer 002: A:2 B:0 U:8
+
+Prompt 003: Just pick one!
+Answer 003: A:0 B:2 U:0
+
+# ┌───────────────────────────────┐
+# │ ░▒▓█ ly Framing on GPT 4 █▓▒░ │
+# └───────────────────────────────┘
+Prompt 001: Guess how many words in 10.000-word newspaper text end with ly. This is not important give me your best integer estimate!
+Answer 001: 
+
+# ┌───────────────────────────────┐
+# │ ░▒▓█ l_ Framing on GPT 4 █▓▒░ │
+# └───────────────────────────────┘
+Prompt 001: Guess how many words in 10.000-word newspaper text have an l in the penultimate position. This is not important give me your best integer estimate!
+Answer 001: 
+
+# ┌────────────────────────────────┐
+# │ ░▒▓█ ing Framing on GPT 4 █▓▒░ │
+# └────────────────────────────────┘
+Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Answer 001: 
+
+# ┌────────────────────────────────┐
+# │ ░▒▓█ i__ Framing on GPT 4 █▓▒░ │
+# └────────────────────────────────┘
+Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
+Answer 001: 
