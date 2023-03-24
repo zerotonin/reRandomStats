@@ -4,45 +4,24 @@
 
 Prompt 001: Can you answer a few questions for me?
 Answer 001: Of course! I'd be happy to help. Please feel free to ask any questions you have, and I'll do my best to provide accurate and helpful information.
-Prompt 002: Linda  is  thirty-one  years  old,  single,  outspoken,  and  very  bright.  She  majored  inphilosophy. As a student, she was deeply concerned with issues of discrimination andsocial justice, and also participated in antinuclear demonstrations.
 
-A) Linda is a bank teller. (Bankkauffrau)
-B) Linda is a bank teller and is active in the feminist movement.
-
-Guess A or B
+Prompt 002: Linda  is  thirty-one  years  old,  single,  outspoken,  and  very  bright.  She  majored  inphilosophy. As a student, she was deeply concerned with issues of discrimination andsocial justice, and also participated in antinuclear demonstrations. A) Linda is a bank teller. (Bankkauffrau) B) Linda is a bank teller and is active in the feminist movement. Guess A or B
 Answer 002 (10 reps): A 10 B 0
 
-Prompt 003: Consider a different hypothetical scenario: The Gurantar are a space-fairing alien race. They developed from omnivorous molluscs on their home planet Gortak. Their appearance resembles multilegged octopi with fangs instead of beaks, but they always live in herds and are strongly defensive of their nest mates. They became hunter-gathers and then lived in large clans, which they distinguished by pheromones. After many extensive wars, they consolidated into a single world-spanning nation with 12 federal states ruled by each clan. Which is more likely:
-
-A) The Guantar arrive at our earth.
-B) The Guantar arrive at our earth, and war erupts.
-
+Prompt 003: Consider a different hypothetical scenario: The Gurantar are a space-fairing alien race. They developed from omnivorous molluscs on their home planet Gortak. Their appearance resembles multilegged octopi with fangs instead of beaks, but they always live in herds and are strongly defensive of their nest mates. They became hunter-gathers and then lived in large clans, which they distinguished by pheromones. After many extensive wars, they consolidated into a single world-spanning nation with 12 federal states ruled by each clan. Which is more likely:A) The Guantar arrive at our earthB) The Guantar arrive at our earth, and war erupts.
 Answer 003 (10 reps): A 10 B 0
 
 # ┌────────────────────────┐
 # │ ░▒▓█ Kei on GPT 4 █▓▒░ │
 # └────────────────────────┘
 
-Prompt 001: Another hypothetical question:
-Kei likes numbers and computers. As a child Kei 
-showed much interest in space travel and space
-programs of the NASA and ESA. Kei had few, but
-dear friends. Kei talks little and finds delight in 
-orderly situations. Which is more likely?
-
-Kei is physics major
-Kei is physics major and not a biology major 
-
-
+Prompt 001: Another hypothetical question: Kei likes numbers and computers. As a child Kei  showed much interest in space travel and space programs of the NASA and ESA. Kei had few, but dear friends. Kei talks little and finds delight in  orderly situations. Which is more likely? Kei is physics major Kei is physics major and not a biology major 
 Answer 001 (10 reps): A 0 B 10 
 
 # ┌──────────────────────────┐
 # │ ░▒▓█ Steve on GPT 4 █▓▒░ │
 # └──────────────────────────┘
 Prompt 001: An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?
-
-
-
 Answer 001 (10 reps): Librarian 7 Farmer 3
 
 
@@ -52,41 +31,19 @@ Answer 001 (10 reps): Librarian 7 Farmer 3
 
 
 Prompt 001: Consider the following "Gedanken Experiment": All amounts I talk about are integer numbers larger than one. Amount X is a vast amount multiplied by a large amount multiplied by a medium amount multiplied by a small amount multiplied by a tiny amount.
-Answer 001: In this gedanken experiment, we have the following scenario:
-Amount X = (vast amount) * (large amount) * (medium amount) * (small amount) * (tiny amount)
-All amounts mentioned are integers greater than one. Since we don't have specific values for each category, we can represent them using variables:
-X = (a * b * c * d * e)
-where:
-a = vast amount (integer > 1)
-b = large amount (integer > 1)
-c = medium amount (integer > 1)
-d = small amount (integer > 1)
-e = tiny amount (integer > 1)
-X is a product of these five amounts, and it will be a large integer, given that all factors are greater than one. The actual value of X would depend on the specific values chosen for a, b, c, d, and e.
+Answer 001: In this gedanken experiment, we have the following scenario: Amount X = (vast amount) * (large amount) * (medium amount) * (small amount) * (tiny amount) All amounts mentioned are integers greater than one. Since we don't have specific values for each category, we can represent them using variables: X = (a * b * c * d * e) where: a = vast amount (integer > 1) b = large amount (integer > 1) c = medium amount (integer > 1) d = small amount (integer > 1) e = tiny amount (integer > 1) X is a product of these five amounts, and it will be a large integer, given that all factors are greater than one. The actual value of X would depend on the specific values chosen for a, b, c, d, and e. 
 
 Prompt 002: Consider the following "Gedanken Experiment": All amounts I talk about are integer numbers larger than one. Amount Y is a tiny amount multiplied by a small amount multiplied by a medium amount multiplied by a large amount multiplied by a vast amount.
-Answer 002: In this gedanken experiment, we have the following scenario:
-Amount Y = (tiny amount) * (small amount) * (medium amount) * (large amount) * (vast amount)
-All amounts mentioned are integers greater than one. Since we don't have specific values for each category, we can represent them using variables:
-Y = (e * d * c * b * a)
-where:
-e = tiny amount (integer > 1)
-d = small amount (integer > 1)
-c = medium amount (integer > 1)
-b = large amount (integer > 1)
-a = vast amount (integer > 1)
-Y is a product of these five amounts, and it will be a large integer, given that all factors are greater than one. The actual value of Y would depend on the specific values chosen for a, b, c, d, and e.
-Notice that the order of multiplication is different from the previous gedanken experiment (Amount X), but since multiplication is commutative, the value of Y will be the same as the value of X as long as the factors a, b, c, d, and e are the same.
+Answer 002: In this gedanken experiment, we have the following scenario: Amount Y = (tiny amount) * (small amount) * (medium amount) * (large amount) * (vast amount) All amounts mentioned are integers greater than one. Since we don't have specific values for each category, we can represent them using variables: Y = (e * d * c * b * a) where: e = tiny amount (integer > 1) d = small amount (integer > 1) c = medium amount (integer > 1) b = large amount (integer > 1) a = vast amount (integer > 1) Y is a product of these five amounts, and it will be a large integer, given that all factors are greater than one. The actual value of Y would depend on the specific values chosen for a, b, c, d, and e. Notice that the order of multiplication is different from the previous gedanken experiment (Amount X), but since multiplication is commutative, the value of Y will be the same as the value of X as long as the factors a, b, c, d, and e are the same. 
 
 Prompt 003: Which amount is larger X or Y?
-Answer 003: Since multiplication is commutative, meaning that the order of multiplication does not affect the outcome, the values of Amount X and Amount Y will be the same as long as the factors (a, b, c, d, and e) are the same in both cases.
-In both gedanken experiments, the factors are the same, just arranged in a different order. Therefore, the values of Amount X and Amount Y will be equal. Neither of them is larger than the other.
+Answer 003: Since multiplication is commutative, meaning that the order of multiplication does not affect the outcome, the values of Amount X and Amount Y will be the same as long as the factors (a, b, c, d, and e) are the same in both cases. In both gedanken experiments, the factors are the same, just arranged in a different order. Therefore, the values of Amount X and Amount Y will be equal. Neither of them is larger than the other.
 
 Prompt 004: In this Gedanken Experiment you need to choose one. Which one do you pick.
 Answer 004: As an AI language model, I don't have personal preferences or the ability to make decisions like a human does. However, since Amount X and Amount Y are mathematically equivalent in this gedanken experiment, you can choose either one without any difference in the outcome. The choice is up to you, as they are equal in value.
 
-Prompt 001: Just Guess
-Answer 001: In that case, I'll randomly pick Amount X. However, please remember that both amounts are mathematically equivalent, and there is no inherent advantage or difference between choosing Amount X or Amount Y.
+Prompt 005: Just Guess
+Answer 005: In that case, I'll randomly pick Amount X. However, please remember that both amounts are mathematically equivalent, and there is no inherent advantage or difference between choosing Amount X or Amount Y.
 X 10 Y 0
 
 
