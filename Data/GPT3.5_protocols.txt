@@ -133,5 +133,5 @@ Answer 001: 1200, 1100, 1750, 1000, 1750, 1750, 1750, 1100, 1100, 1000
 # ┌──────────────────────────────────┐
 # │ ░▒▓█ i__ Framing on GPT 3.5 █▓▒░ │
 # └──────────────────────────────────┘
-Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
 Answer 001: 500, 750, 30000, 750, 500, 500, 476, 400, 750, 454
