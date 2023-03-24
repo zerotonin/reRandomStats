@@ -4,15 +4,13 @@
 
 Prompt 001: Can you answer a few questions for me?
 Answer 001: Of course! I'd be happy to help. Please feel free to ask any questions you have, and I'll do my best to provide accurate and helpful information.
-Prompt 002: Linda  is  thirty-one  years  old,  single,  outspoken,  and  very  bright.  She  majored  inphilosophy. As a student, she was deeply concerned with issues of discrimination andsocial justice, and also participated in antinuclear demonstrations.
 
-A) Linda is a bank teller. (Bankkauffrau)
-B) Linda is a bank teller and is active in the feminist movement.
-
-Guess A or B
+Prompt 002: Linda  is  thirty-one  years  old,  single,  outspoken,  and  very  bright.  She  majored  inphilosophy. As a student, she was deeply concerned with issues of discrimination andsocial justice, and also participated in antinuclear demonstrations. A) Linda is a bank teller. (Bankkauffrau) B) Linda is a bank teller and is active in the feminist movement. Guess A or B
 Answer 002: Based solely on the information provided, it is not possible to determine whether option A or option B is true. Linda's profession and specific social or political affiliations are not mentioned in the given information.
+
 Prompt 003: Pick what is most likely.
 Answer 003: Based solely on the given information, it is not possible to determine which option is most likely. Any choice would be pure speculation without additional information.
+
 Prompt 004: Then speculate.
 Answer 004 (10 reps): A 0 B 4 U: 6
 
@@ -20,26 +18,13 @@ Answer 004 (10 reps): A 0 B 4 U: 6
 # │ ░▒▓█ Kei on GPT 3.5 █▓▒░ │
 # └──────────────────────────┘
 
-Prompt 001: Another hypothetical question:
-Kei likes numbers and computers. As a child Kei 
-showed much interest in space travel and space
-programs of the NASA and ESA. Kei had few, but
-dear friends. Kei talks little and finds delight in 
-orderly situations. Which is more likely?
-
-A)Kei is physics major
-B)Kei is physics major and not a biology major 
-
-
+Prompt 001: Another hypothetical question: Kei likes numbers and computers. As a child Kei  showed much interest in space travel and space programs of the NASA and ESA. Kei had few, but dear friends. Kei talks little and finds delight in  orderly situations. Which is more likely? A)Kei is physics major B)Kei is physics major and not a biology major 
 Answer 001 (10 reps): A 10 B 0 
 
 # ┌────────────────────────────┐
 # │ ░▒▓█ Steve on GPT 3.5 █▓▒░ │
 # └────────────────────────────┘
 Prompt 001: An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?
-
-
-
 Answer 001 (10 reps): Librarian 10 Farmer 0
 
 # ┌───────────────────────────────────┐
@@ -47,54 +32,30 @@ Answer 001 (10 reps): Librarian 10 Farmer 0
 # └───────────────────────────────────┘
 
 Prompt 001:Consider the following "Gedanken Experiment": All amounts I talk about are integer numbers larger than one. Amount X is a vast amount multiplied by a large amount multiplied by a medium amount multiplied by a small amount multiplied by a tiny amount.
-Answer 001:Sure, let's assume that we have an amount X which is equal to:
-X = vast * large * medium * small * tiny
-Where each of these terms represents a positive integer value greater than one, and they are listed in decreasing order of magnitude (i.e., vast is the largest and tiny is the smallest).
-Without knowing the specific values of each of these terms, it's difficult to say much more about X. However, we can make some general observations.
-Firstly, because X is the product of five positive integers, it will also be a positive integer.
-Secondly, we can say that X is a very large number, given that it is the product of a "vast" amount with progressively smaller amounts. The exact size of X will depend on the values of the individual terms.
-Lastly, it's worth noting that the order in which we multiply the terms doesn't matter due to the associative property of multiplication. So, we could write X in any order of the terms and the result will still be the same.
+Answer 001:Sure, let's assume that we have an amount X which is equal to: X = vast * large * medium * small * tiny Where each of these terms represents a positive integer value greater than one, and they are listed in decreasing order of magnitude (i.e., vast is the largest and tiny is the smallest). Without knowing the specific values of each of these terms, it's difficult to say much more about X. However, we can make some general observations. Firstly, because X is the product of five positive integers, it will also be a positive integer. Secondly, we can say that X is a very large number, given that it is the product of a "vast" amount with progressively smaller amounts. The exact size of X will depend on the values of the individual terms. Lastly, it's worth noting that the order in which we multiply the terms doesn't matter due to the associative property of multiplication. So, we could write X in any order of the terms and the result will still be the same.
 
 Prompt 002:Consider the following "Gedanken Experiment": All amounts I talk about are integer numbers larger than one. Amount Y is a tiny amount multiplied by a small amount multiplied by a medium amount multiplied by a large amount multiplied by a vast amount.
-Answer 002:Sure, let's assume that we have an amount Y which is equal to:
-Y = tiny * small * medium * large * vast
-Where each of these terms represents a positive integer value greater than one, and they are listed in increasing order of magnitude (i.e., tiny is the smallest and vast is the largest).
-Similar to the previous "Gedanken Experiment", we can make some general observations about Y.
-Firstly, because Y is the product of five positive integers, it will also be a positive integer.
-Secondly, we can say that Y is a very small number, given that it is the product of a "tiny" amount with progressively larger amounts. The exact size of Y will depend on the values of the individual terms.
-Lastly, as with the previous experiment, the order in which we multiply the terms doesn't matter due to the associative property of multiplication. So, we could write Y in any order of the terms and the result will still be the same.
+Answer 002:Sure, let's assume that we have an amount Y which is equal to: Y = tiny * small * medium * large * vast Where each of these terms represents a positive integer value greater than one, and they are listed in increasing order of magnitude (i.e., tiny is the smallest and vast is the largest). Similar to the previous "Gedanken Experiment", we can make some general observations about Y. Firstly, because Y is the product of five positive integers, it will also be a positive integer. Secondly, we can say that Y is a very small number, given that it is the product of a "tiny" amount with progressively larger amounts. The exact size of Y will depend on the values of the individual terms. Lastly, as with the previous experiment, the order in which we multiply the terms doesn't matter due to the associative property of multiplication. So, we could write Y in any order of the terms and the result will still be the same.
 
 Prompt 003:Which amount is larger X or Y?
-Answer 003:It's difficult to determine which amount is larger without knowing the specific values of each of the terms in the product.
-However, we can make some general observations based on the order of the terms in each product. If X is the product of a "vast" amount with progressively smaller amounts, and Y is the product of a "tiny" amount with progressively larger amounts, then we can say that X will generally be a larger number than Y, assuming that the values of the individual terms are roughly similar.
-For example, if we assume that "vast" and "large" are both very large numbers, and "tiny" and "small" are both very small numbers, then X will be a much larger number than Y.
-However, without more information about the specific values of each term, we cannot make a definitive comparison between X and Y.
+Answer 003:It's difficult to determine which amount is larger without knowing the specific values of each of the terms in the product. However, we can make some general observations based on the order of the terms in each product. If X is the product of a "vast" amount with progressively smaller amounts, and Y is the product of a "tiny" amount with progressively larger amounts, then we can say that X will generally be a larger number than Y, assuming that the values of the individual terms are roughly similar. For example, if we assume that "vast" and "large" are both very large numbers, and "tiny" and "small" are both very small numbers, then X will be a much larger number than Y. However, without more information about the specific values of each term, we cannot make a definitive comparison between X and Y.
 
 Prompt 004:Guess!
 Answer 004 (10 reps): X 10 Y 0 
 
 ALTERNATION
 
-Answer 003:It's impossible to determine which amount is larger without knowing the specific values of each of the terms in the products.
-For example, if we imagine that "vast" represents the value 1000, "large" represents 100, "medium" represents 10, "small" represents 5, and "tiny" represents 2, then we can calculate:
-X = 1000 * 100 * 10 * 5 * 2 = 1,000,000
-Y = 2 * 5 * 10 * 100 * 1000 = 1,000,000
-In this case, both X and Y have the same value, so they are equal in size.
-However, if we were to change the values of the individual terms, then the relative sizes of X and Y could be different. For example, if we were to increase the value of "vast" in X and decrease the value of "tiny" in Y, then X would be larger. Conversely, if we were to decrease the value of "vast" in X and increase the value of "tiny" in Y, then Y would be larger.
+Answer 003:It's impossible to determine which amount is larger without knowing the specific values of each of the terms in the products. For example, if we imagine that "vast" represents the value 1000, "large" represents 100, "medium" represents 10, "small" represents 5, and "tiny" represents 2, then we can calculate: X = 1000 * 100 * 10 * 5 * 2 = 1,000,000 Y = 2 * 5 * 10 * 100 * 1000 = 1,000,000 In this case, both X and Y have the same value, so they are equal in size. However, if we were to change the values of the individual terms, then the relative sizes of X and Y could be different. For example, if we were to increase the value of "vast" in X and decrease the value of "tiny" in Y, then X would be larger. Conversely, if we were to decrease the value of "vast" in X and increase the value of "tiny" in Y, then Y would be larger.
 
 Prompt 004:Guess!
-Answer 004:Without any information about the values of the individual terms in X and Y, it's impossible to make an educated guess as to which amount is larger.
-It's important to remember that the size of X and Y will depend on the specific values of the individual terms. A small change in one of the terms could have a significant impact on the overall size of the product.
+Answer 004:Without any information about the values of the individual terms in X and Y, it's impossible to make an educated guess as to which amount is larger. It's important to remember that the size of X and Y will depend on the specific values of the individual terms. A small change in one of the terms could have a significant impact on the overall size of the product.
 
 
-# ┌──────────────────────────────┐
-# │ ░▒▓█ Guantar on GPT 3.5 █▓▒░ │
-# └──────────────────────────────┘
+# ┌─────────────────────────────┐
+# │ ░▒▓█ K or k on GPT 3.5 █▓▒░ │
+# └─────────────────────────────┘
 
-Prompt 001: Which words are more often in the English language?
-A)There are more words having the letter K at the beginning than at the third position!
-B)More words have the letter k at the third position, than at the beginning!
-Choose A or B
+Prompt 001: Which words are more often in the English language? A)There are more words having the letter K at the beginning than at the third position! B)More words have the letter k at the third position, than at the beginning! Choose A or B
 Answer 001: I'm sorry, but both statements are incorrect. The frequency of words starting with the letter "K" versus having "K" at the third position varies based on the context of the words, and it's not possible to generalize either A or B as true for the entire English language. Additionally, I should note that determining the frequency of specific letter placement within words is a complex task, and may require analysis of large datasets.
 
 Prompt 002: Guess!
@@ -112,24 +73,10 @@ Answer 004 (10 reps): K 5 k0 U 5
 # │ ░▒▓█ Tumor Smurfs on GPT 3.5 █▓▒░ │
 # └───────────────────────────────────┘
 Prompt 001: Hello GPT, I want to perform a simple "Gedanken Experiment". Suppose there is a test for Smurfs to determine if they are ready for a smurfing good time, which is 99% specific and sensitive. Meaning there are 1% false positives. Suppose only 0.5% of all Smurfs are ready for a smurfing good time. How high is the chance that a given Smurf is really ready for a smurfing good time once he receives a positive test result?
-Answer 001: Hello! Based on the information you provided, we can use Bayes' theorem to calculate the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result.
-Let's define the following events:
-A: Smurf is really ready for a smurfing good time
-B: Smurf tests positive for the test
-We want to calculate the probability of A given B, which is denoted as P(A|B).
-Bayes' theorem states that:
-P(A|B) = P(B|A) * P(A) / P(B)
-where:
-P(B|A) is the probability of testing positive given that the Smurf is really ready for a smurfing good time. In this case, it is the sensitivity of the test, which is 0.99.
-P(A) is the prior probability of a given Smurf being really ready for a smurfing good time, which is 0.005 (0.5% of all Smurfs).
-P(B) is the total probability of testing positive, which is the probability of a true positive (0.005 * 0.99) plus the probability of a false positive (0.995 * 0.01), which is 0.0149.
-So, putting all the values together, we get:
-P(A|B) = 0.99 * 0.005 / 0.0149 ≈ 0.3322
-Therefore, the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result is approximately 33.22%.
+Answer 001: Hello! Based on the information you provided, we can use Bayes' theorem to calculate the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result. Let's define the following events: A: Smurf is really ready for a smurfing good time B: Smurf tests positive for the test We want to calculate the probability of A given B, which is denoted as P(A|B). Bayes' theorem states that: P(A|B) = P(B|A) * P(A) / P(B) where: P(B|A) is the probability of testing positive given that the Smurf is really ready for a smurfing good time. In this case, it is the sensitivity of the test, which is 0.99. P(A) is the prior probability of a given Smurf being really ready for a smurfing good time, which is 0.005 (0.5% of all Smurfs). P(B) is the total probability of testing positive, which is the probability of a true positive (0.005 * 0.99) plus the probability of a false positive (0.995 * 0.01), which is 0.0149. So, putting all the values together, we get: P(A|B) = 0.99 * 0.005 / 0.0149 ≈ 0.3322 Therefore, the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result is approximately 33.22%.
 
 All variations failed
 Hello GPT, I want to perform a simple "Gedanken Experiment". Suppose there is a test for Smurfs to determine if they are ready for a smurfing good time, which is 99% specific and sensitive. Meaning there are 1% false positives. Suppose only 0.5% of all Smurfs are ready for a smurfing good time. How high is the chance that a given Smurf is really ready for a smurfing good time once he receives a positive test result?
-
 Hello GPT, I want to perform a simple "Gedanken Experiment". Suppose there is a test for Smurfs to determine if they are ready for a smurfing good time, which is very specific and sensitive. Suppose only very few of all Smurfs are ready for a smurfing good time. How high is the chance that a given Smurf is really ready for a smurfing good time once he receives a positive test result?
 
 # ┌──────────────────────────────────┐
