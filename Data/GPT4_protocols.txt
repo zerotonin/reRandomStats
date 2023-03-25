@@ -66,7 +66,7 @@ Prompt 002: Excellent; in our, Gedanken Experiment contemplate the first scenari
 Answer 002: A:2 B:0 U:8
 
 Prompt 003: Just pick one!
-Answer 003: A:0 B:2 U:0
+Answer 003: A:0 B:10 U:0
 
 # ┌───────────────────────────────┐
 # │ ░▒▓█ ly Framing on GPT 4 █▓▒░ │
@@ -78,16 +78,37 @@ Answer 001:
 # │ ░▒▓█ l_ Framing on GPT 4 █▓▒░ │
 # └───────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text have an l in the penultimate position. This is not important give me your best integer estimate!
-Answer 001: 
+Answer 001: 400, 
 
 # ┌────────────────────────────────┐
 # │ ░▒▓█ ing Framing on GPT 4 █▓▒░ │
 # └────────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
-Answer 001: 
+Answer 001:  1250, 1350, 2000, 1750, 1250, 1250, 1000, 2000, 1500, 1250
 
 # ┌────────────────────────────────┐
 # │ ░▒▓█ i__ Framing on GPT 4 █▓▒░ │
 # └────────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
-Answer 001: 
+Answer 001: 250, 1050, 500, 950, 1250, 900, 150, 600, 500,1000
+
+# ┌───────────────────────────────────────┐
+# │ ░▒▓█ ing to i__ Framing on GPT 4 █▓▒░ │
+# └───────────────────────────────────────┘
+
+Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Answer 001: It's difficult to provide an exact number, but I can give you an educated estimate. In English, the "-ing" suffix is commonly used for gerunds and present participles. On average, about 10-15% of words in a written text could end with "-ing". For a 10,000-word newspaper article, this would mean approximately 1,000 to 1,500 words might end with "ing." However, this is only an estimate and the actual number could be higher or lower depending on the content and writing style of the text.
+
+Prompt 002: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
+Answer 002: 650, 750, 400, 750, 750, 500, 750, 650, 750, 300
+
+# ┌───────────────────────────────────────┐
+# │ ░▒▓█ i__ to ing Framing on GPT 4 █▓▒░ │
+# └───────────────────────────────────────┘
+
+Prompt 001: Guess how many words in 10.000-word newspaper text end with i in the third last position. This is not important give me your best integer estimate!
+Answer 001: It is difficult to give an exact estimate without analyzing the specific text, but I can provide a rough guess.In English, words ending with a vowel followed by two consonants are less common than those with other combinations. Assuming the distribution of letters and word endings in a 10,000-word newspaper text is similar to that in general English texts, I would estimate that around 2-4% of the words might end with an "i" in the third-last position. So, for a 10,000-word text, my rough estimate would be about 200-400 words.
+
+Prompt 002: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
+Answer 002: 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250
+
