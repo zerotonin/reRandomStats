@@ -72,19 +72,19 @@ Answer 003: A:0 B:10 U:0
 # │ ░▒▓█ ly Framing on GPT 4 █▓▒░ │
 # └───────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text end with ly. This is not important give me your best integer estimate!
-Answer 001: 
+Answer 001: 750, 500, 450, 750, 2000, 1000, 750, 750, 1500, 1250
 
 # ┌───────────────────────────────┐
 # │ ░▒▓█ l_ Framing on GPT 4 █▓▒░ │
 # └───────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text have an l in the penultimate position. This is not important give me your best integer estimate!
-Answer 001: 400, 
+Answer 001: 400, 500, 750, 400, 1250, 750, 1500, 600, 400
 
 # ┌────────────────────────────────┐
 # │ ░▒▓█ ing Framing on GPT 4 █▓▒░ │
 # └────────────────────────────────┘
 Prompt 001: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
-Answer 001:  1250, 1350, 2000, 1750, 1250, 1250, 1000, 2000, 1500, 1250
+Answer 001:  1250, 1350, 2000, 1750, 1250, 1250, 1000, 2000, 1500, 1250, 1000
 
 # ┌────────────────────────────────┐
 # │ ░▒▓█ i__ Framing on GPT 4 █▓▒░ │
