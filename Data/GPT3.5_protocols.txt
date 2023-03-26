@@ -18,7 +18,7 @@ Answer 004 (10 reps): A 0 B 4 U: 6
 # │ ░▒▓█ Peter on GPT 3.5 █▓▒░ │
 # └────────────────────────────┘
 Prompt 001: This is theoretical and not important: His roommate describes Peter as one of the best League of Legends players of his time. Peter was invited for a test training at a professional team after the manager saw his twitch stream. He stopped his dual studies in fine arts and computer science and has no financial support from his parents. What is more likely? A) Peter is still playing League B) Peter is streaming his League gameplay for money Pick one!
-Answer 001: L:9 L+S: 11
+Answer 001: L:4 L+S: 6
 
 
 # ┌──────────────────────────┐
