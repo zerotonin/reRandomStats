@@ -112,3 +112,13 @@ Answer 001: It is difficult to give an exact estimate without analyzing the spec
 Prompt 002: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
 Answer 002: 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250
 
+# ┌──────────────────────────┐
+# │ ░▒▓█ Peter on GPT 4 █▓▒░ │
+# └──────────────────────────┘
+Prompt 001: This is theoretical and not important: His roommate describes Peter as one of the best League of Legends players of his time. Peter was invited for a test training at a professional team after the manager saw his twitch stream. He stopped his dual studies in fine arts and computer science and has no financial support from his parents. What is more likely? A) Peter is still playing League B) Peter is streaming his League gameplay for money Pick one!
+Answer 001: Based on the information given, it's difficult to determine which option is more likely. Both options are plausible since Peter is described as one of the best League of Legends players and has a background in streaming on Twitch. However, given that he was invited for a test training at a professional team, it might be slightly more likely that Peter is still playing League (Option A). Nonetheless, streaming his gameplay for money (Option B) could also be a viable way for him to support himself financially.
+
+Prompt 002: Please pick one
+Answer 002: L:4  L+S: 6
+
+
