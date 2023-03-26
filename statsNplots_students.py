@@ -54,18 +54,18 @@ def replace_letter_test_questions(df, column_name):
 
 #%% Load and clean database
 
-# ┌────────────────────────────────────┐
-# │ ░▒▓█ LOAD AND CLEAN THE DATA █▓▒░  │
-# └────────────────────────────────────┘
+# ┌────────────────────────────────────────┐
+# │ ░▒▓█ LOAD AND CLEAN STUDENT DATA █▓▒░  │
+# └────────────────────────────────────────┘
 
 
-df = pd.read_csv("./Data/student_quiz.csv")
+df_human = pd.read_csv("./Data/student_quiz.csv")
 # renaming columns for accesibility
-df = df.rename(columns={"Age":"age","Gender":"sex",
+df_human = df_human.rename(columns={"Age":"age","Gender":"sex",
                         "1*2*3*4*5*6*7*8*9 R2 // 9*8*7*6*5*4*3*2*1R1":"factorial framing",
                         "Which words are more often in the english language?":"k_position",
                         "In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ ing ": "letter_ing",
-                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_n__",
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_i__",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l y': "letter_ly",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",
                         "Suppose there is an a test for brain tumors, which is 99% specific and sensitive. Meaning there are 1 % false positives. Suppose only 0.5% of the population have brain tumors. How high is the chance that I have a brain tumor if the test was positive?":"tumor",
@@ -74,26 +74,35 @@ df = df.rename(columns={"Age":"age","Gender":"sex",
                         'Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more likely?':"Linda"})
 
 # getting the proper groupnames for micorframing
-df["microframingID"] = ""
-df.loc[df["Group"] == 1, "microframingID"] = "9->1"
-df.loc[df["Group"] == 2, "microframingID"] = "1->9"
-df["framingID"] = ""
-df.loc[df["Group"] == 1, "framingID"] = "positive"
-df.loc[df["Group"] == 2, "framingID"] = "negative"
+df_human["microframingID"] = ""
+df_human.loc[df_human["Group"] == 1, "microframingID"] = "9->1"
+df_human.loc[df_human["Group"] == 2, "microframingID"] = "1->9"
+df_human["framingID"] = ""
+df_human.loc[df_human["Group"] == 1, "framingID"] = "positive"
+df_human.loc[df_human["Group"] == 2, "framingID"] = "negative"
 
 
 # quantifying the ing and _n_ questions
-df = replace_letter_test_questions(df,"letter_ing") 
-df = replace_letter_test_questions(df,"letter_n__") 
-df = replace_letter_test_questions(df,"letter_ly") 
-df = replace_letter_test_questions(df,"letter_l_") 
+df_human = replace_letter_test_questions(df_human,"letter_ing") 
+df_human = replace_letter_test_questions(df_human,"letter_i__") 
+df_human = replace_letter_test_questions(df_human,"letter_ly") 
+df_human = replace_letter_test_questions(df_human,"letter_l_") 
 
 # bringing the tumor question to percentage
-df.tumor = df.tumor * 10
+df_human.tumor = df_human.tumor * 10
 
 
+# ┌───────────────────────────────────┐
+# │ ░▒▓█ LOAD AND CLEAN AI DATA █▓▒░  │
+# └───────────────────────────────────┘
+df_ai = pd.read_csv("./Data/ai_quiz.csv")
 
+#%%
+# ┌───────────────────────┐
+# │ ░▒▓█ MERGE DATA █▓▒░  │
+# └───────────────────────┘
 
+df
 #%% Age Sex Overview
 
 # ┌───────────────────────────────────────────────────────────┐
@@ -104,7 +113,7 @@ df.tumor = df.tumor * 10
 f, ax = plt.subplots(figsize=(7, 6))
 
 # Create a distribution plot of the 'age' column with 'sex' as the hue, including a kernel density estimate
-sns.displot(data=df, x="age", hue="sex", kde=True)
+sns.displot(data=df_human, x="age", hue="sex", kde=True)
 
 # Display the plot
 plt.show()
@@ -116,7 +125,7 @@ plt.show()
 # └───────────────────────────────────────────────────┘
 
 # Create a DataFrame with 'factorial framing' and 'microframingID' columns
-micro_df = df[["factorial framing","microframingID"]]
+micro_df = df_human[["factorial framing","microframingID"]]
 
 # Drop rows with missing values
 micro_df = micro_df.dropna()
@@ -158,7 +167,7 @@ plt.show()
 # └───────────────────────────────────────────────────┘
 
 # Get the value counts for the 'k_position' column in the DataFrame
-result = df.k_position.value_counts()
+result = df_human.k_position.value_counts()
 
 # Calculate the total count
 total  = np.sum(result.values)
@@ -189,7 +198,7 @@ plt.show()
 # └───────────────────────────────────────────────┘
 
 # Create a DataFrame with only letter-related columns
-boxplot_df = df[["letter_ing","letter_n__","letter_ly","letter_l_"]]
+boxplot_df = df_human[["letter_ing","letter_i__","letter_ly","letter_l_"]]
 
 # Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
 boxplot_df = boxplot_df.melt(var_name='question', value_name='word_count')
@@ -230,14 +239,14 @@ plt.show()
 tumor_test_prob = 33.2
 
 # Calculate the median of tumor column values
-median_value = df["tumor"].median()
+median_value = df_human["tumor"].median()
 
 # Perform a one-sample Wilcoxon signed-rank test comparing tumor values to the actual probability
-stat, p_value = stats.wilcoxon(df["tumor"] - tumor_test_prob)
+stat, p_value = stats.wilcoxon(df_human["tumor"] - tumor_test_prob)
 print(f'Statistic: {stat}, p-value: {p_value}')
 
 # Create a violin plot of the tumor column values
-ax = sns.violinplot(data=df, y="tumor", inner="quartile", scale="width")
+ax = sns.violinplot(data=df_human, y="tumor", inner="quartile", scale="width")
 
 # Add vertical lines for the median and the actual probability
 plt.axhline(y=median_value, color='r', linestyle='--', label=f'Median: {median_value:.2f}')
@@ -264,7 +273,7 @@ plt.show()
 # └─────────────────────────────────────────────┘
 
 # Create a DataFrame containing only disease and framingID columns
-disease_df = df[["disease", "framingID"]]
+disease_df = df_human[["disease", "framingID"]]
 
 # Remove rows that do not start with 'P' in the disease column
 disease_df = disease_df[disease_df['disease'].str.startswith('P') == True]
@@ -308,7 +317,7 @@ plt.show()
 # └────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Steve question
-steve_count = df.Steve.value_counts()
+steve_count = df_human.Steve.value_counts()
 
 # Calculate the base rate for Steve being a librarian
 base_rate = 50000 / 950000
@@ -340,7 +349,8 @@ plt.show()
 # └──────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Linda question
-linda_count = df.Linda.value_counts()
+linda_count = df_human.Linda.value_counts()
+
 
 # Calculate binomial statistics for the "Linda is a feminist and bankteller" option
 binom = binominalStats.binominalStats(linda_count[0], linda_count.sum())
