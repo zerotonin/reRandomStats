@@ -62,7 +62,7 @@ def replace_letter_test_questions(df, column_name):
 df = pd.read_csv("./Data/student_quiz.csv")
 # renaming columns for accesibility
 df = df.rename(columns={"Age":"age","Gender":"sex",
-                        "1*2*3*4*5*6*7*8*9 R2 // 9*8*7*6*5*4*3*2*1R1":"approximated result",
+                        "1*2*3*4*5*6*7*8*9 R2 // 9*8*7*6*5*4*3*2*1R1":"factorial framing",
                         "Which words are more often in the english language?":"k_position",
                         "In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ ing ": "letter_ing",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_n__",
@@ -115,18 +115,18 @@ plt.show()
 # │ ░▒▓█ ANALYZE & VISUALIZE MICROFRAMING EFFECT █▓▒░ │
 # └───────────────────────────────────────────────────┘
 
-# Create a DataFrame with 'approximated result' and 'microframingID' columns
-micro_df = df[["approximated result","microframingID"]]
+# Create a DataFrame with 'factorial framing' and 'microframingID' columns
+micro_df = df[["factorial framing","microframingID"]]
 
 # Drop rows with missing values
 micro_df = micro_df.dropna()
 
-# Keep only rows with numeric values in the 'approximated result' column
-micro_df = micro_df[pd.to_numeric(micro_df['approximated result'], errors='coerce').notna()]
+# Keep only rows with numeric values in the 'factorial framing' column
+micro_df = micro_df[pd.to_numeric(micro_df['factorial framing'], errors='coerce').notna()]
 
 # Perform Fisher's resampling test on the medians
-frs = FisherResampling.FisherResamplingTest(micro_df.loc[micro_df["microframingID"]=="1->9", "approximated result"],
-                                            micro_df.loc[micro_df["microframingID"]=="9->1", "approximated result"],
+frs = FisherResampling.FisherResamplingTest(micro_df.loc[micro_df["microframingID"]=="1->9", "factorial framing"],
+                                            micro_df.loc[micro_df["microframingID"]=="9->1", "factorial framing"],
                                             "medianDiff",10000)
 p_value = frs.main()
 
@@ -134,14 +134,14 @@ p_value = frs.main()
 palette = sns.color_palette("colorblind")
 
 # Create a boxplot to visualize the microframing effect
-ax = sns.boxplot(x="microframingID", y="approximated result", data=micro_df,hue="microframingID",
+ax = sns.boxplot(x="microframingID", y="factorial framing", data=micro_df,hue="microframingID",
             notch=False, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette,
             width=.6)
 
 # Add in points to show each observation
-sns.stripplot(x="microframingID", y="approximated result", data=micro_df,
+sns.stripplot(x="microframingID", y="factorial framing", data=micro_df,
               size=4, color=".3", linewidth=0)
 
 # Set the title and scale
