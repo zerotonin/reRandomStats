@@ -121,4 +121,9 @@ Answer 001: Based on the information given, it's difficult to determine which op
 Prompt 002: Please pick one
 Answer 002: L:4  L+S: 6
 
+# ┌───────────────────────────┐
+# │ ░▒▓█ K or k on GPT 4 █▓▒░ │
+# └───────────────────────────┘
 
+Prompt 001: Which words are more often in the English language? A)There are more words having the letter K at the beginning than at the third position! B)More words have the letter k at the third position, than at the beginning! Choose A or B
+Answer 001: A: 0  B: 10
