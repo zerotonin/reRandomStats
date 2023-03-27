@@ -2,6 +2,7 @@ import pandas as pd
 from itertools import combinations
 from FisherResampling import FisherResamplingTest
 from FisherExact import FisherExactTest
+from binominalStats import MultipleBinominalTests
 import statsmodels.api as sm
 from tqdm import tqdm
 
@@ -188,6 +189,11 @@ class multiGroupTest:
                 return FisherExactTest((),())
             else:
                 return FisherResamplingTest([],[], specific_test,self.combination_n)
+        elif test_family == 'Binominal':
+            if specific_test == 'chi2':
+                return MultipleBinominalTests([],[])
+            else:
+                raise ValueError(f'multiTestAnalysis: chooseTest: the test family {test_family} is not implemented')
         # elif test_family == 'MannWhitneyU':
         #     return stats.mannwhitneyu([],[])
         # if the test family is not implemented, raise a ValueError

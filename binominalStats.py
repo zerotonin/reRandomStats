@@ -1,7 +1,7 @@
-from scipy.stats import beta, binom_test
+from scipy.stats import binom_test
+from statsmodels.stats.proportion import proportion_confint
 import numpy as np
 import scipy.stats as stats
-
 class binominalStats:
     def __init__(self, heads, total_flips, alpha=0.05, alternative='two-sided'):
         self.heads = heads
@@ -43,10 +43,11 @@ class binominalStats:
         N = float(self.total_flips)
         p = round((x/N)*100, 2)
 
-        intervals = [round(i, 4)*100 for i in beta.interval(self.alpha, x, N-x+1)]
-        intervals.insert(0, p)
+        lower, upper = proportion_confint(count=x, nobs=N, alpha=self.alpha, method='wilson')
+        lower_limit = max(0, round(lower * 100, 4))
+        upper_limit = min(100, round(upper * 100, 4))
 
-        result = {'Proportion': intervals[0], 'Lower CI': intervals[1], 'Upper CI': intervals[2]}
+        result = {'Proportion': p, 'Lower CI': lower_limit, 'Upper CI': upper_limit}
 
         return result
 
@@ -56,16 +57,17 @@ class MultipleBinominalTests:
     A class to perform multiple binominal tests for comparing the fairness of multiple categories.
     """
 
-    def __init__(self, *categories):
+    def __init__(self, data_a,data_b):
         """
         Initialize the MultipleBinominalTests class with a variable number of categories.
 
         Args:
-        *categories (numpy.ndarray): Observed frequencies for each category (format: [count1, count2]).
+        *categories (numpy.ndarray): Observed frequencies for each category (format: [count1, count2]). No totals!
         """
-        self.categories = categories
+        self.data_a = data_a
+        self.data_b = data_b
 
-    def perform_test(self, alpha=0.05):
+    def main(self):
         """
         Perform the Chi-square test for independence and return the p-value.
 
@@ -76,7 +78,7 @@ class MultipleBinominalTests:
         float: The p-value of the test.
         """
         # Create the contingency table
-        contingency_table = np.vstack(self.categories)
+        contingency_table = np.vstack((self.data_a,self.data_b))
 
         # Perform the Chi-square test for independence
         chi2_stat, p_value, dof, expected_freq = stats.chi2_contingency(contingency_table)
