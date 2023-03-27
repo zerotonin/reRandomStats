@@ -66,7 +66,7 @@ class MultipleBinominalTests:
         """
         self.categories = categories
 
-    def perform_test(self, alpha=0.05):
+    def main(self, alpha=0.05):
         """
         Perform the Chi-square test for independence and return the p-value.
 
