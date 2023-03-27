@@ -219,12 +219,32 @@ base_rate = 50000 / 950000
 
 # Create a bar plot with error bars to visualize the results
 f_steve, ax_steve = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
-                      "Answer indicating Linda is a feminist and bankteller, %",
+                      "Steve is a librarian, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
-f_steve.savefig('./figures/Linda.svg')
+f_steve.savefig('./figures/Steve.svg')
 
 run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
+
+#%% Steve base rate fallacy
+
+# ┌────────────────────────────────────────────────┐
+# │ ░▒▓█ 'PETER' QUESTION (CONJUCTION FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────┘
+
+# Count the occurrences of each answer option for the Steve question
+bino3_stats = analyze_two_choice_question(df_gpt35,'Peter', 'S')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'Peter', 'S')
+results =[bino3_stats,bino4_stats]
+
+
+# Create a bar plot with error bars to visualize the results
+f_peter, ax_peter = plot_binomial_results(results, ['GPT 3.5','GPT 4'],
+                      "Peter is a playing and streaming, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_peter.savefig('./figures/Peter.svg')
+
 
 #%% Microframing Factorial
 
