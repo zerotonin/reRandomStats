@@ -210,30 +210,21 @@ run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Linda")
 # └────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Steve question
-steve_count = df_human.Steve.value_counts()
 binoH_stats = analyze_two_choice_question(df_human,'Steve', "librarian")
 bino3_stats = analyze_two_choice_question(df_gpt35,'Steve', 'L')
 bino4_stats = analyze_two_choice_question(df_gpt4 ,'Steve', 'L')
+results =[binoH_stats, bino3_stats,bino4_stats]
 # Calculate the base rate for Steve being a librarian
 base_rate = 50000 / 950000
 
-# Calculate binomial statistics for the "Steve is a librarian" option
-binom = binominalStats.binominalStats(steve_count[0], steve_count.sum())
-
-# Calculate the exact confidence interval for the proportion of this option
-bino_stats = binom.exact_CI()
-
-# Perform a binomial test to determine the p-value
-p_value = binom.binomial_test()
-
 # Create a bar plot with error bars to visualize the results
-f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("Steve is a librarian", bino_stats['Proportion'])
-ax.errorbar("Steve is a librarian", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1, 1], [50, 50], 'k--')
-ax.set_ylabel("Percentage of students believing that Steve is a librarian")
-ax.set_title(f"p value: {p_value:.3e}")
+f_steve, ax_steve = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
+                      "Answer indicating Linda is a feminist and bankteller, %",
+                      f"p values: {[res['p_value'] for res in results]}")
 
+f_steve.savefig('./figures/Linda.svg')
+
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
 
 #%% Microframing Factorial
 
