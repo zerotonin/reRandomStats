@@ -1,7 +1,7 @@
-from scipy.stats import beta, binom_test
+from scipy.stats import binom_test
+from statsmodels.stats.proportion import proportion_confint
 import numpy as np
 import scipy.stats as stats
-
 class binominalStats:
     def __init__(self, heads, total_flips, alpha=0.05, alternative='two-sided'):
         self.heads = heads
@@ -43,7 +43,7 @@ class binominalStats:
         N = float(self.total_flips)
         p = round((x/N)*100, 2)
 
-        lower, upper = beta.interval(self.alpha, x + 1, N - x + 1)
+        lower, upper = proportion_confint(count=x, nobs=N, alpha=self.alpha, method='wilson')
         lower_limit = max(0, round(lower * 100, 4))
         upper_limit = min(100, round(upper * 100, 4))
 
