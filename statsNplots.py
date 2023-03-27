@@ -54,7 +54,7 @@ def plot_binomial_results(results, xlabels,ylabel,title):
     ax.set_ylabel(ylabel)
     ax.set_xticklabels(xlabels, rotation=45, ha='right')
     ax.set_title(title)
-    plt.show()
+    return fig,ax
 
 
 def analyze_two_choice_question(df, column, count_value):
@@ -157,12 +157,22 @@ bino4_stats = analyze_two_choice_question(df_gpt4,'Linda' , 'B')
 results =[binoH_stats, bino3_stats,bino4_stats]
 
 # Create a bar plot with error bars to visualize the results
-plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
+f_linda, ax_linda = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
 
-write_bino_stats_file(bino_stats,"./stats/Linda_human_singleStats.txt")
+#statistics for Linda question
+data = [binoH_stats['count'][1], binoH_stats['count'][0],binoH_stats['count'][1]+ binoH_stats['count'][0],
+        bino3_stats['count'][1], bino3_stats['count'][0],bino3_stats['count'][1]+ bino3_stats['count'][0], 
+        bino4_stats['count'][1], bino4_stats['count'][0],bino4_stats['count'][1]+ bino4_stats['count'][0]]
+group = ['H','H','H','35','35','35','4','4','4']
+
+mtg = multiGroupTest.multiGroupTest(data,group,"Binominal:chi2",0)
+stat_result = mtg.main()
+stat_result.to_csv('./stats/Linda_stats.csv')
+
+
 #%% Microframing Factorial
 
 # ┌───────────────────────────────────────────────────┐
@@ -392,27 +402,3 @@ ax.set_title(f"p value: {p_value:.3e}")
 
 # Display the plot
 plt.show()
-
-#%% Linda
-
-# ┌──────────────────────────────────────────────────┐
-# │ ░▒▓█ 'LINDA' QUESTION (CONJUNCTION FALLACY) █▓▒░ │
-# └──────────────────────────────────────────────────┘
-
-# Count the occurrences of each answer option for the Linda question
-binoH_stats = analyze_two_choice_question(df_human,'Linda',"Percentage of students believing that Linda is a feminist and bankteller")
-bino3_stats = analyze_two_choice_question(df_gpt35,'Linda')
-bino4_stats = analyze_two_choice_question(df_gpt4,'Linda')
-
-# Create a bar plot with error bars to visualize the results
-f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("Linda is a feminist and bankteller", bino_stats['Proportion'])
-ax.errorbar("Linda is a feminist and bankteller", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1, 1], [50, 50], 'k--')
-ax.set_ylabel("Percentage of students believing that Linda is a feminist and bankteller")
-ax.set_title(f"p value: {bino_stats['p_value']:.3e}")
-
-# Display the plot
-plt.show()
-
-write_bino_stats_file(bino_stats,"./stats/Linda_human_singleStats.txt")
