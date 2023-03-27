@@ -43,10 +43,11 @@ class binominalStats:
         N = float(self.total_flips)
         p = round((x/N)*100, 2)
 
-        intervals = [round(i, 4)*100 for i in beta.interval(self.alpha, x, N-x+1)]
-        intervals.insert(0, p)
+        lower, upper = beta.interval(self.alpha, x + 1, N - x + 1)
+        lower_limit = max(0, round(lower * 100, 4))
+        upper_limit = min(100, round(upper * 100, 4))
 
-        result = {'Proportion': intervals[0], 'Lower CI': intervals[1], 'Upper CI': intervals[2]}
+        result = {'Proportion': p, 'Lower CI': lower_limit, 'Upper CI': upper_limit}
 
         return result
 
