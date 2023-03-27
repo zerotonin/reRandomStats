@@ -14,7 +14,7 @@ The script performs the following steps:
 4. Analyze and visualize the position of the letter 'k' in words (availability bias)
 5. Analyze and visualize the word count for different word forms (ease of recall)
 6. Analyze and visualize the base rate fallacy in the brain tumor question
-7. Analyze and visualize the framing effect in the disease question
+7. Analyze and visualize the framing effect in the framing question
 8. Analyze and visualize the base rate fallacy in the 'Steve' question
 9. Analyze and visualize the conjunction fallacy in the 'Linda' question
 """
@@ -65,11 +65,11 @@ df_human = df_human.rename(columns={"Age":"age","Gender":"sex",
                         "1*2*3*4*5*6*7*8*9 R2 // 9*8*7*6*5*4*3*2*1R1":"factorial framing",
                         "Which words are more often in the english language?":"k_position",
                         "In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ ing ": "letter_ing",
-                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_i__",
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ n _ ': "letter_i",
                         'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l y': "letter_ly",
-                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l_",
+                        'In four pages of an english novel (about 2000 words), how many words would you expect to find that have the form _ _ _ _ _ l _ ': "letter_l",
                         "Suppose there is an a test for brain tumors, which is 99% specific and sensitive. Meaning there are 1 % false positives. Suppose only 0.5% of the population have brain tumors. How high is the chance that I have a brain tumor if the test was positive?":"tumor",
-                        "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"disease",
+                        "Imagine that the U.S. is preparing for the outbreak of an unusual disease which is expected to kill 600 people. You have a choice between two programs: ":"framing",
                         'An individual has been described by a neighbour as follows: "Steve is very shy and withdrawn invariably helpful but with little interest in people or in the world of reality. A meek and tidy soul, he has a need for order and structure and a passion for detail" Is Steve more likely to be a librarian or a farmer?':"Steve",
                         'Linda is 31 years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice, and also participated in anti-nuclear demonstrations. Which is more likely?':"Linda"})
 
@@ -84,9 +84,9 @@ df_human.loc[df_human["Group"] == 2, "framingID"] = "negative"
 
 # quantifying the ing and _n_ questions
 df_human = replace_letter_test_questions(df_human,"letter_ing") 
-df_human = replace_letter_test_questions(df_human,"letter_i__") 
+df_human = replace_letter_test_questions(df_human,"letter_i") 
 df_human = replace_letter_test_questions(df_human,"letter_ly") 
-df_human = replace_letter_test_questions(df_human,"letter_l_") 
+df_human = replace_letter_test_questions(df_human,"letter_l") 
 
 # bringing the tumor question to percentage
 df_human.tumor = df_human.tumor * 10
@@ -96,13 +96,9 @@ df_human.tumor = df_human.tumor * 10
 # │ ░▒▓█ LOAD AND CLEAN AI DATA █▓▒░  │
 # └───────────────────────────────────┘
 df_ai = pd.read_csv("./Data/ai_quiz.csv")
+df_ai = df_ai.rename(columns={"care_bear_neg":"framing_neg","care_bear_pos":"framing_pos"})
 
-#%%
-# ┌───────────────────────┐
-# │ ░▒▓█ MERGE DATA █▓▒░  │
-# └───────────────────────┘
-
-df
+#
 #%% Age Sex Overview
 
 # ┌───────────────────────────────────────────────────────────┐
@@ -159,7 +155,30 @@ ax.set_yscale("log")
 
 # Display the plot
 plt.show()
+# Get the value counts for the 'k_position' column in the DataFrame
+result = df_human.k_position.value_counts()
 
+# Calculate the total count
+total  = np.sum(result.values)
+
+# Get the count of responses indicating more words have 'k' at the third position than at the beginning
+k_in_start = result["More words have the letter k at the third position, than at the beginning"]
+
+# Perform binomial statistics analysis
+binom=binominalStats.binominalStats(k_in_start,total)
+ci_dict = binom.exact_CI()
+p_value = binom.binomial_test()
+
+# Create a bar plot to visualize the percentage of students believing in K>k
+f, ax = plt.subplots(figsize=(7, 6))
+ax.bar("More words starting with k", ci_dict['Proportion'])
+ax.errorbar("More words starting with k", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.plot([-1,1],[50, 50],'k--')
+ax.set_ylabel("Percentage of students believing in K>k")
+ax.set_title(f"p value: {p_value:.3e}")
+
+# Display the plot
+plt.show()
 
 #%% letter k position availability bias / ease of recall
 # ┌───────────────────────────────────────────────────┐
@@ -198,7 +217,7 @@ plt.show()
 # └───────────────────────────────────────────────┘
 
 # Create a DataFrame with only letter-related columns
-boxplot_df = df_human[["letter_ing","letter_i__","letter_ly","letter_l_"]]
+boxplot_df = df_human[["letter_ing","letter_i","letter_ly","letter_l"]]
 
 # Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
 boxplot_df = boxplot_df.melt(var_name='question', value_name='word_count')
@@ -266,20 +285,20 @@ else:
 plt.show()
 
 
-##%% disease framing
+##%% framing framing
 
 # ┌─────────────────────────────────────────────┐
-# │ ░▒▓█ DISEASE QUESTION (FRAMING EFFECT) █▓▒░ │
+# │ ░▒▓█ framing QUESTION (FRAMING EFFECT) █▓▒░ │
 # └─────────────────────────────────────────────┘
 
-# Create a DataFrame containing only disease and framingID columns
-disease_df = df_human[["disease", "framingID"]]
+# Create a DataFrame containing only framing and framingID columns
+framing_df = df_human[["framing", "framingID"]]
 
-# Remove rows that do not start with 'P' in the disease column
-disease_df = disease_df[disease_df['disease'].str.startswith('P') == True]
+# Remove rows that do not start with 'P' in the framing column
+framing_df = framing_df[framing_df['framing'].str.startswith('P') == True]
 
-# Count occurrences of each combination of disease and framingID
-total_n = disease_df.value_counts()
+# Count occurrences of each combination of framing and framingID
+total_n = framing_df.value_counts()
 print(total_n)
 
 # Calculate the positive and negative frame counts
