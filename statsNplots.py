@@ -26,6 +26,53 @@ import numpy as np
 import binominalStats, multiGroupTest,FisherResampling
 import scipy.stats as stats
 
+#%% functuion defs
+# ┌──────────────────────┐
+# │ ░▒▓█ FUNCTIONS █▓▒░  │
+# └──────────────────────┘
+
+import binominalStats
+
+def analyze_two_choice_question(df, column):
+    """
+    Analyzes a single question in a DataFrame by counting the occurrences of each answer option,
+    calculating binomial statistics, calculating the exact confidence interval for the proportion,
+    and performing a binomial test to determine the p-value.
+    
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing the data to analyze.
+        column (str): The name of the column containing the data for the question to analyze.
+    
+    Returns:
+        dict: A dictionary containing the count of each answer option, the binomial statistics,
+        the exact confidence interval for the proportion, and the p-value.
+    """
+    # Count the occurrences of each answer option
+    count = df[column].value_counts()
+
+    # Calculate binomial statistics
+    binom = binominalStats.binominalStats(count[0], count.sum())
+
+    # Calculate the exact confidence interval for the proportion
+    ci_dict = binom.exact_CI()
+
+    # Perform a binomial test to determine the p-value
+    p_value = binom.binomial_test()
+
+    # Create a dictionary with the results
+    results = {
+        'count': count,
+        'binomial_stats': binom,
+        'exact_confidence_interval': ci_dict,
+        'p_value': p_value
+    }
+
+    return results
+
+
+
+
+#%% loading
 # ┌──────────────────────┐
 # │ ░▒▓█ LOAD DATA █▓▒░  │
 # └──────────────────────┘
@@ -95,30 +142,8 @@ ax1.set_yscale("log")
 # Display the plot
 plt.show()
 
-# Get the value counts for the 'factorial framing' column in the DataFrame
 
 
-# Calculate the total count
-total  = np.sum(result.values)
-
-# Get the count of responses indicating more words have 'k' at the third position than at the beginning
-k_in_start = result["More words have the letter k at the third position, than at the beginning"]
-
-# Perform binomial statistics analysis
-binom=binominalStats.binominalStats(k_in_start,total)
-ci_dict = binom.exact_CI()
-p_value = binom.binomial_test()
-
-# Create a bar plot to visualize the percentage of students believing in K>k
-f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("More words starting with k", ci_dict['Proportion'])
-ax.errorbar("More words starting with k", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1,1],[50, 50],'k--')
-ax.set_ylabel("Percentage of students believing in K>k")
-ax.set_title(f"p value: {p_value:.3e}")
-
-# Display the plot
-plt.show()
 
 #%% letter k position availability bias / ease of recall
 # ┌───────────────────────────────────────────────────┐
@@ -184,6 +209,8 @@ sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
             notch=True, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette)
+
+
 
 # Display the plot
 plt.show()
