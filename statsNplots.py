@@ -33,7 +33,7 @@ import scipy.stats as stats
 
 import binominalStats
 
-def analyze_two_choice_question(df, column):
+def analyze_two_choice_question(df, column, count_value):
     """
     Analyzes a single question in a DataFrame by counting the occurrences of each answer option,
     calculating binomial statistics, calculating the exact confidence interval for the proportion,
@@ -42,16 +42,17 @@ def analyze_two_choice_question(df, column):
     Args:
         df (pandas.DataFrame): The input DataFrame containing the data to analyze.
         column (str): The name of the column containing the data for the question to analyze.
+        count_value (str): The value to count in the question column.
     
     Returns:
         dict: A dictionary containing the count of each answer option, the binomial statistics,
         the exact confidence interval for the proportion, and the p-value.
     """
     # Count the occurrences of each answer option
-    count = df[column].value_counts()
+    count = df[column].str.count(count_value).value_counts()
 
     # Calculate binomial statistics
-    binom = binominalStats.binominalStats(count[0], count.sum())
+    binom = binominalStats.binominalStats(count[1], count.sum())
 
     # Calculate the exact confidence interval for the proportion
     result = binom.exact_CI()
@@ -353,7 +354,9 @@ plt.show()
 # └──────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Linda question
-bino_stats = analyze_two_choice_question(df_human,'Linda')
+binoH_stats = analyze_two_choice_question(df_human,'Linda')
+bino3_stats = analyze_two_choice_question(df_gpt35,'Linda')
+bino4_stats = analyze_two_choice_question(df_gpt4,'Linda')
 
 # Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
