@@ -117,6 +117,43 @@ def write_bino_stats_file(dictionary, filepath):
     except IOError as e:
         raise IOError(f'Error writing dictionary to file: {str(e)}')
 
+def run_bino_stats(bino_stats_human, bino_stats_gpt35, bino_stats_gpt4, prefix):
+    """Runs binomial statistics and writes results to files.
+
+    Calculates binomial statistics for the Linda question based on the provided data. Performs a multi-group
+    test and writes the results to a CSV file. Also writes the binomial statistics for each group to separate
+    text files.
+
+    Args:
+        bino_stats_human (dict): A dictionary containing the count of each answer option for the human group.
+        bino_stats_gpt35 (dict): A dictionary containing the count of each answer option for the GPT-3.5 group.
+        bino_stats_gpt4 (dict): A dictionary containing the count of each answer option for the GPT-4 group.
+        prefix (str): A prefix to use in the output file names.
+
+    Returns:
+        None.
+    """
+    data = [
+        bino_stats_human['count'][1],
+        bino_stats_human['count'][0],
+        bino_stats_human['count'][1] + bino_stats_human['count'][0],
+        bino_stats_gpt35['count'][1],
+        bino_stats_gpt35['count'][0],
+        bino_stats_gpt35['count'][1] + bino_stats_gpt35['count'][0],
+        bino_stats_gpt4['count'][1],
+        bino_stats_gpt4['count'][0],
+        bino_stats_gpt4['count'][1] + bino_stats_gpt4['count'][0]
+    ]
+
+    group = ['H', 'H', 'H', '35', '35', '35', '4', '4', '4']
+
+    mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+    stat_result = mtg.main()
+    stat_result.to_csv(f'./stats/{prefix}_comparison.csv')
+    write_bino_stats_file(bino_stats_human, f'./stats/{prefix}_human.txt')
+    write_bino_stats_file(bino_stats_gpt35, f'./stats/{prefix}_gpt35.txt')
+    write_bino_stats_file(bino_stats_gpt4, f'./stats/{prefix}_gpt04.txt')
+
 
 
 #%% loading
@@ -159,18 +196,9 @@ f_linda, ax_linda = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
-
 f_linda.savefig('./figures/Linda.svg')
-#statistics for Linda question
-data = [binoH_stats['count'][1], binoH_stats['count'][0],binoH_stats['count'][1]+ binoH_stats['count'][0],
-        bino3_stats['count'][1], bino3_stats['count'][0],bino3_stats['count'][1]+ bino3_stats['count'][0], 
-        bino4_stats['count'][1], bino4_stats['count'][0],bino4_stats['count'][1]+ bino4_stats['count'][0]]
-group = ['H','H','H','35','35','35','4','4','4']
 
-mtg = multiGroupTest.multiGroupTest(data,group,"Binominal:chi2",0)
-stat_result = mtg.main()
-stat_result.to_csv('./stats/Linda_stats.csv')
-
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Linda")
 
 #%% Microframing Factorial
 
