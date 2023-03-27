@@ -1,0 +1,7 @@
+Proportion: 69.79
+Lower CI: 69.36
+Upper CI: 69.73
+count: Linda is a bank teller and is active in the feminist movement.    164
+Linda is a bank teller. (Bankkauffrau)                             71
+Name: Linda, dtype: int64
+p_value: 1.1986892181568054e-09

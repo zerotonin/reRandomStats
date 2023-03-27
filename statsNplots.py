@@ -54,21 +54,39 @@ def analyze_two_choice_question(df, column):
     binom = binominalStats.binominalStats(count[0], count.sum())
 
     # Calculate the exact confidence interval for the proportion
-    ci_dict = binom.exact_CI()
+    result = binom.exact_CI()
 
     # Perform a binomial test to determine the p-value
     p_value = binom.binomial_test()
 
     # Create a dictionary with the results
-    results = {
-        'count': count,
-        'binomial_stats': binom,
-        'exact_confidence_interval': ci_dict,
-        'p_value': p_value
-    }
+    result['count'] = count
+    result['p_value'] = p_value
 
-    return results
+    return result
 
+def write_bino_stats_file(dictionary, filepath):
+    """
+    Writes a Python dictionary to an ASCII file.
+    
+    Args:
+        dictionary (dict): The dictionary to write to the file.
+        filepath (str): The file path to write the dictionary to.
+    
+    Returns:
+        None.
+    
+    Raises:
+        IOError: If the file path is invalid or the file cannot be written.
+    """
+    # Open the file for writing
+    try:
+        with open(filepath, 'w') as f:
+            # Loop over the dictionary items and write them to the file
+            for key, value in dictionary.items():
+                f.write(f'{key}: {value}\n')
+    except IOError as e:
+        raise IOError(f'Error writing dictionary to file: {str(e)}')
 
 
 
@@ -161,13 +179,13 @@ k_in_start = result["More words have the letter k at the third position, than at
 
 # Perform binomial statistics analysis
 binom=binominalStats.binominalStats(k_in_start,total)
-ci_dict = binom.exact_CI()
+bino_stats = binom.exact_CI()
 p_value = binom.binomial_test()
 
 # Create a bar plot to visualize the percentage of students believing in K>k
 f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("More words starting with k", ci_dict['Proportion'])
-ax.errorbar("More words starting with k", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.bar("More words starting with k", bino_stats['Proportion'])
+ax.errorbar("More words starting with k", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
 ax.plot([-1,1],[50, 50],'k--')
 ax.set_ylabel("Percentage of students believing in K>k")
 ax.set_title(f"p value: {p_value:.3e}")
@@ -312,15 +330,15 @@ base_rate = 50000 / 950000
 binom = binominalStats.binominalStats(steve_count[0], steve_count.sum())
 
 # Calculate the exact confidence interval for the proportion of this option
-ci_dict = binom.exact_CI()
+bino_stats = binom.exact_CI()
 
 # Perform a binomial test to determine the p-value
 p_value = binom.binomial_test()
 
 # Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("Steve is a librarian", ci_dict['Proportion'])
-ax.errorbar("Steve is a librarian", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.bar("Steve is a librarian", bino_stats['Proportion'])
+ax.errorbar("Steve is a librarian", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
 ax.plot([-1, 1], [50, 50], 'k--')
 ax.set_ylabel("Percentage of students believing that Steve is a librarian")
 ax.set_title(f"p value: {p_value:.3e}")
@@ -335,25 +353,17 @@ plt.show()
 # └──────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Linda question
-linda_count = df_human.Linda.value_counts()
-
-
-# Calculate binomial statistics for the "Linda is a feminist and bankteller" option
-binom = binominalStats.binominalStats(linda_count[0], linda_count.sum())
-
-# Calculate the exact confidence interval for the proportion of this option
-ci_dict = binom.exact_CI()
-
-# Perform a binomial test to determine the p-value
-p_value = binom.binomial_test()
+bino_stats = analyze_two_choice_question(df_human,'Linda')
 
 # Create a bar plot with error bars to visualize the results
 f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("Linda is a feminist and bankteller", ci_dict['Proportion'])
-ax.errorbar("Linda is a feminist and bankteller", ci_dict['Proportion'], yerr=[[ci_dict['Proportion']-ci_dict['Lower CI']], [ci_dict['Upper CI']-ci_dict['Proportion']]], fmt='none', capsize=5, color='black')
+ax.bar("Linda is a feminist and bankteller", bino_stats['Proportion'])
+ax.errorbar("Linda is a feminist and bankteller", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
 ax.plot([-1, 1], [50, 50], 'k--')
 ax.set_ylabel("Percentage of students believing that Linda is a feminist and bankteller")
-ax.set_title(f"p value: {p_value:.3e}")
+ax.set_title(f"p value: {bino_stats['p_value']:.3e}")
 
 # Display the plot
 plt.show()
+
+write_bino_stats_file(bino_stats,"./stats/Linda_human_singleStats.txt")
