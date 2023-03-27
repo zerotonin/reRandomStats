@@ -136,14 +136,12 @@ df_gpt4  = df_ai[df_ai["AI"] == "GPT4"]
 # │ ░▒▓█ VISUALIZE AGE & SEX DISTRIBUTION OF RESPONDENTS █▓▒░ │
 # └───────────────────────────────────────────────────────────┘
 
-# Create a new plot with a specified size
-f, ax = plt.subplots(figsize=(7, 6))
 
 # Create a distribution plot of the 'age' column with 'sex' as the hue, including a kernel density estimate
-sns.displot(data=df_human, x="age", hue="sex", kde=True, ax=ax)
+sns.displot(data=df_human, x="age", hue="sex", kde=True)
+f_agesex = plt.gcf()
+f_agesex.savefig('./figures/age_sex.svg')
 
-# Display the plot
-#plt.show()
 #%% Linda
 
 # ┌──────────────────────────────────────────────────┐
@@ -162,6 +160,7 @@ f_linda, ax_linda = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
                       f"p values: {[res['p_value'] for res in results]}")
 
 
+f_linda.savefig('./figures/Linda.svg')
 #statistics for Linda question
 data = [binoH_stats['count'][1], binoH_stats['count'][0],binoH_stats['count'][1]+ binoH_stats['count'][0],
         bino3_stats['count'][1], bino3_stats['count'][0],bino3_stats['count'][1]+ bino3_stats['count'][0], 
