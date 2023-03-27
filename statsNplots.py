@@ -32,6 +32,9 @@ import scipy.stats as stats
 df_ai = pd.read_csv("./Data/df_ai.csv")
 df_human = pd.read_csv("./Data/df_human.csv")
 
+df_gpt35 = df_ai[df_ai["AI"] == "GPT3_5"]
+df_gpt4  = df_ai[df_ai["AI"] == "GPT4"]
+
 #
 #%% Age Sex Overview
 
@@ -72,25 +75,28 @@ p_value = frs.main()
 # Load a colorblind-friendly palette
 palette = sns.color_palette("colorblind")
 
+fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(7, 6))
+
 # Create a boxplot to visualize the microframing effect
-ax = sns.boxplot(x="microframingID", y="factorial framing", data=micro_df,hue="microframingID",
+sns.boxplot(x="microframingID", y="factorial framing", data=micro_df,hue="microframingID",
             notch=False, showcaps=False,
             flierprops={"marker": "x"}, dodge=False,
             palette=palette,
-            width=.6)
+            width=.6,ax=ax1)
 
 # Add in points to show each observation
 sns.stripplot(x="microframingID", y="factorial framing", data=micro_df,
               size=4, color=".3", linewidth=0)
 
 # Set the title and scale
-ax.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
-ax.set_yscale("log")
+ax1.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
+ax1.set_yscale("log")
 
 # Display the plot
 plt.show()
-# Get the value counts for the 'k_position' column in the DataFrame
-result = df_human.k_position.value_counts()
+
+# Get the value counts for the 'factorial framing' column in the DataFrame
+
 
 # Calculate the total count
 total  = np.sum(result.values)
