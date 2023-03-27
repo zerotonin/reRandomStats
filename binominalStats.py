@@ -78,7 +78,7 @@ class MultipleBinominalTests:
         float: The p-value of the test.
         """
         # Create the contingency table
-        contingency_table = np.vstack(self.data_a,self.data_b)
+        contingency_table = np.vstack((self.data_a,self.data_b))
 
         # Perform the Chi-square test for independence
         chi2_stat, p_value, dof, expected_freq = stats.chi2_contingency(contingency_table)
