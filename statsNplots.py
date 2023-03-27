@@ -31,7 +31,31 @@ import scipy.stats as stats
 # │ ░▒▓█ FUNCTIONS █▓▒░  │
 # └──────────────────────┘
 
-import binominalStats
+def plot_binomial_results(results, xlabels,ylabel,title):
+    """
+    Plots bar graphs with error bars for a set of binomial statistics.
+
+    Args:
+        results (list): A list of dictionaries, where each dictionary contains the results of a binomial analysis.
+            Each dictionary should have the following keys: "Proportion", "Lower CI", "Upper CI", and "p_value".
+        xlabels (list): A list of strings to use as the x-axis labels for the bar plot.
+
+    Returns:
+        None
+    """
+    fig, ax = plt.subplots(figsize=(7, 6))
+
+    for i, res in enumerate(results):
+        ax.bar(xlabels[i], res['Proportion'])
+        ax.errorbar(xlabels[i], res['Proportion'], yerr=[[res['Proportion']-res['Lower CI']], [res['Upper CI']-res['Proportion']]],
+                    fmt='none', capsize=5, color='black')
+
+    ax.plot([-1, len(xlabels)], [50, 50], 'k--')
+    ax.set_ylabel(ylabel)
+    ax.set_xticklabels(xlabels, rotation=45, ha='right')
+    ax.set_title(title)
+    plt.show()
+
 
 def analyze_two_choice_question(df, column, count_value):
     """
@@ -50,6 +74,10 @@ def analyze_two_choice_question(df, column, count_value):
     """
     # Count the occurrences of each answer option
     count = df[column].str.count(count_value).value_counts()
+
+    # sometimes the value is not in the dataset, then we have to set the value as 0
+    if len(count) == 1:
+        count[1] = 0
 
     # Calculate binomial statistics
     binom = binominalStats.binominalStats(count[1], count.sum())
@@ -101,7 +129,7 @@ df_human = pd.read_csv("./Data/df_human.csv")
 df_gpt35 = df_ai[df_ai["AI"] == "GPT3_5"]
 df_gpt4  = df_ai[df_ai["AI"] == "GPT4"]
 
-#
+
 #%% Age Sex Overview
 
 # ┌───────────────────────────────────────────────────────────┐
@@ -112,11 +140,29 @@ df_gpt4  = df_ai[df_ai["AI"] == "GPT4"]
 f, ax = plt.subplots(figsize=(7, 6))
 
 # Create a distribution plot of the 'age' column with 'sex' as the hue, including a kernel density estimate
-sns.displot(data=df_human, x="age", hue="sex", kde=True)
+sns.displot(data=df_human, x="age", hue="sex", kde=True, ax=ax)
 
 # Display the plot
-plt.show()
+#plt.show()
+#%% Linda
 
+# ┌──────────────────────────────────────────────────┐
+# │ ░▒▓█ 'LINDA' QUESTION (CONJUNCTION FALLACY) █▓▒░ │
+# └──────────────────────────────────────────────────┘
+
+# Count the occurrences of each answer option for the Linda question
+binoH_stats = analyze_two_choice_question(df_human,'Linda',"Linda is a bank teller and is active in the feminist movement.")
+bino3_stats = analyze_two_choice_question(df_gpt35,'Linda', 'B')
+bino4_stats = analyze_two_choice_question(df_gpt4,'Linda' , 'B')
+results =[binoH_stats, bino3_stats,bino4_stats]
+
+# Create a bar plot with error bars to visualize the results
+plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
+                      "Answer indicating Linda is a feminist and bankteller, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+
+write_bino_stats_file(bino_stats,"./stats/Linda_human_singleStats.txt")
 #%% Microframing Factorial
 
 # ┌───────────────────────────────────────────────────┐
@@ -354,7 +400,7 @@ plt.show()
 # └──────────────────────────────────────────────────┘
 
 # Count the occurrences of each answer option for the Linda question
-binoH_stats = analyze_two_choice_question(df_human,'Linda')
+binoH_stats = analyze_two_choice_question(df_human,'Linda',"Percentage of students believing that Linda is a feminist and bankteller")
 bino3_stats = analyze_two_choice_question(df_gpt35,'Linda')
 bino4_stats = analyze_two_choice_question(df_gpt4,'Linda')
 
