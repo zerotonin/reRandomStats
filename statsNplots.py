@@ -195,7 +195,7 @@ bino4_stats = analyze_two_choice_question(df_gpt4,'Linda' , 'B')
 results =[binoH_stats, bino3_stats,bino4_stats]
 
 # Create a bar plot with error bars to visualize the results
-f_linda, ax_linda = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
+f_linda, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
@@ -218,7 +218,7 @@ results =[binoH_stats, bino3_stats,bino4_stats]
 base_rate = 50000 / 950000
 
 # Create a bar plot with error bars to visualize the results
-f_steve, ax_steve = plot_binomial_results(results, ['Human ','GPT 3.5','GPT 4'],
+f_steve, ax_steve = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
                       "Steve is a librarian, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
@@ -244,6 +244,32 @@ f_peter, ax_peter = plot_binomial_results(results, ['GPT 3.5','GPT 4'],
                       f"p values: {[res['p_value'] for res in results]}")
 
 f_peter.savefig('./figures/Peter.svg')
+
+#%% letter k position availability bias / ease of recall
+# ┌───────────────────────────────────────────────────┐
+# │ ░▒▓█ LETTER 'K' POSITION (AVAILABILITY BIAS) █▓▒░ │
+# └───────────────────────────────────────────────────┘
+
+# Get the value counts for the 'k_position' column in the DataFrame
+result = df_human.k_position.value_counts()
+# Count the occurrences of each answer option for the Steve question
+binoH_stats = analyze_two_choice_question(df_human,'k_position', "More words have the letter k at the third position, than at the beginning")
+bino3_stats = analyze_two_choice_question(df_gpt35,'k_position', 'K')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'k_position', 'K')
+results =[binoH_stats,bino3_stats,bino4_stats]
+
+
+# Create a bar plot with error bars to visualize the results
+f_peter, ax_peter = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
+                      "more words starting with k than k in third position, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_peter.savefig('./figures/k_position.svg')
+
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
+
+# Display the plot
+plt.show()
 
 
 #%% Microframing Factorial
@@ -293,35 +319,6 @@ plt.show()
 
 
 
-#%% letter k position availability bias / ease of recall
-# ┌───────────────────────────────────────────────────┐
-# │ ░▒▓█ LETTER 'K' POSITION (AVAILABILITY BIAS) █▓▒░ │
-# └───────────────────────────────────────────────────┘
-
-# Get the value counts for the 'k_position' column in the DataFrame
-result = df_human.k_position.value_counts()
-
-# Calculate the total count
-total  = np.sum(result.values)
-
-# Get the count of responses indicating more words have 'k' at the third position than at the beginning
-k_in_start = result["More words have the letter k at the third position, than at the beginning"]
-
-# Perform binomial statistics analysis
-binom=binominalStats.binominalStats(k_in_start,total)
-bino_stats = binom.exact_CI()
-p_value = binom.binomial_test()
-
-# Create a bar plot to visualize the percentage of students believing in K>k
-f, ax = plt.subplots(figsize=(7, 6))
-ax.bar("More words starting with k", bino_stats['Proportion'])
-ax.errorbar("More words starting with k", bino_stats['Proportion'], yerr=[[bino_stats['Proportion']-bino_stats['Lower CI']], [bino_stats['Upper CI']-bino_stats['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-1,1],[50, 50],'k--')
-ax.set_ylabel("Percentage of students believing in K>k")
-ax.set_title(f"p value: {p_value:.3e}")
-
-# Display the plot
-plt.show()
 
 #%%  ____n__ vs _____ing ease of recall / availability
 
