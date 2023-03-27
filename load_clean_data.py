@@ -103,5 +103,5 @@ df_ai = df_ai.rename(columns={"care_bear_neg":"framing_neg","care_bear_pos":"fra
 
 #%%
 
-df_ai.to_csv('./Data/df_ai.csv')
-df_human.to_csv('./Data/df_human.csv')
+df_ai.to_csv('./Data/df_ai.csv', index=False)
+df_human.to_csv('./Data/df_human.csv', index=False)
