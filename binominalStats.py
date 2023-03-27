@@ -62,7 +62,7 @@ class MultipleBinominalTests:
         Initialize the MultipleBinominalTests class with a variable number of categories.
 
         Args:
-        *categories (numpy.ndarray): Observed frequencies for each category (format: [count1, count2]).
+        *categories (numpy.ndarray): Observed frequencies for each category (format: [count1, count2]). No totals!
         """
         self.categories = categories
 
