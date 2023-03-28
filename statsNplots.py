@@ -446,7 +446,7 @@ neg_frame = np.array([total_n[0], total_n[2]])
 
 # Perform multiple binomial tests between positive and negative framings
 mbt = binominalStats.MultipleBinominalTests(pos_frame, neg_frame)
-p_value = mbt.perform_test()
+p_value = mbt.main()
 
 # Calculate the exact confidence interval for the positive framing
 binom = binominalStats.binominalStats(pos_frame[0], pos_frame.sum())
@@ -468,6 +468,3 @@ ax.set_title(f"p value: {p_value:.3}")
 # Display the plot
 plt.show()
 
-
-# Display the plot
-plt.show()
