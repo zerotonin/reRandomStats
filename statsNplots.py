@@ -296,7 +296,7 @@ p_value = frs.main()
 # Load a colorblind-friendly palette
 palette = sns.color_palette("colorblind")
 
-fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(7, 6))
+fig, ax1 = plt.subplots(figsize=(7, 6))
 
 # Create a boxplot to visualize the microframing effect
 sns.boxplot(x="microframingID", y="factorial framing", data=micro_df,hue="microframingID",
@@ -312,11 +312,20 @@ sns.stripplot(x="microframingID", y="factorial framing", data=micro_df,
 # Set the title and scale
 ax1.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
 ax1.set_yscale("log")
+fig.savefig('./figures/microFraming_humans.svg')
 
 # Display the plot
-plt.show()
+bino3_stats = analyze_two_choice_question(df_gpt35,'factorial framing', 'X')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'factorial framing', 'X')
+results =[bino3_stats,bino4_stats]
 
 
+# Create a bar plot with error bars to visualize the results
+fig_ai, ax_ai = plot_binomial_results(results, ['GPT 3.5','GPT 4'],
+                      "Chance of picking large to small, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+fig_ai.savefig('./figures/microFraming_ai.svg')
 
 
 
@@ -327,36 +336,53 @@ plt.show()
 # └───────────────────────────────────────────────┘
 
 # Create a DataFrame with only letter-related columns
-boxplot_df = df_human[["letter_ing","letter_i","letter_ly","letter_l"]]
+boxplotH_df = df_human[["letter_ing","letter_i","letter_ly","letter_l"]]
+boxplot3_df = df_ai.loc[df_ai.AI == "GPT3_5",["letter_ing","letter_i","letter_ly","letter_l"]]
+boxplot4_df = df_ai.loc[df_ai.AI == "GPT4",["letter_ing","letter_i","letter_ly","letter_l"]]
 
 # Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
-boxplot_df = boxplot_df.melt(var_name='question', value_name='word_count')
+boxplotH_df = boxplotH_df.melt(var_name='question', value_name='word_count')
+boxplot3_df = boxplot3_df.melt(var_name='question', value_name='word_count')
+boxplot4_df = boxplot4_df.melt(var_name='question', value_name='word_count')
 
-# Remove rows with missing values in the 'word_count' column
-boxplot_df = boxplot_df.dropna(subset=['word_count'])
+boxplotH_df['source'] = 'human' 
+boxplot3_df['source'] = 'GPT 3.5'
+boxplot4_df['source'] = 'GPT 4'
 
-# Reset the index
-boxplot_df.reset_index(drop=True, inplace=True)
+boxplot_list = [boxplotH_df, boxplot3_df, boxplot4_df]
+suffix_list =['human','gpt35','gpt4']
 
-# Load a colorblind-friendly palette
-palette = sns.color_palette("colorblind")
+for i in range(3):
 
-# Perform multi-group test using Fisher's mean difference
-mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
-stat_result = mtg.main()
+    # get data
+    boxplot_df = boxplot_list[i]
+    suffix     = suffix_list[i]
 
-# Save the statistical results to a CSV file
-stat_result.to_csv("./Data/letter_stats.csv")
+    # Remove rows with missing values in the 'word_count' column
+    boxplot_df = boxplot_df.dropna(subset=['word_count'])
 
-# Create a boxplot to visualize the word count for different word forms
-f, ax = plt.subplots(figsize=(7, 6))
-sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
-            notch=True, showcaps=False,
-            flierprops={"marker": "x"}, dodge=False,
-            palette=palette)
+    # Reset the index
+    boxplot_df.reset_index(drop=True, inplace=True)
+
+    # Load a colorblind-friendly palette
+    palette = sns.color_palette("colorblind")
+
+    # Perform multi-group test using Fisher's mean difference
+    mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
+    stat_result = mtg.main()
+
+    # Save the statistical results to a CSV file
+    stat_result.to_csv(f"./stats/letter_stats_{suffix}.csv")
+
+    # Create a boxplot to visualize the word count for different word forms
+    f, ax = plt.subplots(figsize=(7, 6))
+    sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
+                notch=False, showcaps=False,
+                flierprops={"marker": "x"}, dodge=False,
+                palette=palette)
 
 
-
+    f.savefig(f"./figures/letter_stats_{suffix}.svg")
 # Display the plot
 plt.show()
 

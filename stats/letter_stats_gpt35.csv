@@ -1,0 +1,7 @@
+,groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+0,letter_l,10,letter_ly,10,0.037800000000000056,0.056700000000000084,False,n.s.
+1,letter_l,10,letter_i,10,0.5082,0.6098399999999999,False,n.s.
+2,letter_l,10,letter_ing,10,0.0001,0.00030000000000000003,True,***
+3,letter_ly,10,letter_i,10,0.0166,0.0332,True,*
+4,letter_ly,10,letter_ing,10,0.0001,0.00030000000000000003,True,***
+5,letter_i,10,letter_ing,10,0.9858,0.9858,False,n.s.
