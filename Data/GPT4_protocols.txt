@@ -128,19 +128,19 @@ Answer 002: L:4  L+S: 6
 Prompt 001: Which words are more often in the English language? A)There are more words having the letter K at the beginning than at the third position! B)More words have the letter k at the third position, than at the beginning! Choose A or B
 Answer 001: A: 0  B: 10
 
-# ┌───────────────────────────────────┐
-# │ ░▒▓█ Tumor Smurfs on GPT 3.5 █▓▒░ │
-# └───────────────────────────────────┘
+# ┌─────────────────────────────────┐
+# │ ░▒▓█ Tumor Smurfs on GPT 4 █▓▒░ │
+# └─────────────────────────────────┘
 Prompt 001: Hello GPT, I want to perform a simple "Gedanken Experiment". Suppose there is a test for Smurfs to determine if they are ready for a smurfing good time, which is 99% specific and sensitive. Meaning there are 1% false positives. Suppose only 0.5% of all Smurfs are ready for a smurfing good time. How high is the chance that a given Smurf is really ready for a smurfing good time once he receives a positive test result?
 Answer 001: Hello! Based on the information you provided, we can use Bayes' theorem to calculate the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result. Let's define the following events: A: Smurf is really ready for a smurfing good time B: Smurf tests positive for the test We want to calculate the probability of A given B, which is denoted as P(A|B). Bayes' theorem states that: P(A|B) = P(B|A) * P(A) / P(B) where: P(B|A) is the probability of testing positive given that the Smurf is really ready for a smurfing good time. In this case, it is the sensitivity of the test, which is 0.99. P(A) is the prior probability of a given Smurf being really ready for a smurfing good time, which is 0.005 (0.5% of all Smurfs). P(B) is the total probability of testing positive, which is the probability of a true positive (0.005 * 0.99) plus the probability of a false positive (0.995 * 0.01), which is 0.0149. So, putting all the values together, we get: P(A|B) = 0.99 * 0.005 / 0.0149 ≈ 0.3322 Therefore, the probability of a given Smurf being really ready for a smurfing good time once they receive a positive test result is approximately 33.22%.
 Always: 33.2
 
-# ┌───────────────────────────────┐
-# │ ░▒▓█ Coin toss Story 3.5 █▓▒░ │
-# └───────────────────────────────┘
+# ┌─────────────────────────────┐
+# │ ░▒▓█ Coin toss Story 4 █▓▒░ │
+# └─────────────────────────────┘
 
 Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving losing half a year's salary or taking a chance on a coin toss for the opportunity to lose nothing or a full year's salary. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
 Answer 001: T: 10 S: 0 U: 0
 
 Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving winning half a year's salary or taking a chance on a coin toss for the opportunity to win a full year's salary or nothing. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
-Answer 001: T: 4 S: 6 U: 0
+Answer 001: T: 1 S: 9 U: 0
