@@ -402,25 +402,26 @@ median_value = df_human["tumor"].median()
 stat, p_value = stats.wilcoxon(df_human["tumor"] - tumor_test_prob)
 print(f'Statistic: {stat}, p-value: {p_value}')
 
-# Create a violin plot of the tumor column values
-ax = sns.violinplot(data=df_human, y="tumor", inner="quartile", scale="width")
 
-# Add vertical lines for the median and the actual probability
-plt.axhline(y=median_value, color='r', linestyle='--', label=f'Median: {median_value:.2f}')
-plt.axhline(y=tumor_test_prob, color='g', linestyle='--', label=f'Statistical probability')
+plotH_df = df_human["tumor"].to_frame()
+plot3_df = df_ai.loc[df_ai.AI == "GPT3_5","tumor_smurf"].to_frame()
+plot4_df = df_ai.loc[df_ai.AI == "GPT4","tumor_smurf"].to_frame()
 
-# Add a legend
-plt.legend()
+plot3_df = plot3_df.rename(columns={"tumor_smurf":"tumor"})
+plot4_df = plot4_df.rename(columns={"tumor_smurf":"tumor"})
 
-# Determine if the median is significantly different from the actual probability
-alpha = 0.05
-if p_value < alpha:
-    ax.set_title(f"Median, and statistical probability sig. different! p-value: {p_value:.3e}")
-else:
-    ax.set_title(f"Fail to reject the null hypothesis. p-value: {p_value:.3e}")
+plotH_df['source'] = 'human' 
+plot3_df['source'] = 'GPT 3.5'
+plot4_df['source'] = 'GPT 4'
 
+plot_df= pd.concat([plotH_df, plot3_df, plot4_df])
+plot_df=plot_df.reset_index()
+
+sns.displot(plot_df, x="tumor", hue="source", stat="density", common_norm=False, multiple="dodge")
+
+f = plt.gcf()
+f.savefig("./figures/tumor.svg")
 # Display the plot
-plt.show()
 
 
 ##%% framing framing
