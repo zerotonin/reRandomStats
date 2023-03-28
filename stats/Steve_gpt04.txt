@@ -1,7 +1,7 @@
-Proportion: 0.0
-Lower CI: 0
-Upper CI: 27.7533
-count: 0    10
-1     0
-Name: k_position, dtype: int64
-p_value: 0.001953125
+Proportion: 70.0
+Lower CI: 39.6778
+Upper CI: 89.2209
+count: 1    7
+0    3
+Name: Steve, dtype: int64
+p_value: 0.34375
