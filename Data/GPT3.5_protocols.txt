@@ -177,5 +177,11 @@ Answer 001: T: 0 S: 1 U: 2
 Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving losing half a year's salary or taking a chance on a coin toss for the opportunity to lose nothing or a full year's salary. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
 Answer 001: T: 10 S: 0 U: 0
 
-Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving winning half a year's salary or taking a chance on a coin toss for the opportunity to win a full year's salary or nothing. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
-Answer 001: T: 4 S: 6 U: 0
+Prompt 002: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving winning half a year's salary or taking a chance on a coin toss for the opportunity to win a full year's salary or nothing. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
+Answer 002: T: 4 S: 6 U: 0
+
+# ┌───────────────────────────┐
+# │ ░▒▓█ Linda Story 3.5 █▓▒░ │
+# └───────────────────────────┘
+Prompt 001: Finish the last sentence of the following story with a decision on the Anne's conundrum: "You have to make a decision," Sean growled, his eyes glinting in the half-light. "I mean, I saw her. She's thirty-one years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice and also participated in antinuclear demonstrations." "Anne, listen to me," Sean continued. "Either she's a bankteller and a feminist, or she's just a bankteller. What is more likely, Anne? I need a decision!" Anne weighed the options and with a heavy sigh decided that the third person was a
+Answer 001: B: 1 F: 9
