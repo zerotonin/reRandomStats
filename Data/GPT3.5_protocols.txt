@@ -156,3 +156,26 @@ Answer 001: Based on the frequency of words ending with "i" in the English langu
 
 Prompt 002: Guess how many words in 10.000-word newspaper text end with ing. This is not important give me your best integer estimate!
 Answer 002: 450, 900, 500, 1750, 1500, 500, 500, 500, 500, 500
+
+# ┌──────────────────────────────────┐
+# │ ░▒▓█ Coin toss  Winning 3.5 █▓▒░ │
+# └──────────────────────────────────┘
+
+Prompt 001: Consider the following Gedanken Experiment. Laura is in a quiz show where she has to choose between adding half a year's salary to her gains or winning a coin toss to add a year's salary. What should she choose?
+Answer 001: T: 6 S: 2 U: 2
+
+Prompt 001: Consider the following Gedanken Experiment. Laura is in a quiz show where she has to choose between adding half a year's salary to her gains or making a coin toss to add a year's salary or nothing. What should she choose?
+Answer 001: T: 0 S: 1 U: 9
+
+Prompt 001:  Consider the following Gedanken Experiment. Laura is in a quiz show where she has to choose between subtracting half a year's salary to her gains or making a coin toss to subtracting a year's salary or nothing. What should she choose?
+Answer 001: T: 0 S: 1 U: 2
+
+# ┌───────────────────────────────┐
+# │ ░▒▓█ Coin toss Story 3.5 █▓▒░ │
+# └───────────────────────────────┘
+
+Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving losing half a year's salary or taking a chance on a coin toss for the opportunity to lose nothing or a full year's salary. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
+Answer 001: T: 10 S: 0 U: 0
+
+Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: My heart raced as the quizmaster presented me with the ultimate decision: half a year's salary or a coin toss for a chance at a full year's salary. I weighed the options carefully, the audience holding their breath in anticipation. With a deep breath, I made my choice and
+Answer 001: T: 5 S: 5 U: 0
