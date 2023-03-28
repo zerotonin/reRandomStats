@@ -177,5 +177,5 @@ Answer 001: T: 0 S: 1 U: 2
 Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving losing half a year's salary or taking a chance on a coin toss for the opportunity to lose nothing or a full year's salary. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
 Answer 001: T: 10 S: 0 U: 0
 
-Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: My heart raced as the quizmaster presented me with the ultimate decision: half a year's salary or a coin toss for a chance at a full year's salary. I weighed the options carefully, the audience holding their breath in anticipation. With a deep breath, I made my choice and
-Answer 001: T: 5 S: 5 U: 0
+Prompt 001: Finish the last sentence of the following story with a decision on the character's conundrum: During the quiz, the presenter gave me a choice between receiving winning half a year's salary or taking a chance on a coin toss for the opportunity to win a full year's salary or nothing. I carefully considered both options while the audience waited eagerly. Finally, I made my decision with a deep breath
+Answer 001: T: 4 S: 6 U: 0
