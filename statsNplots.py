@@ -194,11 +194,11 @@ bino4_stats2 = analyze_two_choice_question(df_gpt4,' linda_story' , 'F')
 results =[binoH_stats, bino3_stats,bino4_stats, bino3_stats2, bino4_stats2]
 
 # Create a bar plot with error bars to visualize the results
-f_linda, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
+f_coinstory, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
-f_linda.savefig('./figures/Linda.svg')
+f_coinstory.savefig('./figures/Linda.svg')
 
 data = [
         binoH_stats['count'][1],
@@ -242,7 +242,7 @@ f_steve.savefig('./figures/Steve.svg')
 
 run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
 
-#%% Steve base rate fallacy
+#%% Peter base conjunction fallacy
 
 # ┌────────────────────────────────────────────────┐
 # │ ░▒▓█ 'PETER' QUESTION (CONJUCTION FALLACY) █▓▒░ │
@@ -461,7 +461,7 @@ pos_frame = np.array([total_n[3], total_n[1]])
 neg_frame = np.array([total_n[0], total_n[2]])
 
 # Perform multiple binomial tests between positive and negative framings
-mbt = binominalStats.MultipleBinominalTests(pos_frame, neg_frame)
+mbt = binominalStats.MultipleBinominalTests(pos_frame, neg_frame,'chi2')
 p_value = mbt.main()
 
 # Calculate the exact confidence interval for the positive framing
@@ -485,3 +485,36 @@ ax.set_title(f"p value: {p_value:.3}")
 plt.show()
 
 #%% coin toss
+# ┌────────────────────────────────────────────────────────┐
+# │ ░▒▓█ Coin Toss / Prospect Theory (FRAMING EFFECT) █▓▒░ │
+# └────────────────────────────────────────────────────────┘
+
+bino3p_stats = analyze_two_choice_question(df_gpt35,'coin_story_pos', 'T')
+bino3n_stats = analyze_two_choice_question(df_gpt35,'coin_story_neg' , 'T')
+bino4p_stat = analyze_two_choice_question(df_gpt4,'coin_story_pos', 'T')
+bino4n_stats = analyze_two_choice_question(df_gpt4,'coin_story_neg' , 'T')
+results =[bino3p_stats,bino3n_stats,bino4p_stat,bino4n_stats]
+
+# Create a bar plot with error bars to visualize the results
+f_coinstory, ax_linda = plot_binomial_results(results, ['pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
+                      "Answer indicating to gamble, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_coinstory.savefig('./figures/Coin_toss_story.svg')
+
+data = [
+        bino3p_stats['count'][1],
+        bino3p_stats['count'][0],
+        bino3n_stats['count'][1],
+        bino3n_stats['count'][0],
+        bino4p_stat['count'][1],
+        bino4p_stat['count'][0],
+        bino4n_stats['count'][1],
+        bino4n_stats['count'][0],
+    ]
+
+group = ['pos3', 'pos3', 'neg3', 'neg3','pos4', 'pos4', 'neg4', 'neg4']
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/coin_toss_comparison.csv')
