@@ -139,16 +139,13 @@ def run_bino_stats(bino_stats_human, bino_stats_gpt35, bino_stats_gpt4, prefix):
     data = [
         bino_stats_human['count'][1],
         bino_stats_human['count'][0],
-        bino_stats_human['count'][1] + bino_stats_human['count'][0],
         bino_stats_gpt35['count'][1],
         bino_stats_gpt35['count'][0],
-        bino_stats_gpt35['count'][1] + bino_stats_gpt35['count'][0],
         bino_stats_gpt4['count'][1],
         bino_stats_gpt4['count'][0],
-        bino_stats_gpt4['count'][1] + bino_stats_gpt4['count'][0]
     ]
 
-    group = ['H', 'H', 'H', '35', '35', '35', '4', '4', '4']
+    group = ['H', 'H', '35', '35', '4', '4']
 
     mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
     stat_result = mtg.main()
@@ -192,16 +189,35 @@ f_agesex.savefig('./figures/age_sex.svg')
 binoH_stats = analyze_two_choice_question(df_human,'Linda',"Linda is a bank teller and is active in the feminist movement.")
 bino3_stats = analyze_two_choice_question(df_gpt35,'Linda', 'B')
 bino4_stats = analyze_two_choice_question(df_gpt4,'Linda' , 'B')
-results =[binoH_stats, bino3_stats,bino4_stats]
+bino3_stats2 = analyze_two_choice_question(df_gpt35,' linda_story', 'F')
+bino4_stats2 = analyze_two_choice_question(df_gpt4,' linda_story' , 'F')
+results =[binoH_stats, bino3_stats,bino4_stats, bino3_stats2, bino4_stats2]
 
 # Create a bar plot with error bars to visualize the results
-f_linda, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
+f_linda, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
 f_linda.savefig('./figures/Linda.svg')
 
-run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Linda")
+data = [
+        binoH_stats['count'][1],
+        binoH_stats['count'][0],
+        bino3_stats['count'][1],
+        bino3_stats['count'][0],
+        bino4_stats['count'][1],
+        bino4_stats['count'][0],
+        bino3_stats2['count'][1],
+        bino3_stats2['count'][0],
+        bino4_stats2['count'][1],
+        bino4_stats2['count'][0],
+    ]
+
+group = ['H', 'H', '35', '35', '4', '4',  'S35', 'S35', 'S4', 'S4', ]
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/Linda_comparison.csv')
 
 #%% Steve base rate fallacy
 
@@ -266,7 +282,7 @@ f_peter, ax_peter = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
 
 f_peter.savefig('./figures/k_position.svg')
 
-run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"k_position")
 
 # Display the plot
 plt.show()
@@ -424,7 +440,7 @@ f.savefig("./figures/tumor.svg")
 # Display the plot
 
 
-##%% framing framing
+#%% framing framing
 
 # ┌─────────────────────────────────────────────┐
 # │ ░▒▓█ framing QUESTION (FRAMING EFFECT) █▓▒░ │
@@ -468,3 +484,4 @@ ax.set_title(f"p value: {p_value:.3}")
 # Display the plot
 plt.show()
 
+#%% coin toss

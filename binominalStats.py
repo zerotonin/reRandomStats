@@ -1,5 +1,6 @@
 from scipy.stats import binom_test
 from statsmodels.stats.proportion import proportion_confint
+from statsmodels.stats.proportion import proportions_ztest
 import numpy as np
 import scipy.stats as stats
 class binominalStats:
@@ -78,11 +79,14 @@ class MultipleBinominalTests:
         float: The p-value of the test.
         """
         # Create the contingency table
-        contingency_table = np.vstack((self.data_a,self.data_b))
+        
+        counts       = np.array((self.data_a[0], self.data_b[0]))
+        observations = np.array((np.sum(self.data_a), np.sum(self.data_b)))
 
-        # Perform the Chi-square test for independence
-        chi2_stat, p_value, dof, expected_freq = stats.chi2_contingency(contingency_table)
-
+        p_value = proportions_ztest(count=counts, nobs=observations, alternative='two-sided')[1]
+        if np.isnan(p_value):
+            p_value =1
+            print('binominalStats: p-value is nan, either because samples are identical or nan in data. p-value set to 1')
         return p_value
 
     def test_result(self, alpha=0.05):
