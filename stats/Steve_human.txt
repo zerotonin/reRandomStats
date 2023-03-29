@@ -1,5 +1,0 @@
-Proportion: 77.45
-Lower CI: 71.6867
-Upper CI: 82.324
-count: [53, 182]
-p_value: 9.564773566718362e-18
