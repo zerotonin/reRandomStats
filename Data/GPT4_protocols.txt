@@ -157,7 +157,7 @@ Answer 001: B: 0 F: 10
 # │ ░▒▓█ Outbreak Story Pos 4 █▓▒░ │
 # └────────────────────────────────┘
 Prompt 001: Finish the last sentence of the following story with a decision on Dr Daniels' conundrum: Jules: "Dr Daniels, have you heard about the outbreak in the U.S.? It's expected to kill 600 people. There are two programs. Program A says that 400 people will die. Program B has a 67% probability that everyone dies or a 33% probability that no one dies. You got to take a decision now!" Dr Daniels weighed the options and, with a heavy sigh, decided to take 
-Program Answer 001: S: 2  G: 5
+Program Answer 001: S: 2  G: 8
 
 # ┌────────────────────────────────┐
 # │ ░▒▓█ Outbreak Story Neg 4 █▓▒░ │
