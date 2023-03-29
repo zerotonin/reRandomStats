@@ -190,10 +190,7 @@ class multiGroupTest:
             else:
                 return FisherResamplingTest([],[], specific_test,self.combination_n)
         elif test_family == 'Binominal':
-            if specific_test == 'chi2':
-                return MultipleBinominalTests([],[])
-            else:
-                raise ValueError(f'multiTestAnalysis: chooseTest: the test family {test_family} is not implemented')
+                return MultipleBinominalTests([],[], specific_test)
         # elif test_family == 'MannWhitneyU':
         #     return stats.mannwhitneyu([],[])
         # if the test family is not implemented, raise a ValueError

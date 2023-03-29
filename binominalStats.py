@@ -1,5 +1,5 @@
 from scipy.stats import binom_test
-from statsmodels.stats.proportion import proportion_confint
+from statsmodels.stats.proportion import proportion_confint,  proportions_ztest, proportions_chisquare
 import numpy as np
 import scipy.stats as stats
 class binominalStats:
@@ -57,7 +57,7 @@ class MultipleBinominalTests:
     A class to perform multiple binominal tests for comparing the fairness of multiple categories.
     """
 
-    def __init__(self, data_a,data_b):
+    def __init__(self, data_a,data_b,func, alternative = 'two-sided'):
         """
         Initialize the MultipleBinominalTests class with a variable number of categories.
 
@@ -66,6 +66,8 @@ class MultipleBinominalTests:
         """
         self.data_a = data_a
         self.data_b = data_b
+        self.func = func
+        self.alternative = alternative
 
     def main(self):
         """
@@ -78,11 +80,19 @@ class MultipleBinominalTests:
         float: The p-value of the test.
         """
         # Create the contingency table
-        contingency_table = np.vstack((self.data_a,self.data_b))
-
-        # Perform the Chi-square test for independence
-        chi2_stat, p_value, dof, expected_freq = stats.chi2_contingency(contingency_table)
-
+        
+        counts       = np.array((self.data_a[0], self.data_b[0]))
+        observations = np.array((np.sum(self.data_a), np.sum(self.data_b)))
+        if self.func == 'ztest':
+            p_value = proportions_ztest(count=counts, nobs=observations, alternative=self.alternative)[1]
+        elif self.func == 'chi2':
+            p_value = proportions_chisquare(count=counts, nobs=observations)[1]
+        else:
+            raise ValueError(f'binominalStats:MultipleBinominalTests: Unknown test function {self.func}')    
+        
+        if np.isnan(p_value):
+            p_value =1
+            print('binominalStats:MultipleBinominalTests: p-value is nan, either because samples are identical or nan in data. p-value set to 1')
         return p_value
 
     def test_result(self, alpha=0.05):

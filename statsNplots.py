@@ -1,0 +1,518 @@
+"""
+Title: Statistical Data Analysis and Visualization of Cognitive Biases
+Author: Bart Geurten
+Publication: Geurten 2023
+
+This script is for the statistical data analysis and visualization of data collected from quizzes on
+cognitive biases. The data is loaded from a CSV file containing student responses to various questions
+designed to measure cognitive biases such as base-rate fallacy, availability bias, and framing effect.
+
+The script performs the following steps:
+1. Load and clean the data
+2. Visualize age and sex distribution of the respondents
+3. Analyze and visualize the microframing effect on approximation
+4. Analyze and visualize the position of the letter 'k' in words (availability bias)
+5. Analyze and visualize the word count for different word forms (ease of recall)
+6. Analyze and visualize the base rate fallacy in the brain tumor question
+7. Analyze and visualize the framing effect in the framing question
+8. Analyze and visualize the base rate fallacy in the 'Steve' question
+9. Analyze and visualize the conjunction fallacy in the 'Linda' question
+"""
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import binominalStats, multiGroupTest,FisherResampling
+import scipy.stats as stats
+
+#%% functuion defs
+# ┌──────────────────────┐
+# │ ░▒▓█ FUNCTIONS █▓▒░  │
+# └──────────────────────┘
+
+def plot_binomial_results(results, xlabels,ylabel,title):
+    """
+    Plots bar graphs with error bars for a set of binomial statistics.
+
+    Args:
+        results (list): A list of dictionaries, where each dictionary contains the results of a binomial analysis.
+            Each dictionary should have the following keys: "Proportion", "Lower CI", "Upper CI", and "p_value".
+        xlabels (list): A list of strings to use as the x-axis labels for the bar plot.
+
+    Returns:
+        None
+    """
+    fig, ax = plt.subplots(figsize=(7, 6))
+
+    for i, res in enumerate(results):
+        ax.bar(xlabels[i], res['Proportion'])
+        ax.errorbar(xlabels[i], res['Proportion'], yerr=[[res['Proportion']-res['Lower CI']], [res['Upper CI']-res['Proportion']]],
+                    fmt='none', capsize=5, color='black')
+
+    ax.plot([-1, len(xlabels)], [50, 50], 'k--')
+    ax.set_ylabel(ylabel)
+    ax.set_xticklabels(xlabels, rotation=45, ha='right')
+    ax.set_title(title)
+    return fig,ax
+
+
+def analyze_two_choice_question(df, column, count_value):
+    """
+    Analyzes a single question in a DataFrame by counting the occurrences of each answer option,
+    calculating binomial statistics, calculating the exact confidence interval for the proportion,
+    and performing a binomial test to determine the p-value.
+    
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing the data to analyze.
+        column (str): The name of the column containing the data for the question to analyze.
+        count_value (str): The value to count in the question column.
+    
+    Returns:
+        dict: A dictionary containing the count of each answer option, the binomial statistics,
+        the exact confidence interval for the proportion, and the p-value.
+    """
+    # Count the occurrences of each answer option
+    counts = df[column].value_counts()
+
+    if count_value not  in counts.index:
+        counts[count_value] = 0
+    
+    # Calculate binomial statistics
+    binom = binominalStats.binominalStats(counts[count_value], counts.sum())
+
+    # Calculate the exact confidence interval for the proportion
+    result = binom.exact_CI()
+
+    # Perform a binomial test to determine the p-value
+    p_value = binom.binomial_test()
+
+    # Create a dictionary with the results
+    result['count'] =  [counts.sum()-counts[count_value],counts[count_value]]
+    result['p_value'] = p_value
+
+    return result
+
+def write_bino_stats_file(dictionary, filepath):
+    """
+    Writes a Python dictionary to an ASCII file.
+    
+    Args:
+        dictionary (dict): The dictionary to write to the file.
+        filepath (str): The file path to write the dictionary to.
+    
+    Returns:
+        None.
+    
+    Raises:
+        IOError: If the file path is invalid or the file cannot be written.
+    """
+    # Open the file for writing
+    try:
+        with open(filepath, 'w') as f:
+            # Loop over the dictionary items and write them to the file
+            for key, value in dictionary.items():
+                f.write(f'{key}: {value}\n')
+    except IOError as e:
+        raise IOError(f'Error writing dictionary to file: {str(e)}')
+
+def run_bino_stats(bino_stats_human, bino_stats_gpt35, bino_stats_gpt4, prefix):
+    """Runs binomial statistics and writes results to files.
+
+    Calculates binomial statistics for the Linda question based on the provided data. Performs a multi-group
+    test and writes the results to a CSV file. Also writes the binomial statistics for each group to separate
+    text files.
+
+    Args:
+        bino_stats_human (dict): A dictionary containing the count of each answer option for the human group.
+        bino_stats_gpt35 (dict): A dictionary containing the count of each answer option for the GPT-3.5 group.
+        bino_stats_gpt4 (dict): A dictionary containing the count of each answer option for the GPT-4 group.
+        prefix (str): A prefix to use in the output file names.
+
+    Returns:
+        None.
+    """
+    data = [
+        bino_stats_human['count'][1],
+        bino_stats_human['count'][0],
+        bino_stats_gpt35['count'][1],
+        bino_stats_gpt35['count'][0],
+        bino_stats_gpt4['count'][1],
+        bino_stats_gpt4['count'][0],
+    ]
+
+    group = ['H', 'H', '35', '35', '4', '4']
+
+    mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+    stat_result = mtg.main()
+    stat_result.to_csv(f'./stats/{prefix}_comparison.csv')
+    write_bino_stats_file(bino_stats_human, f'./stats/{prefix}_human.txt')
+    write_bino_stats_file(bino_stats_gpt35, f'./stats/{prefix}_gpt35.txt')
+    write_bino_stats_file(bino_stats_gpt4, f'./stats/{prefix}_gpt04.txt')
+
+
+
+#%% loading
+# ┌──────────────────────┐
+# │ ░▒▓█ LOAD DATA █▓▒░  │
+# └──────────────────────┘
+df_ai = pd.read_csv("./Data/df_ai.csv")
+df_human = pd.read_csv("./Data/df_human.csv")
+
+df_gpt35 = df_ai[df_ai["AI"] == "GPT3_5"]
+df_gpt4  = df_ai[df_ai["AI"] == "GPT4"]
+
+
+#%% Age Sex Overview
+
+# ┌───────────────────────────────────────────────────────────┐
+# │ ░▒▓█ VISUALIZE AGE & SEX DISTRIBUTION OF RESPONDENTS █▓▒░ │
+# └───────────────────────────────────────────────────────────┘
+
+
+# Create a distribution plot of the 'age' column with 'sex' as the hue, including a kernel density estimate
+sns.displot(data=df_human, x="age", hue="sex", kde=True)
+f_agesex = plt.gcf()
+f_agesex.savefig('./figures/age_sex.svg')
+
+#%% Linda
+
+# ┌──────────────────────────────────────────────────┐
+# │ ░▒▓█ 'LINDA' QUESTION (CONJUNCTION FALLACY) █▓▒░ │
+# └──────────────────────────────────────────────────┘
+
+# Count the occurrences of each answer option for the Linda question
+binoH_stats = analyze_two_choice_question(df_human,'Linda',"Linda is a bank teller and is active in the feminist movement.")
+bino3_stats = analyze_two_choice_question(df_gpt35,'Linda', 'B')
+bino4_stats = analyze_two_choice_question(df_gpt4,'Linda' , 'B')
+bino3_stats2 = analyze_two_choice_question(df_gpt35,' linda_story', 'F')
+bino4_stats2 = analyze_two_choice_question(df_gpt4,' linda_story' , 'F')
+results =[binoH_stats, bino3_stats,bino4_stats, bino3_stats2, bino4_stats2]
+
+# Create a bar plot with error bars to visualize the results
+f_outbreak, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
+                      "Answer indicating Linda is a feminist and bankteller, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_outbreak.savefig('./figures/Linda.svg')
+
+data = [
+        binoH_stats['count'][1],
+        binoH_stats['count'][0],
+        bino3_stats['count'][1],
+        bino3_stats['count'][0],
+        bino4_stats['count'][1],
+        bino4_stats['count'][0],
+        bino3_stats2['count'][1],
+        bino3_stats2['count'][0],
+        bino4_stats2['count'][1],
+        bino4_stats2['count'][0],
+    ]
+
+group = ['H', 'H', '35', '35', '4', '4',  'S35', 'S35', 'S4', 'S4', ]
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/Linda_comparison.csv')
+
+#%% Steve base rate fallacy
+
+# ┌────────────────────────────────────────────────┐
+# │ ░▒▓█ 'STEVE' QUESTION (BASE RATE FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────┘
+
+# Count the occurrences of each answer option for the Steve question
+binoH_stats = analyze_two_choice_question(df_human,'Steve', "librarian")
+bino3_stats = analyze_two_choice_question(df_gpt35,'Steve', 'L')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'Steve', 'L')
+results =[binoH_stats, bino3_stats,bino4_stats]
+# Calculate the base rate for Steve being a librarian
+base_rate = 50000 / 950000
+
+# Create a bar plot with error bars to visualize the results
+f_steve, ax_steve = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
+                      "Steve is a librarian, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_steve.savefig('./figures/Steve.svg')
+
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"Steve")
+
+#%% Peter base conjunction fallacy
+
+# ┌────────────────────────────────────────────────┐
+# │ ░▒▓█ 'PETER' QUESTION (CONJUCTION FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────┘
+
+# Count the occurrences of each answer option for the Steve question
+bino3_stats = analyze_two_choice_question(df_gpt35,'Peter', 'S')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'Peter', 'S')
+results =[bino3_stats,bino4_stats]
+
+
+# Create a bar plot with error bars to visualize the results
+f_peter, ax_peter = plot_binomial_results(results, ['GPT 3.5','GPT 4'],
+                      "Peter is a playing and streaming, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_peter.savefig('./figures/Peter.svg')
+
+#%% letter k position availability bias / ease of recall
+# ┌───────────────────────────────────────────────────┐
+# │ ░▒▓█ LETTER 'K' POSITION (AVAILABILITY BIAS) █▓▒░ │
+# └───────────────────────────────────────────────────┘
+
+# Get the value counts for the 'k_position' column in the DataFrame
+result = df_human.k_position.value_counts()
+# Count the occurrences of each answer option for the Steve question
+binoH_stats = analyze_two_choice_question(df_human,'k_position', "More words have the letter k at the third position, than at the beginning")
+bino3_stats = analyze_two_choice_question(df_gpt35,'k_position', 'K')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'k_position', 'K')
+results =[binoH_stats,bino3_stats,bino4_stats]
+
+
+# Create a bar plot with error bars to visualize the results
+f_peter, ax_peter = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4'],
+                      "more words starting with k than k in third position, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_peter.savefig('./figures/k_position.svg')
+
+run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"k_position")
+
+
+
+#%% Microframing Factorial
+
+# ┌───────────────────────────────────────────────────┐
+# │ ░▒▓█ ANALYZE & VISUALIZE MICROFRAMING EFFECT █▓▒░ │
+# └───────────────────────────────────────────────────┘
+
+# Create a DataFrame with 'factorial framing' and 'microframingID' columns
+micro_df = df_human[["factorial framing","microframingID"]]
+
+# Drop rows with missing values
+micro_df = micro_df.dropna()
+
+# Keep only rows with numeric values in the 'factorial framing' column
+micro_df = micro_df[pd.to_numeric(micro_df['factorial framing'], errors='coerce').notna()]
+
+# Perform Fisher's resampling test on the medians
+frs = FisherResampling.FisherResamplingTest(micro_df.loc[micro_df["microframingID"]=="1->9", "factorial framing"],
+                                            micro_df.loc[micro_df["microframingID"]=="9->1", "factorial framing"],
+                                            "medianDiff",10000)
+p_value = frs.main()
+
+# Load a colorblind-friendly palette
+palette = sns.color_palette("colorblind")
+
+fig, ax1 = plt.subplots(figsize=(7, 6))
+
+# Create a boxplot to visualize the microframing effect
+sns.boxplot(x="microframingID", y="factorial framing", data=micro_df,hue="microframingID",
+            notch=False, showcaps=False,
+            flierprops={"marker": "x"}, dodge=False,
+            palette=palette,
+            width=.6,ax=ax1)
+
+# Add in points to show each observation
+sns.stripplot(x="microframingID", y="factorial framing", data=micro_df,
+              size=4, color=".3", linewidth=0)
+
+# Set the title and scale
+ax1.set_title(f" Fisher Resampling on medians. p-value: {p_value:.3}")
+ax1.set_yscale("log")
+fig.savefig('./figures/microFraming_humans.svg')
+
+# Display the plot
+bino3_stats = analyze_two_choice_question(df_gpt35,'factorial framing', 'X')
+bino4_stats = analyze_two_choice_question(df_gpt4 ,'factorial framing', 'X')
+results =[bino3_stats,bino4_stats]
+
+
+# Create a bar plot with error bars to visualize the results
+fig_ai, ax_ai = plot_binomial_results(results, ['GPT 3.5','GPT 4'],
+                      "Chance of picking large to small, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+fig_ai.savefig('./figures/microFraming_ai.svg')
+
+
+
+#%%  ____n__ vs _____ing ease of recall / availability
+
+# ┌───────────────────────────────────────────────┐
+# │ ░▒▓█ WORD COUNT FOR DIFFERENT WORD FORMS █▓▒░ │
+# └───────────────────────────────────────────────┘
+
+# Create a DataFrame with only letter-related columns
+boxplotH_df = df_human[["letter_ing","letter_i","letter_ly","letter_l"]]
+boxplot3_df = df_ai.loc[df_ai.AI == "GPT3_5",["letter_ing","letter_i","letter_ly","letter_l"]]
+boxplot4_df = df_ai.loc[df_ai.AI == "GPT4",["letter_ing","letter_i","letter_ly","letter_l"]]
+
+# Melt the DataFrame to create a new DataFrame with 'word_count' and 'question' columns
+boxplotH_df = boxplotH_df.melt(var_name='question', value_name='word_count')
+boxplot3_df = boxplot3_df.melt(var_name='question', value_name='word_count')
+boxplot4_df = boxplot4_df.melt(var_name='question', value_name='word_count')
+
+boxplotH_df['source'] = 'human' 
+boxplot3_df['source'] = 'GPT 3.5'
+boxplot4_df['source'] = 'GPT 4'
+
+boxplot_list = [boxplotH_df, boxplot3_df, boxplot4_df]
+suffix_list =['human','gpt35','gpt4']
+
+for i in range(3):
+
+    # get data
+    boxplot_df = boxplot_list[i]
+    suffix     = suffix_list[i]
+
+    # Remove rows with missing values in the 'word_count' column
+    boxplot_df = boxplot_df.dropna(subset=['word_count'])
+
+    # Reset the index
+    boxplot_df.reset_index(drop=True, inplace=True)
+
+    # Load a colorblind-friendly palette
+    palette = sns.color_palette("colorblind")
+
+    # Perform multi-group test using Fisher's mean difference
+    mtg = multiGroupTest.multiGroupTest(boxplot_df.word_count,boxplot_df.question,"Fisher:meanDiff",10000)
+    stat_result = mtg.main()
+
+    # Save the statistical results to a CSV file
+    stat_result.to_csv(f"./stats/letter_stats_{suffix}.csv")
+
+    # Create a boxplot to visualize the word count for different word forms
+    f, ax = plt.subplots(figsize=(7, 6))
+    sns.boxplot(data=boxplot_df, x="question", y="word_count", hue="question",
+                notch=False, showcaps=False,
+                flierprops={"marker": "x"}, dodge=False,
+                palette=palette)
+
+
+    f.savefig(f"./figures/letter_stats_{suffix}.svg")
+
+#%% tumor question base rate fallacy
+
+# ┌────────────────────────────────────────────────────┐
+# │ ░▒▓█ BRAIN TUMOR QUESTION (BASE RATE FALLACY) █▓▒░ │
+# └────────────────────────────────────────────────────┘
+
+# The actual probability is 33.2%
+tumor_test_prob = 33.2
+
+# Calculate the median of tumor column values
+median_value = df_human["tumor"].median()
+
+# Perform a one-sample Wilcoxon signed-rank test comparing tumor values to the actual probability
+stat, p_value = stats.wilcoxon(df_human["tumor"] - tumor_test_prob)
+print(f'Statistic: {stat}, p-value: {p_value}')
+
+
+plotH_df = df_human["tumor"].to_frame()
+plot3_df = df_ai.loc[df_ai.AI == "GPT3_5","tumor_smurf"].to_frame()
+plot4_df = df_ai.loc[df_ai.AI == "GPT4","tumor_smurf"].to_frame()
+
+plot3_df = plot3_df.rename(columns={"tumor_smurf":"tumor"})
+plot4_df = plot4_df.rename(columns={"tumor_smurf":"tumor"})
+
+plotH_df['source'] = 'human' 
+plot3_df['source'] = 'GPT 3.5'
+plot4_df['source'] = 'GPT 4'
+
+plot_df= pd.concat([plotH_df, plot3_df, plot4_df])
+plot_df=plot_df.reset_index()
+
+sns.displot(plot_df, x="tumor", hue="source", stat="density", common_norm=False, multiple="dodge")
+
+f = plt.gcf()
+f.savefig("./figures/tumor.svg")
+# Display the plot
+
+
+#%% framing framing
+
+# ┌─────────────────────────────────────────────┐
+# │ ░▒▓█ framing QUESTION (FRAMING EFFECT) █▓▒░ │
+# └─────────────────────────────────────────────┘
+
+# Create a DataFrame containing only framing and framingID columns
+framing_df = df_human[["framing", "framingID"]]
+
+# Remove rows that do not start with 'P' in the framing column
+framing_df = framing_df[framing_df['framing'].str.startswith('P') == True]
+
+binohp_stats = analyze_two_choice_question(framing_df.loc[framing_df['framingID'] == 'positive'],'framing',
+                                           'Program B: either no one is saved (67% probability) or everyone is saved (33% probability)')
+binohn_stats = analyze_two_choice_question(framing_df.loc[framing_df['framingID'] == 'negative'],'framing',
+                                           'Program B: either everyone dies (67% probability), or no one dies (33% probability)')
+bino3p_stats = analyze_two_choice_question(df_gpt35,'outbreak_story_pos', 'G')
+bino3n_stats = analyze_two_choice_question(df_gpt35,'outbreak_story_neg' , 'G')
+bino4p_stat = analyze_two_choice_question(df_gpt4,'outbreak_story_pos', 'G')
+bino4n_stats = analyze_two_choice_question(df_gpt4,'outbreak_story_neg' , 'G')
+results =[binohp_stats, binohn_stats,bino3p_stats,bino3n_stats,bino4p_stat,bino4n_stats]
+
+# Create a bar plot with error bars to visualize the results
+f_outbreak, ax_linda = plot_binomial_results(results, ['pos human','neg human', 'pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
+                      "Answer indicating to gamble, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_outbreak.savefig('./figures/outbreak_story.svg')
+
+data = [
+        binohp_stats['count'][1],
+        binohp_stats['count'][0],
+        binohn_stats['count'][1],
+        binohn_stats['count'][0],
+        bino3p_stats['count'][1],
+        bino3p_stats['count'][0],
+        bino3n_stats['count'][1],
+        bino3n_stats['count'][0],
+        bino4p_stat['count'][1],
+        bino4p_stat['count'][0],
+        bino4n_stats['count'][1],
+        bino4n_stats['count'][0],
+    ]
+
+group = ['posH', 'posH', 'negH', 'negH','pos3', 'pos3', 'neg3', 'neg3','pos4', 'pos4', 'neg4', 'neg4']
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/outbreak_comparison.csv')
+
+#%% coin toss
+# ┌────────────────────────────────────────────────────────┐
+# │ ░▒▓█ Coin Toss / Prospect Theory (FRAMING EFFECT) █▓▒░ │
+# └────────────────────────────────────────────────────────┘
+
+bino3p_stats = analyze_two_choice_question(df_gpt35,'coin_story_pos', 'T')
+bino3n_stats = analyze_two_choice_question(df_gpt35,'coin_story_neg' , 'T')
+bino4p_stat = analyze_two_choice_question(df_gpt4,'coin_story_pos', 'T')
+bino4n_stats = analyze_two_choice_question(df_gpt4,'coin_story_neg' , 'T')
+results =[bino3p_stats,bino3n_stats,bino4p_stat,bino4n_stats]
+
+# Create a bar plot with error bars to visualize the results
+f_outbreak, ax_linda = plot_binomial_results(results, ['pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
+                      "Answer indicating to gamble, %",
+                      f"p values: {[res['p_value'] for res in results]}")
+
+f_outbreak.savefig('./figures/Coin_toss_story.svg')
+
+data = [
+        bino3p_stats['count'][1],
+        bino3p_stats['count'][0],
+        bino3n_stats['count'][1],
+        bino3n_stats['count'][0],
+        bino4p_stat['count'][1],
+        bino4p_stat['count'][0],
+        bino4n_stats['count'][1],
+        bino4n_stats['count'][0],
+    ]
+
+group = ['pos3', 'pos3', 'neg3', 'neg3','pos4', 'pos4', 'neg4', 'neg4']
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/coin_toss_comparison.csv')

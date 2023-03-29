@@ -1,0 +1,7 @@
+Proportion: 69.79
+Lower CI: 63.6369
+Upper CI: 75.3011
+count: 1    164
+0     71
+Name: Linda, dtype: int64
+p_value: 1.1986892181568054e-09
