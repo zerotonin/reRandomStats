@@ -1,7 +1,5 @@
 Proportion: 100.0
 Lower CI: 72.2467
 Upper CI: 100
-count: 1    10
-0     0
-Name: Steve, dtype: int64
+count: [0, 10]
 p_value: 0.001953125

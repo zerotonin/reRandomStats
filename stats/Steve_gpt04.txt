@@ -1,7 +1,5 @@
 Proportion: 70.0
 Lower CI: 39.6778
 Upper CI: 89.2209
-count: 1    7
-0    3
-Name: Steve, dtype: int64
+count: [3, 7]
 p_value: 0.34375

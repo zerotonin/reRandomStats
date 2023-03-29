@@ -1,7 +1,5 @@
 Proportion: 62.39
 Lower CI: 56.0336
 Upper CI: 68.3524
-count: 1.0    146
-0.0     88
-Name: k_position, dtype: int64
+count: [88, 146]
 p_value: 0.0001813438328547242

@@ -1,7 +1,5 @@
 Proportion: 0.0
 Lower CI: 0
 Upper CI: 27.7533
-count: 0    10
-1     0
-Name: k_position, dtype: int64
+count: [10, 0]
 p_value: 0.001953125

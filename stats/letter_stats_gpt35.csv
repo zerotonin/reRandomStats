@@ -1,7 +1,7 @@
 ,groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-0,letter_l,10,letter_ly,10,0.037800000000000056,0.056700000000000084,False,n.s.
-1,letter_l,10,letter_i,10,0.5082,0.6098399999999999,False,n.s.
-2,letter_l,10,letter_ing,10,0.0001,0.00030000000000000003,True,***
-3,letter_ly,10,letter_i,10,0.0166,0.0332,True,*
-4,letter_ly,10,letter_ing,10,0.0001,0.00030000000000000003,True,***
-5,letter_i,10,letter_ing,10,0.9858,0.9858,False,n.s.
+0,letter_i,10,letter_ing,10,0.9938,0.9938,False,n.s.
+1,letter_i,10,letter_ly,10,0.019200000000000106,0.03840000000000021,True,*
+2,letter_i,10,letter_l,10,0.4942,0.5930399999999999,False,n.s.
+3,letter_ing,10,letter_ly,10,0.00019999999999997797,0.0005999999999999339,True,***
+4,letter_ing,10,letter_l,10,0.00019999999999997797,0.0005999999999999339,True,***
+5,letter_ly,10,letter_l,10,0.0362,0.05430000000000001,False,n.s.
