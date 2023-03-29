@@ -73,17 +73,13 @@ def analyze_two_choice_question(df, column, count_value):
         the exact confidence interval for the proportion, and the p-value.
     """
     # Count the occurrences of each answer option
-    count = df[column].str.count(count_value).value_counts()
+    counts = df[column].value_counts()
 
-    # sometimes the value is not in the dataset, then we have to set the value as 0
-    if len(count) == 1:
-        if  count.keys()[0] == 1:
-            count[0] = 0
-        else:
-            count[1] = 0
-
+    if count_value not  in counts.index:
+        counts[count_value] = 0
+    
     # Calculate binomial statistics
-    binom = binominalStats.binominalStats(count[1], count.sum())
+    binom = binominalStats.binominalStats(counts[count_value], counts.sum())
 
     # Calculate the exact confidence interval for the proportion
     result = binom.exact_CI()
@@ -92,7 +88,7 @@ def analyze_two_choice_question(df, column, count_value):
     p_value = binom.binomial_test()
 
     # Create a dictionary with the results
-    result['count'] = count
+    result['count'] =  [counts.sum()-counts[count_value],counts[count_value]]
     result['p_value'] = p_value
 
     return result
@@ -194,11 +190,11 @@ bino4_stats2 = analyze_two_choice_question(df_gpt4,' linda_story' , 'F')
 results =[binoH_stats, bino3_stats,bino4_stats, bino3_stats2, bino4_stats2]
 
 # Create a bar plot with error bars to visualize the results
-f_coinstory, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
+f_outbreak, ax_linda = plot_binomial_results(results, ['Human','GPT 3.5','GPT 4', 'storyGPT 3.5','storyGPT 4'],
                       "Answer indicating Linda is a feminist and bankteller, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
-f_coinstory.savefig('./figures/Linda.svg')
+f_outbreak.savefig('./figures/Linda.svg')
 
 data = [
         binoH_stats['count'][1],
@@ -284,8 +280,6 @@ f_peter.savefig('./figures/k_position.svg')
 
 run_bino_stats(binoH_stats, bino3_stats,bino4_stats,"k_position")
 
-# Display the plot
-plt.show()
 
 
 #%% Microframing Factorial
@@ -399,8 +393,6 @@ for i in range(3):
 
 
     f.savefig(f"./figures/letter_stats_{suffix}.svg")
-# Display the plot
-plt.show()
 
 #%% tumor question base rate fallacy
 
@@ -452,37 +444,43 @@ framing_df = df_human[["framing", "framingID"]]
 # Remove rows that do not start with 'P' in the framing column
 framing_df = framing_df[framing_df['framing'].str.startswith('P') == True]
 
-# Count occurrences of each combination of framing and framingID
-total_n = framing_df.value_counts()
-print(total_n)
-
-# Calculate the positive and negative frame counts
-pos_frame = np.array([total_n[3], total_n[1]])
-neg_frame = np.array([total_n[0], total_n[2]])
-
-# Perform multiple binomial tests between positive and negative framings
-mbt = binominalStats.MultipleBinominalTests(pos_frame, neg_frame,'chi2')
-p_value = mbt.main()
-
-# Calculate the exact confidence interval for the positive framing
-binom = binominalStats.binominalStats(pos_frame[0], pos_frame.sum())
-ci_dict_pos = binom.exact_CI()
-
-# Calculate the exact confidence interval for the negative framing
-binom = binominalStats.binominalStats(neg_frame[0], neg_frame.sum())
-ci_dict_neg = binom.exact_CI()
+binohp_stats = analyze_two_choice_question(framing_df.loc[framing_df['framingID'] == 'positive'],'framing',
+                                           'Program B: either no one is saved (67% probability) or everyone is saved (33% probability)')
+binohn_stats = analyze_two_choice_question(framing_df.loc[framing_df['framingID'] == 'negative'],'framing',
+                                           'Program B: either everyone dies (67% probability), or no one dies (33% probability)')
+bino3p_stats = analyze_two_choice_question(df_gpt35,'outbreak_story_pos', 'G')
+bino3n_stats = analyze_two_choice_question(df_gpt35,'outbreak_story_neg' , 'G')
+bino4p_stat = analyze_two_choice_question(df_gpt4,'outbreak_story_pos', 'G')
+bino4n_stats = analyze_two_choice_question(df_gpt4,'outbreak_story_neg' , 'G')
+results =[binohp_stats, binohn_stats,bino3p_stats,bino3n_stats,bino4p_stat,bino4n_stats]
 
 # Create a bar plot with error bars to visualize the results
-f, ax = plt.subplots(figsize=(7, 6))
-ax.bar(["positive", "negative"], [ci_dict_pos['Proportion'], ci_dict_neg['Proportion']])
-ax.errorbar("positive", ci_dict_pos['Proportion'], yerr=[[ci_dict_pos['Proportion']-ci_dict_pos['Lower CI']], [ci_dict_pos['Upper CI']-ci_dict_pos['Proportion']]], fmt='none', capsize=5, color='black')
-ax.errorbar("negative", ci_dict_neg['Proportion'], yerr=[[ci_dict_neg['Proportion']-ci_dict_neg['Lower CI']], [ci_dict_neg['Upper CI']-ci_dict_neg['Proportion']]], fmt='none', capsize=5, color='black')
-ax.plot([-0.5, 1.5], [50, 50], 'k--')
-ax.set_ylabel("Percentage of students chosing to gamble")
-ax.set_title(f"p value: {p_value:.3}")
+f_outbreak, ax_linda = plot_binomial_results(results, ['pos human','neg human', 'pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
+                      "Answer indicating to gamble, %",
+                      f"p values: {[res['p_value'] for res in results]}")
 
-# Display the plot
-plt.show()
+f_outbreak.savefig('./figures/outbreak_story.svg')
+
+data = [
+        binohp_stats['count'][1],
+        binohp_stats['count'][0],
+        binohn_stats['count'][1],
+        binohn_stats['count'][0],
+        bino3p_stats['count'][1],
+        bino3p_stats['count'][0],
+        bino3n_stats['count'][1],
+        bino3n_stats['count'][0],
+        bino4p_stat['count'][1],
+        bino4p_stat['count'][0],
+        bino4n_stats['count'][1],
+        bino4n_stats['count'][0],
+    ]
+
+group = ['posH', 'posH', 'negH', 'negH','pos3', 'pos3', 'neg3', 'neg3','pos4', 'pos4', 'neg4', 'neg4']
+
+mtg = multiGroupTest.multiGroupTest(data, group, "Binominal:chi2", 0)
+stat_result = mtg.main()
+stat_result.to_csv(f'./stats/outbreak_comparison.csv')
 
 #%% coin toss
 # ┌────────────────────────────────────────────────────────┐
@@ -496,11 +494,11 @@ bino4n_stats = analyze_two_choice_question(df_gpt4,'coin_story_neg' , 'T')
 results =[bino3p_stats,bino3n_stats,bino4p_stat,bino4n_stats]
 
 # Create a bar plot with error bars to visualize the results
-f_coinstory, ax_linda = plot_binomial_results(results, ['pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
+f_outbreak, ax_linda = plot_binomial_results(results, ['pos. GPT 3.5','neg. GPT 3.5', 'pos.  GPT 4','neg. GPT 4'],
                       "Answer indicating to gamble, %",
                       f"p values: {[res['p_value'] for res in results]}")
 
-f_coinstory.savefig('./figures/Coin_toss_story.svg')
+f_outbreak.savefig('./figures/Coin_toss_story.svg')
 
 data = [
         bino3p_stats['count'][1],
