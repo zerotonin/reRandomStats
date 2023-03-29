@@ -150,4 +150,17 @@ Answer 001: T: 1 S: 9 U: 0
 # │ ░▒▓█ Linda Story 4 █▓▒░ │
 # └─────────────────────────┘
 Prompt 001: Finish the last sentence of the following story with a decision on the Anne's conundrum: "You have to make a decision," Sean growled, his eyes glinting in the half-light. "I mean, I saw her. She's thirty-one years old, single, outspoken, and very bright. She majored in philosophy. As a student, she was deeply concerned with issues of discrimination and social justice and also participated in antinuclear demonstrations." "Anne, listen to me," Sean continued. "Either she's a bankteller and a feminist, or she's just a bankteller. What is more likely, Anne? I need a decision!" Anne weighed the options and with a heavy sigh decided that the third person was a
-Answer 001: B: 0 F: 2
+Answer 001: B: 0 F: 10
+
+
+# ┌────────────────────────────────┐
+# │ ░▒▓█ Outbreak Story Pos 4 █▓▒░ │
+# └────────────────────────────────┘
+Prompt 001: Finish the last sentence of the following story with a decision on Dr Daniels' conundrum: Jules: "Dr Daniels, have you heard about the outbreak in the U.S.? It's expected to kill 600 people. There are two programs. Program A says that 400 people will die. Program B has a 67% probability that everyone dies or a 33% probability that no one dies. You got to take a decision now!" Dr Daniels weighed the options and, with a heavy sigh, decided to take 
+Program Answer 001: S: 2  G: 5
+
+# ┌────────────────────────────────┐
+# │ ░▒▓█ Outbreak Story Neg 4 █▓▒░ │
+# └────────────────────────────────┘
+Prompt 001: Finish the last sentence of the following story with a decision on Dr Daniels' conundrum: Jules: "Dr Daniels, have you heard about the outbreak in the U.S.? It's expected to kill 600 people. There are two programs. Program A says that 400 people will die. Program B has a 67% probability that everyone dies or a 33% probability that no one dies. You got to take a decision now!" Dr Daniels weighed the options and, with a heavy sigh, decided to take 
+Program Answer 001: S: 6  G: 4
