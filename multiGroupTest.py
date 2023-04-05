@@ -11,7 +11,7 @@ class multiGroupTest:
     A class for running multiple statistical tests on grouped data and applying multiple test correction.
     """
 
-    def __init__(self,data,group,test,combination_n,correction_type='fdr_bh'):
+    def __init__(self,data,group,test,combination_n,correction_type='fdr_bh',combination_set = ()):
         """
         Initialize a multiGroupTest object.
         
@@ -19,34 +19,26 @@ class multiGroupTest:
             data (list): A list of numerical values representing the data set to be tested.
             group (list): A list of strings representing the group names corresponding to each element of the data set.
             test (str): A string representing the statistical test to be used. The format should be test-family:test-name, e.g 'ttest:ind'
-            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations
+            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations, or 'set' if the parameter combnination set is given.
             correction_type (str, optional): The method used for testing and adjustment of pvalues. Can be either the full name or initial letters. Default is 'fdr_bh'. Available methods are:
-                
-                'bonferroni' : one-step correction
-
-                'sidak' : one-step correction
-
-                'holm-sidak' : step down method using Sidak adjustments
-
-                'holm' : step-down method using Bonferroni adjustments
-
-                'simes-hochberg' : step-up method (independent)
-
-                'hommel' : closed method based on Simes tests (non-negative)
-
-                'fdr_bh' : Benjamini/Hochberg (non-negative)
-
-                'fdr_by' : Benjamini/Yekutieli (negative)
-
-                'fdr_tsbh' : two stage fdr correction (non-negative)
-
-                'fdr_tsbky' : two stage fdr correction (non-negative)
-        """        
+                                'bonferroni' : one-step correction
+                                'sidak' : one-step correction
+                                'holm-sidak' : step down method using Sidak adjustments
+                                'holm' : step-down method using Bonferroni adjustments
+                                'simes-hochberg' : step-up method (independent)
+                                'hommel' : closed method based on Simes tests (non-negative)
+                                'fdr_bh' : Benjamini/Hochberg (non-negative)
+                                'fdr_by' : Benjamini/Yekutieli (negative)
+                                'fdr_tsbh' : two stage fdr correction (non-negative)
+                                'fdr_tsbky' : two stage fdr correction (non-negative)
+            combination_set (str, optional): In some cases not all combinations are needed, set combinatio_n to 'set' and this variable to a tuple of data tags. 
+         """        
         self.data  = data
         self.group = group
         self.test  = test
-        self.correction_type = correction_type
-        self.combination_n  = combination_n 
+        self.correction_type  = correction_type
+        self.combination_n    = combination_n 
+        self.combination_set  = combination_set 
     
 
     def rearrange_data(self):
@@ -115,7 +107,10 @@ class multiGroupTest:
             list: A list of tuples containing all possible unique combinations of 2 indices out of the length of group names
         """
         # Using python's built-in combinations function from the itertools module to generate a list of all possible unique tuples
-        return list(combinations(range(len(self.group_names)), 2))
+        if self.combination_n == 'set':
+            return  [(self.group_names.index(x), self.group_names.index(y)) for (x,y) in self.combination_set]
+        else:
+            return list(combinations(range(len(self.group_names)), 2))
 
     
     def get_significance_level(self,p_value):
