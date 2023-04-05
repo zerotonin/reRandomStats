@@ -1,6 +1,6 @@
 import multiGroupTest,dataIO
 import matplotlib.pyplot as plt
-from binominal_stats import exact_CI
+import binominalStats
 import numpy as np
 '''
 Script: stat_analysis_GargEtAl_2023B.py
@@ -43,11 +43,14 @@ for i in range(len(file_path)):
     # Save the result to a csv file
     result_df.to_csv(save_file)
 
+binoObj = binominalStats.binominalStats(0,0)
 
 temp = np.array([data[0:8],data[8::]])
 conf_int = list()
 for i in range(temp.shape[1]):
-    conf_int.append(exact_CI(temp[0,i],temp[1,i]))
+    binoObj.heads = temp[0,i]
+    binoObj.total_flips = temp[1,i]
+    conf_int.append(binoObj.exact_CI())
 
 import matplotlib.pyplot as plt
 
