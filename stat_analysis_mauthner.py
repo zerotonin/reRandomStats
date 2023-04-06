@@ -31,24 +31,35 @@ tag= "MauthnerCells"
 # v files containing the original data
 file_path = f'./Data/{tag}.csv'
 df = pd.read_csv(file_path)
-df_stat = df.groupby(df['Genotype'].str[:-2])['Median'].mean().reset_index(name="Median")
-df_stat['Genotype'] = df_stat['Genotype'].str[:-1]
+df_stat = df.loc[:,['Genotype','Median']]
+df_stat['Genotype'] = df_stat['Genotype'].str[:-3]
 df_stat = df_stat.replace('wt', '+\+')
 df_stat = df_stat.replace('hom', '-\-')
 df_stat = df_stat.replace('het', '+\-')
-#df_stat['Mean'] = df_stat['Mean']/255
-#df_stat = df_stat.rename(columns={"Mean":"Mean pixel intensity"})
+df_stat['Median'] = df_stat['Median']/255
+df_stat = df_stat.rename(columns={"Median":"Median pixel intensity, norm."})
 
 # data combinations to be tested
 
-sns.catplot(data=df_stat, x="Genotype", y="Median", hue="Genotype", kind="swarm")
-plt.gcf().savefig(f'./figures/{tag}_.svg')
+f, ax = plt.subplots(figsize=(7, 6))
+sns.boxplot(
+    data=df_stat, x="Genotype", y="Median pixel intensity, norm.",
+    notch=False, showcaps=False,
+    flierprops={"marker": "x"},
+    boxprops={"facecolor": (.4, .6, .8, .5)},
+    
+)
+
+sns.stripplot(x="Genotype", y="Median pixel intensity, norm.", data=df_stat,
+              size=4, color=".3", linewidth=0)
+
+f.savefig(f'./figures/{tag}_.svg')
 #plt.show()
 
 save_file = f'./stats/{tag}_Fishers_MeanDiff_FDR_BH.csv'
 # Read the data from the current file and convert it to a long table format
 # Create a multiGroupTest object and set the data, group and test parameters
-mgt = multiGroupTest.multiGroupTest(df_stat["Median"],df_stat['Genotype'],'hypo:Kolmogorov','all')
+mgt = multiGroupTest.multiGroupTest(df_stat["Median"],df_stat['Genotype'],'Fisher:medianDiff',20000)
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
 # Save the result to a csv file

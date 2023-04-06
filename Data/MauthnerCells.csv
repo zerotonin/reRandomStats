@@ -1,4 +1,4 @@
-Genotype,Area,Mean,InDen,Median,RawIntDen,RawIntden_normalisedtoarea,Intden_normalised to area,hemisphere
+Genotype,Area,Mean,InDen,Median,RawIntDen,RawIntden_normalisedtoarea,Intden_norm,hemisphere
 wt1M1,743.4788,105.1628,78186.3378,113,242190,325.752395360836,105.162834232799,L
 wt2M1,1363.6364,86.4342,117864.7986,83,365098,267.738526193639,86.4341833350884,L
 wt3M1,663.172,138.8787,92100.4344,146,1142277,1722.44455435392,138.878653501656,L
