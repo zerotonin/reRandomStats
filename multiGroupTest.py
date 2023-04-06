@@ -2,6 +2,7 @@ import pandas as pd
 from itertools import combinations
 from FisherResampling import FisherResamplingTest
 from FisherExact import FisherExactTest
+from HypothesisTests import HypothesisTests
 from binominalStats import MultipleBinominalTests
 import statsmodels.api as sm
 from tqdm import tqdm
@@ -186,8 +187,7 @@ class multiGroupTest:
                 return FisherResamplingTest([],[], specific_test,self.combination_n)
         elif test_family == 'Binominal':
                 return MultipleBinominalTests([],[], specific_test)
-        # elif test_family == 'MannWhitneyU':
-        #     return stats.mannwhitneyu([],[])
-        # if the test family is not implemented, raise a ValueError
+        elif test_family == 'hypo':
+                return HypothesisTests([],[],specific_test)
         else:
             raise ValueError(f'multiTestAnalysis: chooseTest: the test family {test_family} is not implemented')
