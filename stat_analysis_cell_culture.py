@@ -24,26 +24,25 @@ mutant zebrafish. All p-values are corrected with the Benjamini Hochberg FDR det
 
 
 # file_path contains a list of file paths to csv files containing the original data
-file_path = ['./Data/cell_culture_data.csv']
+tag= "cell_culture_data"
+# Assign the current file path, data subset, and save file name
+file = f'./Data/{tag}.csv'
+save_file = f'./stats/{tag}_FishersExactTest_FDR_BH.csv'
 
 # data combinations to be tested
 combinations = [('wt_c1', 'mut_c1'), ('wt_c2', 'mut_c2'), ('wt_c3','mut_c3'), ('wt_c4','mut_c4')] 
 
-# Iterate over the file paths
-for i in range(len(file_path)):
-    # Assign the current file path, data subset, and save file name
-    file = file_path[i]
-    save_file = file[0:-4]+'_stats_FishersExactTest_FDR_BH.csv'
-    # Create a DataIO object
-    dio = dataIO.DataIO()  
-    # Read the data from the current file and convert it to a long table format
-    id_list,data=dio.wide_table_csv_to_long_table(file)
-    # Create a multiGroupTest object and set the data, group and test parameters
-    mgt = multiGroupTest.multiGroupTest(data,id_list,'Fisher:exact','set',combination_set=combinations)
-    # Run the main method of the multiGroupTest object
-    result_df = mgt.main()
-    # Save the result to a csv file
-    result_df.to_csv(save_file)
+
+# Create a DataIO object
+dio = dataIO.DataIO()  
+# Read the data from the current file and convert it to a long table format
+id_list,data=dio.wide_table_csv_to_long_table(file)
+# Create a multiGroupTest object and set the data, group and test parameters
+mgt = multiGroupTest.multiGroupTest(data,id_list,'Fisher:exact','set',combination_set=combinations)
+# Run the main method of the multiGroupTest object
+result_df = mgt.main()
+# Save the result to a csv file
+result_df.to_csv(save_file)
 
 binoObj = binominalStats.binominalStats(0,0)
 
@@ -88,3 +87,4 @@ fig,ax =plot_bar_with_error_bars([x['Proportion']for x in conf_int[0:4]],
 
 ax.set_xlabel('anatomical location')
 ax.set_ylabel('cell positive, in percent')
+fig.savefig(f'./figures/{tag}.svg')
