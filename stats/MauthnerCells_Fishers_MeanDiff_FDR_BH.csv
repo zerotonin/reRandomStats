@@ -1,0 +1,4 @@
+groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+-\-,3,+\+,5,0.03571428571428559,0.10714285714285676,False,n.s.
+-\-,3,+\-,3,0.09999999999999999,0.15,False,n.s.
++\+,5,+\-,3,0.2857142857142857,0.2857142857142857,False,n.s.
