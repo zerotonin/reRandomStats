@@ -20,7 +20,7 @@ class multiGroupTest:
             data (list): A list of numerical values representing the data set to be tested.
             group (list): A list of strings representing the group names corresponding to each element of the data set.
             test (str): A string representing the statistical test to be used. The format should be test-family:test-name, e.g 'ttest:ind'
-            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations, or 'set' if the parameter combnination set is given.
+            combination_n (int or str): The number of random combinations to generate, or 'all' to generate all possible unique combinations.
             correction_type (str, optional): The method used for testing and adjustment of pvalues. Can be either the full name or initial letters. Default is 'fdr_bh'. Available methods are:
                                 'bonferroni' : one-step correction
                                 'sidak' : one-step correction
@@ -32,7 +32,8 @@ class multiGroupTest:
                                 'fdr_by' : Benjamini/Yekutieli (negative)
                                 'fdr_tsbh' : two stage fdr correction (non-negative)
                                 'fdr_tsbky' : two stage fdr correction (non-negative)
-            combination_set (str, optional): In some cases not all combinations are needed, set combinatio_n to 'set' and this variable to a tuple of data tags. 
+            combination_set (str, optional): In some cases not all combinations are needed. If this  variable is not empty but holds a list of tuples with the groups for testing only these pairings will be teste.
+                                             E.g. [('GroupA','GroupB'),('GroupA','GroupC'),('GroupB','GroupC')] 
          """        
         self.data  = data
         self.group = group
@@ -108,7 +109,7 @@ class multiGroupTest:
             list: A list of tuples containing all possible unique combinations of 2 indices out of the length of group names
         """
         # Using python's built-in combinations function from the itertools module to generate a list of all possible unique tuples
-        if self.combination_n == 'set':
+        if self.combination_set:
             return  [(self.group_names.index(x), self.group_names.index(y)) for (x,y) in self.combination_set]
         else:
             return list(combinations(range(len(self.group_names)), 2))
