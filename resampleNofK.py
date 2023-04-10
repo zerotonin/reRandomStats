@@ -90,10 +90,8 @@ class getNofK:
             list: A list of tuples containing all possible unique combinations of k indices out of N
         """
         # Using python's built-in combinations function from the itertools module to generate a list of all possible unique tuples
-    
-        all_combinations = list(combinations(range(self.combined_len), self.short_len))
-        filtered_combinations = [comb for comb in all_combinations if not all(i + 1 == j for i, j in zip(comb, comb[1:]))]
-        return filtered_combinations
+        
+        return list(combinations(range(self.combined_len), self.short_len))
 
 
     def get_unique_random_combinations(self):
