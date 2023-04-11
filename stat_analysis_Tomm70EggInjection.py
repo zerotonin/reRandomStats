@@ -31,14 +31,15 @@ tag= "egg_Tomm70_injection"
 # v files containing the original data
 file_path = f'./Data/{tag}.csv'
 df = pd.read_csv(file_path)
-#df_fish = df.groupby('fish_id', as_index=False).median()
-#df_fish[['genotype', 'injection']] = df.groupby('fish_id')[['genotype', 'injection']].first().reset_index(drop=True)
+df_fish = df.groupby('fish_id', as_index=False).median()
+df_fish[['genotype', 'injection']] = df.groupby('fish_id')[['genotype', 'injection']].first().reset_index(drop=True)
+df_fish['id'] = df_fish['genotype']+" "+  df_fish['injection']
 
 # data combinations to be tested
 
 f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(
-    data=df, x="genotype", y="Mean",
+    data=df_fish, x="genotype", y="RawIntden_normatoMaxintensity",
     notch=False, showcaps=False,
     flierprops={"marker": "x"},
     hue="injection",
@@ -51,7 +52,7 @@ f.savefig(f'./figures/{tag}_.svg')
 save_file = f'./stats/{tag}_Fishers_MedianDiff_FDR_BH.csv'
 # Read the data from the current file and convert it to a long table format
 # Create a multiGroupTest object and set the data, group and test parameters
-mgt = multiGroupTest.multiGroupTest(df["Median"],df['id'],'Fisher:medianDiff',20000)
+mgt = multiGroupTest.multiGroupTest(df_fish["Median"],df_fish['id'],'Fisher:medianDiff',20000)
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
 # Save the result to a csv file
