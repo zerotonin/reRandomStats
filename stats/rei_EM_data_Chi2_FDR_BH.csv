@@ -1,0 +1,7 @@
+,groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+0,-/- cranial,2,-/- caudal,2,0.7469767746949472,0.9787277960645134,False,n.s.
+1,-/- cranial,2,+/+ caudal,2,0.8172445237774778,0.9787277960645134,False,n.s.
+2,-/- cranial,2,+/+ cranial,2,0.5149033491968354,0.9787277960645134,False,n.s.
+3,-/- caudal,2,+/+ caudal,2,0.9787277960645134,0.9787277960645134,False,n.s.
+4,-/- caudal,2,+/+ cranial,2,0.37542335709102315,0.9787277960645134,False,n.s.
+5,+/+ caudal,2,+/+ cranial,2,0.4453957184005106,0.9787277960645134,False,n.s.
