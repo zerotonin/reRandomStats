@@ -1,5 +1,10 @@
-genotype,position,doublemyelinsheath,breaks,vesiculation,area_microm2
--/-,caudal,6,81,33,31752
-+/+,caudal,2,21,15,14553
--/-,cranial,6,73,30,31311
-+/+,cranial,5,43,10,13230
+genotype,observation,area_microm2,obs_type
+-/-,81,31752,breaks
++/+,21,14553,breaks
+-/-,228,31752,mild_splitting
++/+,110,14553,mild_splitting
+-/-,71,31311,severe_split
++/+,12,13230,severe_split
+-/-,30,31311,vesiculation
++/+,10,13230,vesiculation
+
