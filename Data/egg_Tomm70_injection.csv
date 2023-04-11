@@ -1,4 +1,4 @@
-,Area ,Mean,IntDen,Median,RawIntDen,Maxintensity_perpicture,RawIntden_normatoMaxintensity,genotype,Injection type,Fishnumber
+,Area,Mean,IntDen,Median,RawIntDen,Maxintensity_perpicture,RawIntden_normatoMaxintensity,genotype,injection,fish_id
 1,892.1656,987.5588,881065.9615,1009,8471279,39339411,0.215338226594191,wt,FALSE,A
 2,892.1656,1067.2457,952159.9537,1118,9154834,39339411,0.23271405868278,wt,FALSE,A
 3,892.1656,1064.2079,949449.6548,1065,9128775,39339411,0.23205164408791,wt,FALSE,A

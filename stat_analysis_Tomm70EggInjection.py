@@ -31,18 +31,19 @@ tag= "egg_Tomm70_injection"
 # v files containing the original data
 file_path = f'./Data/{tag}.csv'
 df = pd.read_csv(file_path)
-df['id'] = df['genotype'] + '_' + df['injection']
+#df_fish = df.groupby('fish_id', as_index=False).median()
+#df_fish[['genotype', 'injection']] = df.groupby('fish_id')[['genotype', 'injection']].first().reset_index(drop=True)
 
 # data combinations to be tested
 
 f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(
-    data=df, x="genotype", y="Median",
+    data=df, x="genotype", y="Mean",
     notch=False, showcaps=False,
     flierprops={"marker": "x"},
     hue="injection",
     )
-#plt.show()
+plt.show()
 
 f.savefig(f'./figures/{tag}_.svg')
 
