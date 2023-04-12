@@ -41,11 +41,12 @@ class binominalStats:
         """
         x = float(self.heads)
         N = float(self.total_flips)
-        p = x/N
+        p = round((x/N)*100, 2)
 
         lower, upper = proportion_confint(count=x, nobs=N, alpha=self.alpha, method='wilson')
-        lower_limit = max(0, lower)
-        upper_limit = min(1, upper)
+        lower_limit = max(0, round(lower * 100, 4))
+        upper_limit = min(100, round(upper * 100, 4))
+
         result = {'Proportion': p, 'Lower CI': lower_limit, 'Upper CI': upper_limit}
 
         return result
