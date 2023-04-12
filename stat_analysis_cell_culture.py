@@ -24,8 +24,8 @@ mutant zebrafish. All p-values are corrected with the Benjamini Hochberg FDR det
 
 
 # file_path contains a list of file paths to csv files containing the original data
-#tag= "cell_culture_data_female"
-tag= "cell_culture_data_male"
+tag= "cell_culture_data_female"
+#tag= "cell_culture_data_male"
 
 # Assign the current file path, data subset, and save file name
 file = f'./Data/{tag}.csv'

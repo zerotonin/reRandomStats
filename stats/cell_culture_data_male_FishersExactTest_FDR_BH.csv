@@ -1,4 +1,5 @@
 ,groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-0,+/+_breaks,2,-/-_breaks,2,0.018227925562829154,0.027341888344243732,True,*
-1,+/+_severe_split,2,-/-_severe_split,2,0.0023475051511739186,0.007042515453521756,True,**
-2,+/+_vesiculation,2,-/-_vesiculation,2,0.5149033491968354,0.5149033491968354,False,n.s.
+0,wt_c1,2,mut_c1,2,0.00045435153974275876,0.001817406158971035,True,**
+1,wt_c2,2,mut_c2,2,0.031569187578855566,0.06313175978953711,False,n.s.
+2,wt_c3,2,mut_c3,2,1.0,1.0,False,n.s.
+3,wt_c4,2,mut_c4,2,0.047348819842152834,0.06313175978953711,False,n.s.
