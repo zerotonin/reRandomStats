@@ -29,28 +29,38 @@ tag= "rei_EM_data"
 # Assign the current file path, data subset, and save file name
 file = f'./Data/{tag}.csv'
 df = pd.read_csv(file)
-df['id'] = df['genotype']+" "+df['position']
+observation_types = df.obs_type.unique()
+df['id'] = df.genotype +'_'+ df.obs_type
 
 # group the dataframe by genotype and sum the columns
 binoObj = binominalStats.binominalStats(0,0)
 conf_int = list(    )
 for i,row in df.iterrows() :
-    binoObj.heads = row.vesiculation
+    binoObj.heads = row.observation
     binoObj.total_flips = row.area_microm2
     conf_int.append(binoObj.exact_CI())
 df_stat = pd.DataFrame(conf_int)
 df_stat = df_stat.rename(columns={"Proportion":"frequency","Lower CI":f"lowCI","Upper CI":f"upCI"})
 # calculate the error bar lengths
-error_bar_lower = df_stat['frequency'] - df_stat['lowCI']
-error_bar_upper = df_stat['upCI'] - df_stat['frequency']
+df_stat['lowCI'] = df_stat['frequency'] - df_stat['lowCI']
+df_stat['upCI'] = df_stat['upCI'] - df_stat['frequency']
+df_stat = df_stat*1000
+df = pd.concat([df,df_stat],axis=1)
 
-f = plt.figure()
-plt.bar(df['id'], df_stat['frequency'], yerr=[error_bar_lower, error_bar_upper], capsize=4)
-f.savefig(f'./figures/{tag}.svg')
 
+for obs_type in observation_types:
+    df_temp = df.loc[df.obs_type == obs_type,:]
+    f = plt.figure()
+    plt.bar(df_temp['genotype'], df_temp['frequency'], yerr=[df_temp['lowCI'], df_temp['upCI'] ], capsize=4)
+    plt.gca().set_title(obs_type)
+    plt.gca().set_ylabel('observations per 1000 micrometer^2')
+    plt.gca().set_xlabel('genotype')
+    f.savefig(f'./figures/{tag}_{obs_type}.svg')
+
+#plt.show()
 save_file = f'./stats/{tag}_Chi2_FDR_BH.csv'
 
-data_stats = [(row.vesiculation, row.area_microm2 - row.vesiculation) for index, row in df.iterrows()]
+data_stats = [(row.observation, row.area_microm2 - row.observation) for index, row in df.iterrows()]
 # flatten list of tuples to 1-dimensional list
 data_stats = [item for sublist in data_stats for item in sublist]
 
@@ -58,6 +68,8 @@ id_stats = df['id'].tolist()
 # repeat each value twice
 id_stats = [x for x in id_stats for i in range(2)]
 
-mtg = multiGroupTest.multiGroupTest(data_stats,id_stats,'Binominal:chi2','all')
+set_combinations = [('+/+_breaks','-/-_breaks'),('+/+_severe_split','-/-_severe_split'),('+/+_vesiculation','-/-_vesiculation')]
+
+mtg = multiGroupTest.multiGroupTest(data_stats,id_stats,'Binominal:chi2','all',combination_set =set_combinations)
 result = mtg.main()
 result.to_csv(save_file)
