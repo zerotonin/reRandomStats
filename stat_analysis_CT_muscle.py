@@ -43,6 +43,7 @@ sns.boxplot(
     
 )
 
+ax.set_ylim([0,11])
 
 f.savefig(f'./figures/{tag}_.svg')
 plt.show()
