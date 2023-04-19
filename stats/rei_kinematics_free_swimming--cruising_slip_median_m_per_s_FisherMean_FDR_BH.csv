@@ -1,0 +1,7 @@
+groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+Mrei-INT,40,Mrei-HT,50,0.6097,0.48775999999999997,False,n.s.
+Mrei-INT,40,Mrei-HM,64,0.0007,0.0028000000000000004,True,**
+Mrei-HT,50,Mrei-HM,64,0.0061,0.012200000000000003,True,*
+Frei-INT,42,Frei-HT,73,0.4071,0.48740000000000006,False,n.s.
+Frei-INT,42,Frei-HM,48,0.4874,0.48740000000000006,False,n.s.
+Frei-HT,73,Frei-HM,48,0.8069999999999999,0.5379999999999999,False,n.s.
