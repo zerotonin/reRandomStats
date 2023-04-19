@@ -32,7 +32,9 @@ file = f'./Data/{tag}.csv'
 save_file = f'./stats/{tag}_FishersExactTest_FDR_BH.csv'
 
 # data combinations to be tested
-combinations = [('wt_c1', 'mut_c1'), ('wt_c2', 'mut_c2'), ('wt_c3','mut_c3'), ('wt_c4','mut_c4')] 
+combinations = [('wt_c1', 'mut_c1'), ('wt_c2', 'mut_c2'), 
+                ('wt_c3','mut_c3'), ('wt_c4','mut_c4'),
+                ('wt_c13','mut_c13')] 
 
 
 # Create a DataIO object
@@ -48,7 +50,7 @@ result_df.to_csv(save_file)
 
 binoObj = binominalStats.binominalStats(0,0)
 
-temp = np.array([data[0:8],data[8::]])
+temp = np.array([data[0:10],data[10::]])
 conf_int = list()
 for i in range(temp.shape[1]):
     binoObj.heads = temp[0,i]
@@ -58,7 +60,7 @@ for i in range(temp.shape[1]):
 import matplotlib.pyplot as plt
 
 def plot_bar_with_error_bars(group1, group2, ci_lower1, ci_upper1, ci_lower2, ci_upper2, color1='teal', color2='orange',g_name1='wt',g_name2='mut'):
-    labels = ['1', '2', '3', '4']
+    labels = ['1', '2', '3', '1-3', '4']
     x = range(len(labels))
     width = 0.4
 
@@ -75,17 +77,19 @@ def plot_bar_with_error_bars(group1, group2, ci_lower1, ci_upper1, ci_lower2, ci
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
+    ax.set_xlabel('anatomical category')
+    ax.set_ylabel('probability density, %')
 
     plt.show()
     return fig,ax
 
 
-fig,ax =plot_bar_with_error_bars([x['Proportion']for x in conf_int[0:4]], 
-                                 [x['Proportion']for x in conf_int[4::]], 
-                                 [x['Lower CI']for x in conf_int[0:4]], 
-                                 [x['Upper CI']for x in conf_int[0:4]], 
-                                 [x['Lower CI']for x in conf_int[4::]], 
-                                 [x['Upper CI']for x in conf_int[4::]])
+fig,ax =plot_bar_with_error_bars([x['Proportion']for x in conf_int[0:5]], 
+                                 [x['Proportion']for x in conf_int[5::]], 
+                                 [x['Lower CI']for x in conf_int[0:5]], 
+                                 [x['Upper CI']for x in conf_int[0:5]], 
+                                 [x['Lower CI']for x in conf_int[5::]], 
+                                 [x['Upper CI']for x in conf_int[5::]])
 
 ax.set_xlabel('anatomical location')
 ax.set_ylabel('cell positive, in percent')
