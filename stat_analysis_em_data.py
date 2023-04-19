@@ -68,7 +68,8 @@ id_stats = df['id'].tolist()
 # repeat each value twice
 id_stats = [x for x in id_stats for i in range(2)]
 
-set_combinations = [('+/+_breaks','-/-_breaks'),('+/+_severe_split','-/-_severe_split'),('+/+_vesiculation','-/-_vesiculation')]
+set_combinations = [('+/+_breaks','-/-_breaks'),('+/+_severe_split','-/-_severe_split'),
+                    ('+/+_vesiculation','-/-_vesiculation'),('+/+_double_myelin','-/-_double_myelin')]
 
 mtg = multiGroupTest.multiGroupTest(data_stats,id_stats,'Binominal:chi2','all',combination_set =set_combinations)
 result = mtg.main()

@@ -5,4 +5,6 @@ genotype,observation,area_microm2,obs_type
 +/+,12,13230,severe_split
 -/-,30,31311,vesiculation
 +/+,10,13230,vesiculation
+-/-,6,31752,double_myelin
++/+,2,14553,double_myelin
 

@@ -36,24 +36,28 @@ df = pd.read_csv(file_path)
 
 f, ax = plt.subplots(figsize=(7, 6))
 sns.boxplot(
-    data=df, x="Genotype ", y="Area_normalised_to_length",
+    data=df, x="Genotype ", y="Area_normalised_to_squared_length",
     notch=False, showcaps=False,
     flierprops={"marker": "x"},
-    hue="sex",
+    hue="sex",hue_order=['male','female']
     
 )
 
-ax.set_ylim([0,11])
+#ax.set_ylim([0,11])
 
 f.savefig(f'./figures/{tag}_.svg')
 plt.show()
 
-df_stat= df.loc[:,["Genotype ","sex","Area_normalised_to_length"]]
+set_combination = [('+/+_female','+/-_female'),('+/+_female','-/-_female'),('+/-_female','-/-_female'),
+                   ('+/+_male','+/-_male'),('+/+_male','-/-_male'),('+/-_male','-/-_male')]
+
+df_stat= df.loc[:,["Genotype ","sex","Area_normalised_to_squared_length"]]
 df_stat['id'] = df_stat['Genotype '] + '_' + df_stat['sex']
 save_file = f'./stats/{tag}_Fishers_MeanDiff_FDR_BH.csv'
 # Read the data from the current file and convert it to a long table format
 # Create a multiGroupTest object and set the data, group and test parameters
-mgt = multiGroupTest.multiGroupTest(df_stat["Area_normalised_to_length"],df_stat['id'],'Fisher:medianDiff',20000)
+mgt = multiGroupTest.multiGroupTest(df_stat["Area_normalised_to_squared_length"],df_stat['id'],
+                                    'Fisher:medianDiff',20000,combination_set=set_combination)
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
 # Save the result to a csv file
