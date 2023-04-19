@@ -1,16 +1,7 @@
 groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-+/-_male,5,+/+_female,5,0.2069,0.51725,False,n.s.
-+/-_male,5,-/-_female,5,0.3076,0.57675,False,n.s.
-+/-_male,5,-/-_male,5,0.4899,0.6680454545454546,False,n.s.
-+/-_male,5,+/-_female,5,0.4428000000000001,0.6680454545454546,False,n.s.
-+/-_male,5,+/+_male,5,0.02515,0.09731249999999969,False,n.s.
-+/+_female,5,-/-_female,5,0.85995,0.85995,False,n.s.
-+/+_female,5,-/-_male,5,0.63845,0.7490769230769231,False,n.s.
-+/+_female,5,+/-_female,5,0.025949999999999918,0.09731249999999969,False,n.s.
-+/+_female,5,+/+_male,5,0.6492,0.7490769230769231,False,n.s.
--/-_female,5,-/-_male,5,0.85235,0.85995,False,n.s.
--/-_female,5,+/-_female,5,0.02475000000000005,0.09731249999999969,False,n.s.
--/-_female,5,+/+_male,5,0.4525,0.6680454545454546,False,n.s.
--/-_male,5,+/-_female,5,0.08794999999999997,0.2638499999999999,False,n.s.
--/-_male,5,+/+_male,5,0.2714,0.57675,False,n.s.
-+/-_female,5,+/+_male,5,0.0214,0.09731249999999969,False,n.s.
++/+_female,5,+/-_female,5,0.02344999999999997,0.07590000000000001,False,n.s.
++/+_female,5,-/-_female,5,0.85015,0.86215,False,n.s.
++/-_female,5,-/-_female,5,0.0253,0.07590000000000001,False,n.s.
++/+_male,5,+/-_male,5,0.20815000000000006,0.4163000000000001,False,n.s.
++/+_male,5,-/-_male,5,0.86215,0.86215,False,n.s.
++/-_male,5,-/-_male,5,0.3121,0.46815,False,n.s.
