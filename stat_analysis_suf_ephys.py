@@ -47,7 +47,7 @@ plt.gcf().savefig(f'./figures/{tag}.svg')
 
 
 
-save_file = f'./stats/{tag}_IndepedentT_FDR_BH.csv'
+save_file = f'./stats/{tag}_Fisher_sumDiff_FDR_BH.csv'
 # Read the data from the current file and convert it to a long table format
 # Create a multiGroupTest object and set the data, group and test parameters
 
