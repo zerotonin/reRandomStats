@@ -43,7 +43,7 @@ sns.stripplot(
     jitter=True, color = [0.5, 0.5, 0.5]
 )
 
-plt.gcf().savefig(f'./figures/{tag}_male.svg')
+plt.gcf().savefig(f'./figures/{tag}.svg')
 
 
 
