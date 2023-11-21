@@ -6,9 +6,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 '''
-Script: stat_analysis_GargEtAl_2023B.py
+Script: stat_analysis_GargEtAl_2023.py
 Written by: Bart R.H. Geurten
-Date: 18. Mar 2023
+Date: 21. Nov 2023
 Purpose: Statistical analysis of the immunohisto analysis cell cultures for the Garg et al. 2023B article.
 
 This script is used for the statistical analysis of the immunohisto analysis cell cultures in the Garg et al. 2023B article.
