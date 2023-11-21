@@ -124,6 +124,8 @@ class FisherResamplingTest:
             return self.calculateTest_medianDifferences(dataA, dataB)
         elif self.func == 'meanDiff':
             return self.calculateTest_meanDifferences(dataA, dataB)
+        elif self.func == 'sumDiff':
+            return self.calculateTest_sumDifferences(dataA, dataB)
         else:
             raise ValueError(f'FisherResamplingTest: calculateTest: the testType {self.func} is not implemented')
 
@@ -157,6 +159,19 @@ class FisherResamplingTest:
         return np.mean(np.array(dataA)) - np.mean(np.array(dataB))
 
 
+    def calculateTest_sumDifferences(self,dataA,dataB):
+        """
+        This function calculates the test statistic for the two data sets as the difference in means.
+
+        Copy code
+        Args:
+            dataA (list): The first data set to be compared
+            dataB (list): The second data set to be compared
+
+        Returns:
+            float: The calculated test statistic
+        """
+        return np.sum(np.array(dataA)) - np.sum(np.array(dataB))
 
 #tfr = FisherResamplingTest([0,0,0],[0,0,0,0],'medianDiff')
 #tfr.main()
