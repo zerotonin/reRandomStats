@@ -59,7 +59,7 @@ f.savefig(f'./figures/{tag}_.svg')
 save_file = f'./stats/{tag}_Fishers_MeanDiff_FDR_BH.csv'
 # Read the data from the current file and convert it to a long table format
 # Create a multiGroupTest object and set the data, group and test parameters
-mgt = multiGroupTest.multiGroupTest(df_stat["Median"],df_stat['Genotype'],'Fisher:medianDiff',20000)
+mgt = multiGroupTest.multiGroupTest(df_stat["Median pixel intensity, norm."],df_stat['Genotype'],'Fisher:medianDiff',20000)
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
 # Save the result to a csv file
