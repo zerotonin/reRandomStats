@@ -32,6 +32,7 @@ tag= "mauthner_large_spikes_post_stim"
 # v files containing the original data
 file_path = f'./Data/{tag}.csv'
 df = pd.read_csv(file_path)
+df = df[df.sex == 'female']
 
 # data combinations to be tested
 
