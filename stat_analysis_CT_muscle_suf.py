@@ -35,10 +35,10 @@ df = pd.read_csv(file_path)
 # data combinations to be tested
 
 f, ax = plt.subplots(figsize=(7, 6))
-sns.boxplot(
+sns.scatterplot(
     data=df, x="Genotype", y="Area_normalised_to_squared_length",
-    notch=False, showcaps=False,
-    flierprops={"marker": "x"},
+    #notch=False, showcaps=False,
+    #flierprops={"marker": "x"},
     hue="sex",hue_order=['male','female']
     
 )
@@ -61,7 +61,7 @@ mgt = multiGroupTest.multiGroupTest(df_stat["Area_normalised_to_squared_length"]
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
 # Save the result to a csv file
-result_df.to_csv(save_file, index=False)
+#result_df.to_csv(save_file, index=False)
 
 
 
