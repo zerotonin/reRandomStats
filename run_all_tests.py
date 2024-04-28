@@ -5,11 +5,11 @@ import seaborn as sns
 import multiGroupTest
 import binominalStats
 import numpy as np
-
+from write_pretty_table import write_pretty_table
 '''
 Script: stat_analysis_Bergers_2024.py
 Written by: Bart R.H. Geurten
-Date: 21. Nov 2023
+Date: 28. Apr 2024
 Purpose: Statistical analysis of activity and speed ratios of Drosophila mutants for Miriam Bergers' 2024 Master Thesis.
 
 This script is developed for analyzing the effects of environmental light changes on different Drosophila mutants, 
@@ -51,5 +51,7 @@ for filename in os.listdir(data_directory):
             # Run the main method of the multiGroupTest object and save the results
             result_df = mgt.main()
             result_df.to_csv(save_file, index=False)
+            write_pretty_table(result_df,'')
+
 
 print("All files processed and results saved.")
