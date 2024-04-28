@@ -1,7 +1,0 @@
-groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-Msufge1-INT,25,Msufge1-HT,31,0.5404,0.64848,False,n.s.
-Msufge1-INT,25,Msufge1-HM,9,0.4532,0.64848,False,n.s.
-Msufge1-HT,31,Msufge1-HM,9,0.3654,0.64848,False,n.s.
-Fsufge1-INT,9,Fsufge1-HT,22,0.9485,0.9485,False,n.s.
-Fsufge1-INT,9,Fsufge1-HM,6,0.2677,0.64848,False,n.s.
-Fsufge1-HT,22,Fsufge1-HM,6,0.1072,0.6432000000000001,False,n.s.

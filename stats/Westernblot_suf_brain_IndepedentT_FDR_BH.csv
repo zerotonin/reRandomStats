@@ -1,4 +1,0 @@
-groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-+/+_male,3,+/-_male,3,0.33737189634324716,0.33737189634324716,False,n.s.
-+/+_male,3,-/-_male,3,0.003886574850200997,0.011659724550602992,True,*
-+/-_male,3,-/-_male,3,0.14745426449645815,0.22118139674468723,False,n.s.
