@@ -43,7 +43,7 @@ for filename in os.listdir(data_directory):
             stat_df = df[['genotype', ratio]].dropna(subset=[ratio])
 
             # Define save path for the statistical results
-            save_file = f'./stats/{filename}_{ratio}_Fishers_MedianDiff_FDR_BH.csv'
+            save_file = f'./stats/{filename[:-4]}_{ratio}_Fishers_MedianDiff_FDR_BH.csv'
             
             # Create a multiGroupTest object and set the data, group and test parameters
             mgt = multiGroupTest.multiGroupTest(stat_df[ratio].to_numpy(), stat_df['genotype'], 'Fisher:medianDiff', 20000)

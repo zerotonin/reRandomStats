@@ -1,2 +1,2 @@
 groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-15V,54,3V,54,0.8867499999999999,0.8867499999999999,False,n.s.
+15V,48,3V,46,0.0006999999999999229,0.0006999999999999229,True,***
