@@ -59,5 +59,34 @@ result_df = mgt.main()
 result_df.to_csv(save_file, index=False)
 
 
+# ANOVA 
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+save_file = f'./stats/{tag}ANOVA_Tukey.csv'
+# Read the data from the current file and convert it to a long table format
+# Create a multiGroupTest object and set the data, group and test parameters
+model = ols('expression ~ C(id)', data=df).fit()
+
+anova_table = sm.stats.anova_lm(model, typ=2)
+# Perform Tukey's HSD test (assuming your DataFrame is still named `df`)
+tukey_results = pairwise_tukeyhsd(df['expression'], df['genotype'])
+
+with open(save_file, "w") as file:
+
+    # Write a header for the ANOVA table
+    file.write("## ANOVA Results ##\n\n")
+
+    # Write the ANOVA table as text
+    file.write(anova_table.to_string())
+
+    # Add some spacing
+    file.write("\n\n")  # Add blank lines for separation
+
+    # Write a header for the Tukey HSD results
+    file.write("## Tukey HSD Results ##\n\n")
+
+    # Write the Tukey results as text
+    file.write(tukey_results.summary().as_text())
 
