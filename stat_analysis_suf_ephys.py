@@ -32,7 +32,6 @@ tag= "mauthner_large_spikes_post_stim"
 # v files containing the original data
 file_path = f'./Data/{tag}.csv'
 df = pd.read_csv(file_path)
-df = df[df.sex == 'female']
 
 # data combinations to be tested
 
@@ -53,7 +52,7 @@ save_file = f'./stats/{tag}_Fisher_sumDiff_FDR_BH.csv'
 # Create a multiGroupTest object and set the data, group and test parameters
 
 set_combination = [('+/+',"+/-"),('+/+',"-/-"),('+/-',"-/-")]
-mgt = multiGroupTest.multiGroupTest(df["large_spikes"],df['genotype'],'Fisher:sumDiff',500000, #'hypo:IndependentT','all',
+mgt = multiGroupTest.multiGroupTest(df["large_spikes"],df['genotype'],'Fisher:sum=Diff',500000, #'hypo:IndependentT','all',
                                     combination_set=set_combination)
 # Run the main method of the multiGroupTest object
 result_df = mgt.main()
