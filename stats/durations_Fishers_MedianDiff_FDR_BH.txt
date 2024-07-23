@@ -1,0 +1,17 @@
+Species		Data Set			Saccade Type	Duration Type
+-------		--------			------------	-------------
+
+g = gentoo	c = confined (dataset 2)	b = body	i = inter saccade durations
+r = rockhopper	o = open (dataset 1)		h = head	s = saccade durations
+						a = associated
+
+
++--------+----------+--------+----------+---------+-------------------+------+------------+
+| groupA | groupA_n | groupB | groupB_n | p value | p value corrected |  h   | sig. level |
++--------+----------+--------+----------+---------+-------------------+------+------------+
+|  gcbs  |   100    |  gcbi  |    49    |  0.0001 |       0.0001      | True |    ***     |
+|  gchs  |   102    |  gchi  |    39    |  0.0001 |       0.0001      | True |    ***     |
+|  gcas  |   202    |  gcai  |    89    |  0.0001 |       0.0001      | True |    ***     |
+|  gobs  |   382    |  gobi  |   280    |  0.0001 |       0.0001      | True |    ***     |
+|  robs  |   152    |  robi  |   116    |  0.0001 |       0.0001      | True |    ***     |
++--------+----------+--------+----------+---------+-------------------+------+------------+
