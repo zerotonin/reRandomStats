@@ -4,7 +4,7 @@
 # update:  conda env update -f reRandomStats.yaml 
 name: stats
 dependencies:
-  - python=3.7
+  - python=3.12
   - pip
   - Shapely
   - ipython
