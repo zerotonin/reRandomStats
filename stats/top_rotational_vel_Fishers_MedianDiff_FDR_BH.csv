@@ -1,0 +1,7 @@
+groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+head_free,50,head_associated,51,0.50585,0.5501,False,n.s.
+head_free,50,body_body,98,0.5501,0.5501,False,n.s.
+head_free,50,head+body_intersaccadic,75,9.999999999998899e-05,0.00019999999999997797,True,***
+head_associated,51,body_body,98,0.2318,0.3477,False,n.s.
+head_associated,51,head+body_intersaccadic,75,9.999999999998899e-05,0.00019999999999997797,True,***
+body_body,98,head+body_intersaccadic,75,9.999999999998899e-05,0.00019999999999997797,True,***
