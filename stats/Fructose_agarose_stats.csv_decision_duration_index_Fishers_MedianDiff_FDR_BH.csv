@@ -1,0 +1,14 @@
+groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+female_18.15,26,male_18.15,27,0.8565499999999999,0.9661,False,n.s.
+male_26.2,14,female_26.2,25,0.8023,0.9661,False,n.s.
+male_26.6,3,female_26.6,3,0.30685000000000007,0.9661,False,n.s.
+female_5.6,47,male_5.6,50,0.35185,0.9661,False,n.s.
+female_15.1,49,male_15.1,48,0.7116,0.9661,False,n.s.
+female_10.6,27,male_10.6,27,0.9410499999999999,0.9661,False,n.s.
+female_26.3,26,male_26.3,25,0.1484,0.9661,False,n.s.
+female_22.9,52,male_22.9,53,0.671,0.9661,False,n.s.
+female_19.2,26,male_19.2,27,0.94645,0.9661,False,n.s.
+male_7.6,165,female_7.6,173,0.60375,0.9661,False,n.s.
+male_14.0,102,female_14.0,108,0.85675,0.9661,False,n.s.
+male_8.0,80,female_8.0,81,0.5467500000000001,0.9661,False,n.s.
+male_2.0,54,female_2.0,54,0.9661,0.9661,False,n.s.
