@@ -16,7 +16,7 @@ df = pd.read_csv(file_path)
 
 df['id'] = [f'{s[0]}{d[0]}{b[0]}{t[0]}' for s,d,b,t in list(zip(df.species.to_list(),df.dataset.to_list(),df.bodypart.to_list(),df.saccade_type.to_list()))]
 
-sets =[('gcbs', 'gcbi'), ('gchs', 'gchi'), ('gcas', 'gcai'), ('gobs', 'gobi'), ('robs', 'robi')]
+sets =[('gcbs', 'gcbi'), ('gchs', 'gchi'), ('gcas', 'gcai'), ('gobs', 'gobi'), ('robs', 'robi'), ("gobs","robs")]
 
 # Define save path for the statistical results
 save_file = f'./stats/durations_Fishers_MedianDiff_FDR_BH.csv'

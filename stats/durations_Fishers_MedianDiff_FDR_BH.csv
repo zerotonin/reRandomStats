@@ -1,6 +1,7 @@
 groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
-gcbs,100,gcbi,49,0.0001,0.0001,True,***
-gchs,102,gchi,39,0.0001,0.0001,True,***
-gcas,202,gcai,89,0.0001,0.0001,True,***
-gobs,382,gobi,280,0.0001,0.0001,True,***
-robs,152,robi,116,0.0001,0.0001,True,***
+gcbs,100,gcbi,49,0.0001,0.00012,True,***
+gchs,102,gchi,39,0.0001,0.00012,True,***
+gcas,202,gcai,89,0.0001,0.00012,True,***
+gobs,382,gobi,280,0.0001,0.00012,True,***
+robs,152,robi,116,0.0001,0.00012,True,***
+gobs,382,robs,152,0.9610000000000001,0.9610000000000001,False,n.s.
