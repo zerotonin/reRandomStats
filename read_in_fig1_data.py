@@ -152,7 +152,7 @@ def run_all(xlsx_paths, csv_filename=None, output_dir=None):
     else:
         outdir = Path(output_dir) if output_dir else Path(".")
         outdir.mkdir(parents=True, exist_ok=True)
-        wide.to_csv(outdir/"camp_long.csv", index=False)
+        wide.to_csv(outdir/"fig_1_camp_long.csv", index=False)
 
     print(f"\nTOTAL estimated long rows (time×ROI sum): {total_est_rows}")
     print(f"TOTAL extracted rows (after parsing): {len(long)}")
