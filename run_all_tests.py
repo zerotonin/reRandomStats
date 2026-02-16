@@ -27,7 +27,7 @@ in the thesis.
 '''
 
 # Path to the directory containing the data files
-data_directory = './Data'
+data_directory = './data'
 
 # Iterate over all files in the Data directory
 for filename in os.listdir(data_directory):
@@ -36,17 +36,18 @@ for filename in os.listdir(data_directory):
 
         # Read the data from the current file
         df = pd.read_csv(file_path)
-        df['id'] = df['genotype']  # Assuming genotype and ID are synonymous for identification
+        df['id'] = df['species'].str[3] # Assuming genotype and ID are synonymous for identification
 
-        for ratio in ['activity_ratio', 'speed_ratio']:
+        for data_type in ['median_speed_mmPs', 'median_temperature_degC']:
             # Filter the DataFrame to include only the specified columns and drop rows with NaN in the current ratio
-            stat_df = df[['genotype', ratio]].dropna(subset=[ratio])
+            stat_df = df[['id', data_type]].dropna(subset=[data_type])
 
             # Define save path for the statistical results
-            save_file = f'./stats/{filename}_{ratio}_Fishers_MedianDiff_FDR_BH.csv'
+            save_file = f'./stats/{filename}_{data_type}_Fishers_MedianDiff_FDR_BH.csv'
             
             # Create a multiGroupTest object and set the data, group and test parameters
-            mgt = multiGroupTest.multiGroupTest(stat_df[ratio].to_numpy(), stat_df['genotype'], 'Fisher:medianDiff', 20000)
+            mgt = multiGroupTest.multiGroupTest(stat_df[data_type].to_numpy(), stat_df['id'], 'Fisher:medianDiff', 10000)
+
             
             # Run the main method of the multiGroupTest object and save the results
             result_df = mgt.main()
