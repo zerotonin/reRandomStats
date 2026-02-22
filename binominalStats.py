@@ -1,4 +1,4 @@
-from scipy.stats import binom_test
+from scipy.stats import binomtest
 from statsmodels.stats.proportion import proportion_confint,  proportions_ztest, proportions_chisquare
 import numpy as np
 import scipy.stats as stats
@@ -23,7 +23,7 @@ class binominalStats:
             float: p-value of the test.
         """
         # Null hypothesis: the coin is fair (p = 0.5)
-        return binom_test(self.heads, self.total_flips, p=base_rate, alternative=self.alternative)
+        return binomtest(self.heads, self.total_flips, p=base_rate, alternative=self.alternative)
 
     def exact_CI(self):
         """
