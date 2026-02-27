@@ -27,26 +27,35 @@ in the thesis.
 '''
 
 # Path to the directory containing the data files
-data_directory = './Data'
+for model_type in ['abm05']:#['abm', 'wfm']:
+    data_directory = f'./data/{model_type}/'
 
-# Iterate over all files in the Data directory
-for filename in os.listdir(data_directory):
-    if filename.endswith('.csv'):
-        file_path = os.path.join(data_directory, filename)
+    # Iterate over all files in the Data directory
+    for filename in os.listdir(data_directory):
+        if filename.endswith('.csv'):
+            file_path = os.path.join(data_directory, filename)
+            print(f'Processing file: {file_path}')
 
-        # Read the data from the current file
-        df = pd.read_csv(file_path)
-        df['id'] = df['genotype']  # Assuming genotype and ID are synonymous for identification
+            # Read the data from the current file
+            df = pd.read_csv(file_path)
 
-        for ratio in ['activity_ratio', 'speed_ratio']:
+            if 'replicate' in df.columns:
+                df.drop('replicate', axis=1, inplace=True) # Remove replicate column if it exists, as it's not needed for the analysis
+
+            value_col = df.columns.drop('mechanic')[0] 
+            df['mechanic'] = df['mechanic'].fillna('no')
+            df['id'] = df['mechanic']
+
+            
             # Filter the DataFrame to include only the specified columns and drop rows with NaN in the current ratio
-            stat_df = df[['genotype', ratio]].dropna(subset=[ratio])
+            stat_df = df[['id', value_col]].dropna(subset=[value_col])
 
             # Define save path for the statistical results
-            save_file = f'./stats/{filename}_{ratio}_Fishers_MedianDiff_FDR_BH.csv'
+            save_file = f'./stats/{model_type}_{filename[0:-4]}_{value_col}_Fishers_MedianDiff_FDR_BH.csv'
             
             # Create a multiGroupTest object and set the data, group and test parameters
-            mgt = multiGroupTest.multiGroupTest(stat_df[ratio].to_numpy(), stat_df['genotype'], 'Fisher:medianDiff', 20000)
+            mgt = multiGroupTest.multiGroupTest(stat_df[value_col].to_numpy(), stat_df['id'], 'Fisher:medianDiff', 10000)
+
             
             # Run the main method of the multiGroupTest object and save the results
             result_df = mgt.main()
