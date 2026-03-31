@@ -37,3 +37,4 @@ Thumbs.db
 # Data (keep repo lean)
 
 !examples/*.csv
+figures/*
