@@ -1,47 +1,183 @@
+# reRandomStats
 
+[![Tests](https://github.com/zerotonin/rerandomstats/actions/workflows/tests.yml/badge.svg)](https://github.com/zerotonin/rerandomstats/actions/workflows/tests.yml)
+[![Docs](https://github.com/zerotonin/rerandomstats/actions/workflows/docs.yml/badge.svg)](https://zerotonin.github.io/rerandomstats/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 
-## Statistics
+```
+╔══════════════════════════════════════════════════════════════════╗
+║  reRandomStats                                                   ║
+║  « Re-randomisation statistics in the spirit of Fisher »         ║
+╚══════════════════════════════════════════════════════════════════╝
+```
 
-Welcome to the GitHub repository for the re-randomisation statistic tests. This repository is maintained by [Bart R.H. Geurten](https://orcid.org/0000-0002-1816-3241). It is dedicated to comprehensively implementing the re-randomisation test using various statistics packages such as numpy, scipy, pandas, and statsmodels.
+A comprehensive Python toolkit for **re-randomisation statistics** in the tradition of [Sir Ronald A. Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher). The package provides Fisher's resampling test with flexible test statistics, pairwise multi-group comparisons with multiple-testing correction, binomial proportion tests, and a unified interface to classical parametric and non-parametric hypothesis tests.
 
-The re-randomisation test is a statistical method for testing the significance of a difference between two groups. It is based on the principle that if there is no real difference between the groups, any difference observed in a sample is likely due to random chance. The re-randomisation test uses this principle to test the null hypothesis that there is no difference between the groups.
+## Features
 
-In this repository, you will find specific branches for journal articles in which we have used this statistics package. These branches include the original scripts to run the analysis and, if possible, the data and results. This organisation scheme allows for easy reproducibility of our results and a better understanding of the methodologies used in the analysis.
-
-We hope this repository will be a valuable resource for researchers, students, and practitioners interested in the re-randomisation test and its applications. If you have questions or suggestions, please open an issue on Github or contact us directly.
+- **Fisher's Resampling Test** — permutation-based two-sample test using mean, median, or sum differences as the test statistic. Supports exhaustive enumeration for small samples and random resampling for large ones.
+- **Fisher's Exact Test** — wrapper for 2×2 contingency table analysis.
+- **Multi-Group Pairwise Testing** — runs all (or user-specified) pairwise comparisons with automatic multiple-testing correction (Benjamini-Hochberg FDR, Bonferroni, Holm, and others via `statsmodels`).
+- **Binomial Proportion Tests** — single-sample binomial test with Wilson confidence intervals, plus two-sample z-test and chi-square comparisons.
+- **Classical Hypothesis Tests** — unified dispatcher for Mann-Whitney U, Kruskal-Wallis, Kolmogorov-Smirnov, Mood's Median, Wilcoxon Rank-Sum, independent t-test, and chi-square.
+- **Data I/O** — CSV reader supporting German-locale semicolon-delimited files, with wide→long table conversion.
 
 ## Installation
 
-To use this repository, you will need to have the following packages installed:
+### From source (recommended for development)
 
- - numpy 
- - scipy 
- - pandas 
- - statsmodels
+```bash
+git clone https://github.com/zerotonin/rerandomstats.git
+cd rerandomstats
+pip install -e ".[dev]"
+```
 
-These packages can be easily installed using pip:
+### Via conda environment
 
-    pip install numpy scipy pandas statsmodels
+```bash
+conda env create -f environment.yml
+conda activate rerandomstats
+pip install -e .
+```
 
-or via conda:
+### Dependencies
 
-    conda env create -f reRandomStats.yaml 
+Core: `numpy`, `scipy`, `pandas`, `statsmodels`, `prettytable`, `tqdm`
 
+## Quick Start
 
-## Usage
+### Two-sample Fisher resampling test
 
-To use the scripts in this repository, clone the repository and navigate to the appropriate branch for the journal article you are interested in. The scripts and data will be located in the corresponding folder.
+```python
+from rerandomstats import FisherResamplingTest
 
-    git clone https://github.com/bartrgeurten/re-randomization-test
+# Compare two groups using median differences
+test = FisherResamplingTest(
+    data_a=[1.2, 3.4, 2.1, 4.5, 3.3],
+    data_b=[5.6, 7.8, 6.5, 8.9, 7.2],
+    func='medianDiff',
+    combination_n=20_000,
+)
+p_value = test.main()
+print(f"p = {p_value:.4f}")
+```
+
+### Multi-group pairwise comparisons with FDR correction
+
+```python
+import numpy as np
+from rerandomstats import MultiGroupTest
+
+data   = list(np.random.randn(30))
+groups = ['control'] * 10 + ['treatment_A'] * 10 + ['treatment_B'] * 10
+
+mgt = MultiGroupTest(
+    data=data,
+    group=groups,
+    test='Fisher:medianDiff',
+    combination_n=20_000,
+    correction_type='fdr_bh',
+)
+results_df = mgt.main()
+print(results_df)
+```
+
+### Fisher's exact test
+
+```python
+from rerandomstats import FisherExactTest
+
+test = FisherExactTest(data_a=(8, 2), data_b=(1, 5))
+print(f"p = {test.main():.4f}")
+```
+
+### Binomial proportion test
+
+```python
+from rerandomstats import BinomialStats
+
+bs = BinomialStats(heads=73, total_flips=100)
+result = bs.binomial_test(base_rate=0.5)
+print(f"p = {result.pvalue:.4f}")
+print(bs.exact_ci())
+```
+
+### Classical hypothesis tests via the unified interface
+
+```python
+from rerandomstats import HypothesisTests
+
+ht = HypothesisTests(
+    data_a=[1, 2, 3, 4, 5],
+    data_b=[6, 7, 8, 9, 10],
+    func='MannWhitneyU',
+)
+print(f"p = {ht.main():.4f}")
+```
+
+## Available Tests
+
+| Family | Test String | Description |
+|--------|------------|-------------|
+| Fisher | `Fisher:medianDiff` | Resampling test — median difference |
+| Fisher | `Fisher:meanDiff` | Resampling test — mean difference |
+| Fisher | `Fisher:sumDiff` | Resampling test — sum difference |
+| Fisher | `Fisher:exact` | Fisher's exact test (2×2 table) |
+| Binomial | `Binomial:ztest` | Two-sample proportions z-test |
+| Binomial | `Binomial:chi2` | Two-sample proportions chi-square |
+| hypo | `hypo:MannWhitneyU` | Mann-Whitney U test |
+| hypo | `hypo:KruskalWallis` | Kruskal-Wallis H test |
+| hypo | `hypo:ChiSquare` | Chi-square goodness of fit |
+| hypo | `hypo:Kolmogorov` | Kolmogorov-Smirnov test |
+| hypo | `hypo:MoodMedian` | Mood's median test |
+| hypo | `hypo:WilcoxonRankSum` | Wilcoxon rank-sum test |
+| hypo | `hypo:IndependentT` | Independent samples t-test |
+
+## Documentation
+
+Full API documentation is built with Sphinx and hosted at:
+**[https://zerotonin.github.io/rerandomstats/](https://zerotonin.github.io/rerandomstats/)**
+
+To build locally:
+
+```bash
+cd docs
+make html
+open _build/html/index.html
+```
+
+## Running Tests
+
+```bash
+pytest
+```
 
 ## Contributing
 
-If you want to contribute to this repository, please open an issue or a pull request on Github. We welcome any contributions that improve the implementation of the re-randomisation test or provide new examples of its applications.
+Contributions are welcome! Please open an issue or pull request on [GitHub](https://github.com/zerotonin/rerandomstats/issues).
 
 ## License
 
-This repository is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+
+## Citation
+
+If you use this software in your research, please cite it:
+
+```bibtex
+@software{geurten_rerandomstats,
+  author    = {Geurten, Bart R.H.},
+  title     = {{reRandomStats}: Re-randomisation Statistics Toolkit},
+  url       = {https://github.com/zerotonin/rerandomstats},
+  license   = {MIT},
+}
+```
 
 ## Acknowledgements
 
-We want to acknowledge [Sir Ronald Aylmer Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher) for his pioneering work on the re-randomisation test and his contributions to the field of statistics.
+We acknowledge [Sir Ronald Aylmer Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher) for his pioneering work on the re-randomisation test and his foundational contributions to the field of statistics.
+
+## Maintainer
+
+[Bart R.H. Geurten](https://orcid.org/0000-0002-1816-3241) — Department of Zoology, University of Otago, Dunedin, New Zealand.

@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+title: "reRandomStats: Re-randomisation Statistics Toolkit"
+message: "If you use this software, please cite it as below."
+type: software
+version: 0.1.0
+date-released: "2025-01-01"
+license: MIT
+repository-code: "https://github.com/zerotonin/rerandomstats"
+url: "https://zerotonin.github.io/rerandomstats/"
+keywords:
+  - statistics
+  - resampling
+  - permutation test
+  - Fisher
+  - hypothesis testing
+  - FDR correction
+  - non-parametric
+  - binomial
+authors:
+  - given-names: "Bart R.H."
+    family-names: Geurten
+    email: bart.geurten@otago.ac.nz
+    orcid: "https://orcid.org/0000-0002-1816-3241"
+    affiliation: "Department of Zoology, University of Otago, Dunedin, New Zealand"
+abstract: >-
+  A comprehensive Python toolkit for re-randomisation statistics in the
+  tradition of Sir Ronald Fisher. Implements Fisher's resampling test
+  with mean, median, and sum difference statistics, Fisher's exact test,
+  pairwise multi-group comparisons with multiple-testing correction
+  (Benjamini-Hochberg FDR and others), binomial proportion tests with
+  Wilson confidence intervals, and a suite of classical parametric and
+  non-parametric hypothesis tests.
