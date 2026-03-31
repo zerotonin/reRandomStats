@@ -1,0 +1,22 @@
+# environment.yml — reRandomStats
+#
+# install: conda env create -f environment.yml
+# update:  conda env update -f environment.yml
+name: rerandomstats
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.9
+  - pip
+  - numpy>=1.22
+  - scipy>=1.9
+  - pandas>=1.5
+  - statsmodels>=0.13
+  - tqdm>=4.60
+  - pip:
+      - prettytable>=3.0
+      - pytest>=7.0
+      - pytest-cov>=4.0
+      - sphinx>=7.0
+      - sphinx-rtd-theme>=2.0

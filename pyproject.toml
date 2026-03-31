@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rerandomstats"
+version = "0.1.0"
+description = "Re-randomisation statistics toolkit implementing Fisher's resampling test, multiple hypothesis testing with FDR correction, and binomial proportion tests."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Bart R.H. Geurten", email = "bart.geurten@otago.ac.nz"},
+]
+keywords = [
+    "statistics",
+    "resampling",
+    "permutation-test",
+    "Fisher",
+    "hypothesis-testing",
+    "FDR",
+    "binomial",
+    "non-parametric",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = [
+    "numpy>=1.22",
+    "scipy>=1.9",
+    "pandas>=1.5",
+    "statsmodels>=0.13",
+    "prettytable>=3.0",
+    "tqdm>=4.60",
+]
+
+[project.urls]
+Homepage = "https://github.com/zerotonin/rerandomstats"
+Documentation = "https://zerotonin.github.io/rerandomstats/"
+Repository = "https://github.com/zerotonin/rerandomstats"
+Issues = "https://github.com/zerotonin/rerandomstats/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "sphinx>=7.0",
+    "sphinx-rtd-theme>=2.0",
+    "ruff>=0.4",
+]
+
+[tool.setuptools.packages.find]
+include = ["rerandomstats*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 99
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]

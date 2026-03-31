@@ -1,3 +1,40 @@
-__pycache__/*
-Data/.~lock.*
-.vscode/settings.json
+# Byte-compiled / optimised / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing / coverage
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Sphinx docs
+docs/_build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (keep repo lean)
+*.csv
+*.xlsx
+!examples/*.csv
