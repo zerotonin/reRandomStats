@@ -35,6 +35,5 @@ docs/_build/
 Thumbs.db
 
 # Data (keep repo lean)
-*.csv
-*.xlsx
+
 !examples/*.csv
