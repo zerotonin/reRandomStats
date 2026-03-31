@@ -1,0 +1,19 @@
+response,statistic,groupA,groupA_n,groupB,groupB_n,p value,p value corrected,h,sig. level
+Tukutuku,meanDiff,BTT,320,STT,320,0.055299999999999905,0.055299999999999905,False,n.s.
+Tukutuku,meanDiff,BTT,320,ACO,320,0.0001,0.00015000000000000001,True,***
+Tukutuku,meanDiff,STT,320,ACO,320,0.0001,0.00015000000000000001,True,***
+Oligosoma,meanDiff,BTT,320,STT,320,0.2269,0.2269,False,n.s.
+Oligosoma,meanDiff,BTT,320,ACO,320,0.03554999999999997,0.053324999999999956,False,n.s.
+Oligosoma,meanDiff,STT,320,ACO,320,0.0011499999999999844,0.003449999999999953,True,**
+total_lizard,meanDiff,BTT,320,STT,320,0.99725,0.99725,False,n.s.
+total_lizard,meanDiff,BTT,320,ACO,320,0.0009,0.0015,True,**
+total_lizard,meanDiff,STT,320,ACO,320,0.001,0.0015,True,**
+Tukutuku,medianDiff,BTT,320,STT,320,0.99995,0.99995,False,n.s.
+Tukutuku,medianDiff,BTT,320,ACO,320,0.99995,0.99995,False,n.s.
+Tukutuku,medianDiff,STT,320,ACO,320,0.99995,0.99995,False,n.s.
+Oligosoma,medianDiff,BTT,320,STT,320,0.99995,0.99995,False,n.s.
+Oligosoma,medianDiff,BTT,320,ACO,320,0.99995,0.99995,False,n.s.
+Oligosoma,medianDiff,STT,320,ACO,320,0.99995,0.99995,False,n.s.
+total_lizard,medianDiff,BTT,320,STT,320,0.99995,0.99995,False,n.s.
+total_lizard,medianDiff,BTT,320,ACO,320,0.99995,0.99995,False,n.s.
+total_lizard,medianDiff,STT,320,ACO,320,0.99995,0.99995,False,n.s.
