@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.PENDING.svg)](https://zenodo.org/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20387255.svg)](https://doi.org/10.5281/zenodo.20387255)
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
@@ -265,19 +265,23 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 ## Citation
 
 If you use this software in your research, please cite the **version
-you used**. Citation metadata is in [`CITATION.cff`](CITATION.cff)
-and on the GitHub repo's "Cite this repository" button.
+you used**. Full metadata is in [`CITATION.cff`](CITATION.cff) and
+on the GitHub repo's "Cite this repository" button. The latest
+version DOI is:
+
+> Geurten, B. R. H. (2026). *reRandomStats: Re-randomisation
+> Statistics Toolkit* (Version 0.2.0) [Software]. Zenodo.
+> https://doi.org/10.5281/zenodo.20387255
 
 ```bibtex
-@software{geurten_rerandomstats,
+@software{geurten_rerandomstats_v020,
   author    = {Geurten, Bart R. H.},
   title     = {{reRandomStats}: Re-randomisation Statistics Toolkit},
-  year      = {2025},
-  version   = {0.1.0},
-  url       = {https://github.com/zerotonin/rerandomstats},
+  year      = {2026},
+  version   = {0.2.0},
+  doi       = {10.5281/zenodo.20387255},
+  url       = {https://github.com/zerotonin/reRandomStats},
   license   = {MIT},
-  note      = {Zenodo DOI to appear on first GitHub Release; replace
-               this block with the version-DOI you used.},
 }
 ```
 

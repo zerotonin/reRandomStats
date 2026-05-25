@@ -4,9 +4,14 @@ message: "If you use this software, please cite it as below."
 type: software
 version: "0.2.0"
 date-released: "2026-05-26"
+doi: "10.5281/zenodo.20387255"
 license: MIT
 repository-code: "https://github.com/zerotonin/reRandomStats"
 url: "https://zerotonin.github.io/reRandomStats/"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20387255"
+    description: "Zenodo archive of reRandomStats v0.2.0"
 keywords:
   - statistics
   - resampling
