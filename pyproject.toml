@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rerandomstats"
-version = "0.1.0"
-description = "Re-randomisation statistics toolkit implementing Fisher's resampling test, multiple hypothesis testing with FDR correction, and binomial proportion tests."
+version = "0.2.0"
+description = "Re-randomisation statistics toolkit: Fisher's resampling test, multi-group comparisons with shared-core FDR / Bonferroni / Holm correction, binomial proportion tests, classical hypothesis-test dispatcher, time-stratified case-crossover estimators, model-comparison helpers (Wald two-sample-beta, LRT), and dose-response / breakpoint analysis (broken-stick + Davies + Muggeo pscore + 4PL Hill with profile-RSS CIs and Sebaugh-McCray lower bend)."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
@@ -19,8 +19,19 @@ keywords = [
     "Fisher",
     "hypothesis-testing",
     "FDR",
+    "Benjamini-Hochberg",
+    "Bonferroni",
     "binomial",
     "non-parametric",
+    "case-crossover",
+    "conditional-logit",
+    "Wald-test",
+    "likelihood-ratio-test",
+    "dose-response",
+    "broken-stick-regression",
+    "Davies-test",
+    "Hill-equation",
+    "breakpoint-detection",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -46,10 +57,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/zerotonin/rerandomstats"
-Documentation = "https://zerotonin.github.io/rerandomstats/"
-Repository = "https://github.com/zerotonin/rerandomstats"
-Issues = "https://github.com/zerotonin/rerandomstats/issues"
+Homepage = "https://github.com/zerotonin/reRandomStats"
+Documentation = "https://zerotonin.github.io/reRandomStats/"
+Repository = "https://github.com/zerotonin/reRandomStats"
+Issues = "https://github.com/zerotonin/reRandomStats/issues"
 
 [project.optional-dependencies]
 dev = [

@@ -1,7 +1,7 @@
 # reRandomStats
 
 [![Tests](https://github.com/zerotonin/rerandomstats/actions/workflows/tests.yml/badge.svg)](https://github.com/zerotonin/rerandomstats/actions/workflows/tests.yml)
-[![Docs](https://github.com/zerotonin/rerandomstats/actions/workflows/docs.yml/badge.svg)](https://zerotonin.github.io/rerandomstats/)
+[![Docs](https://github.com/zerotonin/rerandomstats/actions/workflows/docs.yml/badge.svg)](https://zerotonin.github.io/reRandomStats/)
 [![Release](https://github.com/zerotonin/rerandomstats/actions/workflows/release.yml/badge.svg)](https://github.com/zerotonin/rerandomstats/releases)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -19,6 +19,8 @@ A comprehensive Python toolkit for **re-randomisation statistics** in the tradit
 
 ## Features
 
+### Core resampling and hypothesis-test framework
+
 - **Fisher's Resampling Test** — permutation-based two-sample test using mean, median, or sum differences as the test statistic. Supports exhaustive enumeration for small samples and random resampling for large ones.
 - **Fisher's Exact Test** — wrapper for 2×2 contingency table analysis.
 - **Multi-Group Pairwise Testing** — runs all (or user-specified) pairwise comparisons with automatic multiple-testing correction (Benjamini-Hochberg FDR, Bonferroni, Holm, and others via `statsmodels`).
@@ -27,6 +29,12 @@ A comprehensive Python toolkit for **re-randomisation statistics** in the tradit
 - **Data I/O** — CSV reader supporting German-locale semicolon-delimited files, with wide→long table conversion.
 - **Pretty Tables** — `write_pretty_table` helper that takes any results DataFrame and renders a publication-ready ASCII / Markdown table for inclusion in manuscripts and logs.
 - **Combinatoric Resampling Utility** — `GetNofK` exhaustively enumerates n-of-k partitions for small-sample exact resampling.
+
+### New in v0.2.0 — three application-oriented submodules
+
+- **Case-crossover estimators** (`rerandomstats.case_crossover`) — time-stratified case-crossover conditional logit (Maclure 1991; Lee et al. 2023) with stratified-permutation backup, closed-form daylight-hours covariate, within-event temporal-contrast test (hot-day-vs-hot-week), and a Burke-2015 σ-rescaled effect translator for cross-study comparability. Promoted from ThermoStrife v0.1.1.
+- **Model comparison** (`rerandomstats.model_comparison`) — two-sample Wald z-test on independently-estimated coefficients (`wald_two_sample_beta`), nested-model likelihood-ratio test (`likelihood_ratio_test`), single-method correction (`correct_pvalues`) and array helper (`correct_pvalues_array`), and dual-method BH + Bonferroni report (`benjamini_hochberg`). **All four correction helpers route through one `statsmodels.stats.multitest.multipletests` call** — the package's shared-algorithmic-source invariant prevents drift between BH implementations.
+- **Dose-response and breakpoint analysis** (`rerandomstats.dose_response`) — broken-stick segmented regression with profile-RSS 95 % CI on the breakpoint (`broken_stick_fit`), the Davies (1987 / 2002) and Muggeo (2016) Pseudo-Score breakpoint-existence tests (`davies_test`, `pscore_test`), 4-parameter Hill / logistic fit with Sebaugh–McCray (2003) lower-bend point (`hill_fit`), and a per-subject iterator (`per_subject_segmented`) that applies any of the four fitters across a panel of subjects. Pickle-safe for `concurrent.futures.ProcessPoolExecutor` parallelism. Ported verbatim from the DigiMuh dairy-cow heat-stress pipeline.
 
 ## Installation
 
@@ -121,6 +129,94 @@ ht = HypothesisTests(
 print(f"p = {ht.main():.4f}")
 ```
 
+### Case-crossover conditional logit (v0.2.0)
+
+```python
+from rerandomstats import build_case_crossover_frame, case_crossover_conditional_logit
+
+# events: list of dicts; each event has event_id, lat, lon, when (date),
+# tmax_event_c (float), baseline (DataFrame index=date, column 'tmax').
+frame = build_case_crossover_frame(events)
+result = case_crossover_conditional_logit(frame)
+print(f"OR per +1 °C: {result['or_per_C']:.3f} "
+      f"(95% CI {result['or_ci95_low']:.3f}–{result['or_ci95_high']:.3f}), "
+      f"p_one_sided = {result['pvalue_one_sided']:.4f}")
+```
+
+### Wald comparison of two independently-fitted coefficients (v0.2.0)
+
+```python
+from rerandomstats import wald_two_sample_beta
+
+# E.g. ThermoFooty H7: hot-host pool β vs cool-host pool β
+result = wald_two_sample_beta(
+    beta_a=0.082, se_a=0.025,    # hot-host pool
+    beta_b=0.041, se_b=0.022,    # cool-host pool
+    alternative='two-sided',
+    name_a='hot_host', name_b='cool_host',
+)
+print(f"Δβ = {result['diff']:+.4f}, z = {result['z_statistic']:.2f}, "
+      f"p = {result['pvalue']:.4f}")
+```
+
+### Heterogeneous battery correction (BH + Bonferroni side-by-side, v0.2.0)
+
+```python
+from rerandomstats import benjamini_hochberg
+
+# Pre-computed p-values from a heterogeneous battery (case-crossover,
+# Wald, Poisson, LRT — anything that produced a p-value).
+battery = {
+    "H2": 0.0008, "H3": 0.012, "H4": 0.039,
+    "H5": 0.001, "H0_spec": 0.0047,
+}
+result = benjamini_hochberg(battery, alpha=0.05)
+for name, row in result["results"].items():
+    print(f"{name}: raw p = {row['raw_p']:.4f}  "
+          f"BH q = {row['bh_adjusted_p']:.4f}  BH-reject = {row['bh_reject']}")
+```
+
+### Breakpoint detection on dose-response data (v0.2.0)
+
+```python
+import numpy as np
+from rerandomstats import broken_stick_fit, davies_test, pscore_test, hill_fit
+
+x = ...  # predictor (e.g. THI, ambient temperature, anomaly)
+y = ...  # response (e.g. core temperature, card rate)
+
+# Primary: broken-stick segmented regression with profile-RSS CI on breakpoint
+bs = broken_stick_fit(x, y)
+if bs['converged']:
+    print(f"Breakpoint = {bs['breakpoint']:.2f} "
+          f"[{bs['breakpoint_ci_lo']:.2f}, {bs['breakpoint_ci_hi']:.2f}], "
+          f"R² = {bs['r_squared']:.3f}")
+
+# Existence tests (Davies upper-bound + Muggeo Pseudo-Score, typically more powerful)
+print(f"Davies p = {davies_test(x, y)['pvalue']:.4f}")
+print(f"Pscore p = {pscore_test(x, y)['pvalue']:.4f}")
+
+# Rescue / alternative: 4-parameter Hill with Sebaugh–McCray lower bend
+hf = hill_fit(x, y)
+if hf['converged']:
+    print(f"EC50 = {hf['ec50']:.2f}, Hill n = {hf['hill_n']:.2f}, "
+          f"lower bend = {hf['lower_bend']:.2f}")
+```
+
+### Per-subject (per-animal / per-player / per-station) breakpoint distribution (v0.2.0)
+
+```python
+from rerandomstats import per_subject_segmented, broken_stick_fit
+
+# df: long-format panel with one row per (subject, observation).
+result_df = per_subject_segmented(
+    df, subject_col="animal_id", x_col="thi", y_col="rumen_temp",
+    model=broken_stick_fit, min_n=50,
+)
+# result_df has one row per subject with columns: animal_id + all keys
+# from broken_stick_fit (breakpoint, slope_below, slope_above, …).
+```
+
 ## Available Tests
 
 | Family | Test String | Description |
@@ -142,7 +238,7 @@ print(f"p = {ht.main():.4f}")
 ## Documentation
 
 Full API documentation is built with Sphinx and hosted at:
-**[https://zerotonin.github.io/rerandomstats/](https://zerotonin.github.io/rerandomstats/)**
+**[https://zerotonin.github.io/reRandomStats/](https://zerotonin.github.io/reRandomStats/)**
 
 To build locally:
 
