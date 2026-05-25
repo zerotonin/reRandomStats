@@ -2,11 +2,11 @@ cff-version: 1.2.0
 title: "reRandomStats: Re-randomisation Statistics Toolkit"
 message: "If you use this software, please cite it as below."
 type: software
-version: "0.1.0"
-date-released: "2025-01-01"
+version: "0.2.0"
+date-released: "2026-05-26"
 license: MIT
-repository-code: "https://github.com/zerotonin/rerandomstats"
-url: "https://zerotonin.github.io/rerandomstats/"
+repository-code: "https://github.com/zerotonin/reRandomStats"
+url: "https://zerotonin.github.io/reRandomStats/"
 keywords:
   - statistics
   - resampling
@@ -14,8 +14,19 @@ keywords:
   - Fisher
   - hypothesis testing
   - FDR correction
+  - Benjamini-Hochberg
+  - Bonferroni
   - non-parametric
   - binomial
+  - case-crossover
+  - conditional logit
+  - Wald test
+  - likelihood-ratio test
+  - dose-response
+  - broken-stick regression
+  - Davies test
+  - Hill equation
+  - breakpoint detection
 authors:
   - given-names: "Bart R.H."
     family-names: Geurten
@@ -23,10 +34,22 @@ authors:
     orcid: "https://orcid.org/0000-0002-1816-3241"
     affiliation: "Department of Zoology, University of Otago, Dunedin, New Zealand"
 abstract: >-
-  A comprehensive Python toolkit for re-randomisation statistics in the
-  tradition of Sir Ronald Fisher. Implements Fisher's resampling test
-  with mean, median, and sum difference statistics, Fisher's exact test,
-  pairwise multi-group comparisons with multiple-testing correction
-  (Benjamini-Hochberg FDR and others), binomial proportion tests with
-  Wilson confidence intervals, and a suite of classical parametric and
-  non-parametric hypothesis tests.
+  A comprehensive Python toolkit for re-randomisation statistics in
+  the tradition of Sir Ronald Fisher.  v0.2.0 adds three new
+  submodules to the core resampling / hypothesis-test framework:
+  (i) case_crossover, the time-stratified case-crossover conditional
+  logit estimator with stratified-permutation backup and a
+  Burke-2015 sigma-rescaled effect translator (promoted from
+  ThermoStrife); (ii) model_comparison, with a two-sample Wald
+  z-test on independently-estimated coefficients, a nested-model
+  likelihood-ratio test, and BH / Bonferroni / Holm / Sidak
+  correction helpers that route through a single
+  statsmodels.stats.multitest.multipletests call (the package's
+  shared algorithmic-source invariant); (iii) dose_response, with
+  broken-stick segmented regression (profile-RSS 95 percent CI on
+  the breakpoint), the Davies (1987 / 2002) and Muggeo (2016)
+  Pseudo-Score breakpoint-existence tests, and a 4-parameter Hill
+  fit reporting the Sebaugh-McCray lower bend.  All three new
+  submodules carry verbatim numerical ports from the DigiMuh and
+  ThermoStrife pipelines plus a per-subject iterator pickle-safe for
+  ProcessPoolExecutor parallelism.
