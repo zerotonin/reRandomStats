@@ -22,9 +22,11 @@ A comprehensive Python toolkit for **re-randomisation statistics** in the tradit
 - **Fisher's Resampling Test** — permutation-based two-sample test using mean, median, or sum differences as the test statistic. Supports exhaustive enumeration for small samples and random resampling for large ones.
 - **Fisher's Exact Test** — wrapper for 2×2 contingency table analysis.
 - **Multi-Group Pairwise Testing** — runs all (or user-specified) pairwise comparisons with automatic multiple-testing correction (Benjamini-Hochberg FDR, Bonferroni, Holm, and others via `statsmodels`).
-- **Binomial Proportion Tests** — single-sample binomial test with Wilson confidence intervals, plus two-sample z-test and chi-square comparisons.
+- **Binomial Proportion Tests** — `BinomialStats` for single-sample binomial test with Wilson confidence intervals plus two-sample z-test and chi-square comparisons, and `MultipleBinomialTests` for batched binomial comparisons with multiple-testing correction.
 - **Classical Hypothesis Tests** — unified dispatcher for Mann-Whitney U, Kruskal-Wallis, Kolmogorov-Smirnov, Mood's Median, Wilcoxon Rank-Sum, independent t-test, and chi-square.
 - **Data I/O** — CSV reader supporting German-locale semicolon-delimited files, with wide→long table conversion.
+- **Pretty Tables** — `write_pretty_table` helper that takes any results DataFrame and renders a publication-ready ASCII / Markdown table for inclusion in manuscripts and logs.
+- **Combinatoric Resampling Utility** — `GetNofK` exhaustively enumerates n-of-k partitions for small-sample exact resampling.
 
 ## Installation
 
@@ -166,16 +168,64 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 ## Citation
 
-If you use this software in your research, please cite it:
+If you use this software in your research, please cite the **version
+you used**. Citation metadata is in [`CITATION.cff`](CITATION.cff)
+and on the GitHub repo's "Cite this repository" button.
 
 ```bibtex
 @software{geurten_rerandomstats,
-  author    = {Geurten, Bart R.H.},
+  author    = {Geurten, Bart R. H.},
   title     = {{reRandomStats}: Re-randomisation Statistics Toolkit},
+  year      = {2025},
+  version   = {0.1.0},
   url       = {https://github.com/zerotonin/rerandomstats},
   license   = {MIT},
+  note      = {Zenodo DOI to appear on first GitHub Release; replace
+               this block with the version-DOI you used.},
 }
 ```
+
+> **Note for Elsevier submissions:** Elsevier Editorial Manager does
+> not parse `@software`. Convert to `@misc` at submission time per
+> the lab BibTeX convention.
+
+## Reproducing the analyses in published papers
+
+This repository preserves **per-paper code snapshots as permanent
+git tags** under the `paper-*` namespace, so any reader of the
+associated paper can check out the exact code state that produced
+the published results:
+
+```bash
+git clone https://github.com/zerotonin/rerandomstats.git
+cd rerandomstats
+git tag -l 'paper-*'                            # browse available snapshots
+git checkout paper-Berger_Senthilan_2024        # e.g. for Berger & Senthilan (2024)
+pip install -e .
+```
+
+Browse all snapshots at
+[github.com/zerotonin/rerandomstats/tags](https://github.com/zerotonin/rerandomstats/tags).
+Tags are created at the tip of the per-paper feature branch when the
+paper is released; the branches are then removed to keep the active
+branch list clean while the snapshot remains permanently citable.
+
+## Used by
+
+Downstream lab projects that depend on reRandomStats:
+
+- **[ThermoStrife](https://github.com/zerotonin/thermostrife)**
+  ([Zenodo DOI 10.5281/zenodo.20371612](https://doi.org/10.5281/zenodo.20371612)) —
+  historical-uprisings temperature companion to the ThermoKourt
+  *Drosophila* heat-aggression pipeline. Case-crossover conditional
+  logit + stratified permutation + σ-rescaled effect machinery
+  currently lives in `thermostrife.inference`; will migrate to
+  `rerandomstats.case_crossover` from v0.2.0 onwards.
+- **ThermoFooty** (pre-registered at
+  [OSF DOI 10.17605/OSF.IO/YZVAK](https://doi.org/10.17605/OSF.IO/YZVAK),
+  repo TBD) — pre-registered natural-experiment test of heat-aggression
+  on European soccer. Will consume reRandomStats v0.2.0 as the
+  canonical stats backend.
 
 ## Acknowledgements
 
