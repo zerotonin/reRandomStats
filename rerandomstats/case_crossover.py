@@ -221,7 +221,7 @@ def case_crossover_conditional_logit(
         "pvalue_two_sided": float(p_two_sided),
         "covariate_betas": {
             name: float(b)
-            for name, b in zip(cols[1:], result.params[1:], strict=False)
+            for name, b in zip(cols[1:], result.params[1:])
         },
     }
 

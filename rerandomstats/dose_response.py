@@ -641,7 +641,7 @@ def per_subject_segmented(
         # (even when the list has length 1).  Normalising once handles both
         # the single-column and composite-key cases uniformly.
         key_tuple = key if isinstance(key, tuple) else (key,)
-        subject_id = dict(zip(group_keys, key_tuple, strict=False))
+        subject_id = dict(zip(group_keys, key_tuple))
 
         if len(x) < min_n:
             row = {**subject_id, "n": len(x), "converged": False}

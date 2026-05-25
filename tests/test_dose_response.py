@@ -243,7 +243,7 @@ class TestPerSubjectSegmented:
             x, y = _broken_stick_data(
                 bp=bp, n=n_per_subject, noise_sd=0.2, seed=seed + s,
             )
-            for xi, yi in zip(x, y, strict=False):
+            for xi, yi in zip(x, y):
                 rows.append({"subject_id": f"subj_{s}", "x": xi, "y": yi})
         return pd.DataFrame(rows)
 
@@ -281,7 +281,7 @@ class TestPerSubjectSegmented:
         rows = []
         for s in range(4):
             x, y = _hill_data(ec50=20.0 + s, n=100, seed=s)
-            for xi, yi in zip(x, y, strict=False):
+            for xi, yi in zip(x, y):
                 rows.append({"subject_id": f"hill_{s}", "x": xi, "y": yi})
         panel = pd.DataFrame(rows)
 
