@@ -41,6 +41,44 @@ Multi-Group Testing
    :undoc-members:
    :show-inheritance:
 
+Case-Crossover Estimators (v0.2.0)
+----------------------------------
+
+Time-stratified case-crossover conditional logit with stratified-
+permutation backup and Burke-2015 σ-rescaled effect translator.
+
+.. automodule:: rerandomstats.case_crossover
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Model Comparison (v0.2.0)
+-------------------------
+
+Wald two-sample-β test, nested-model likelihood-ratio test, and the
+shared-algorithmic-source p-value correction helpers
+(``correct_pvalues`` / ``correct_pvalues_array`` /
+``benjamini_hochberg``) routing through ``statsmodels.stats.multitest.multipletests``.
+
+.. automodule:: rerandomstats.model_comparison
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Dose-Response and Breakpoint Analysis (v0.2.0)
+----------------------------------------------
+
+Broken-stick segmented regression with profile-RSS 95 % CI on the
+breakpoint, the Davies (1987 / 2002) and Muggeo (2016) Pseudo-Score
+breakpoint-existence tests, the 4-parameter Hill / logistic fit with
+Sebaugh–McCray lower-bend point, and a per-subject iterator that
+applies any of the four to a panel of subjects.
+
+.. automodule:: rerandomstats.dose_response
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Resampling Index Generator
 --------------------------
 

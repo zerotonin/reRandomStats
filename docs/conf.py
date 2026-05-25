@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath(".."))
 project = "reRandomStats"
 copyright = "2023-2026, Bart R.H. Geurten"
 author = "Bart R.H. Geurten"
-release = "0.1.0"
+release = "0.2.0"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
