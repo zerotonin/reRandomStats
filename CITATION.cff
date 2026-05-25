@@ -2,7 +2,7 @@ cff-version: 1.2.0
 title: "reRandomStats: Re-randomisation Statistics Toolkit"
 message: "If you use this software, please cite it as below."
 type: software
-version: 0.1.0
+version: "0.1.0"
 date-released: "2025-01-01"
 license: MIT
 repository-code: "https://github.com/zerotonin/rerandomstats"
