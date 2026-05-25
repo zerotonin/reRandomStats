@@ -26,7 +26,6 @@ from scipy.stats import (
     ttest_ind,
 )
 
-
 # Accepted test names (for documentation / validation)
 _VALID_TESTS = {
     "MannWhitneyU",

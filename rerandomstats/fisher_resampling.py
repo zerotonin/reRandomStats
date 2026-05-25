@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, List, Literal, Sequence, Tuple, Union
+from typing import List, Literal, Sequence, Union
 
 import numpy as np
 

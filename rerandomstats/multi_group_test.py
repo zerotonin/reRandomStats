@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 from itertools import combinations
-from typing import List, Literal, Optional, Sequence, Tuple, Union
+from typing import List, Optional, Sequence, Tuple, Union
 
 import pandas as pd
 import statsmodels.api as sm

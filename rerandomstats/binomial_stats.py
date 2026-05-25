@@ -13,11 +13,15 @@
 
 from __future__ import annotations
 
-from typing import Dict, Literal, Sequence, Tuple
+from typing import Dict, Literal, Tuple
 
 import numpy as np
 from scipy.stats import binomtest
-from statsmodels.stats.proportion import proportion_confint, proportions_chisquare, proportions_ztest
+from statsmodels.stats.proportion import (
+    proportion_confint,
+    proportions_chisquare,
+    proportions_ztest,
+)
 
 
 class BinomialStats:

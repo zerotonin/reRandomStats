@@ -20,11 +20,10 @@ from rerandomstats import (
     FisherResamplingTest,
     GetNofK,
     HypothesisTests,
-    MultipleBinomialTests,
     MultiGroupTest,
+    MultipleBinomialTests,
     write_pretty_table,
 )
-
 
 # ┌──────────────────────────────────────────────────────────────────┐
 # │                  FisherExactTest                                  │
