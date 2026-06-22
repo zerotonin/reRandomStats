@@ -11,11 +11,11 @@
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║  reRandomStats                                                   ║
-║  « Re-randomisation statistics in the spirit of Fisher »         ║
+║  « Re-randomisation, resampling & exact statistics »             ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-A comprehensive Python toolkit for **re-randomisation statistics** in the tradition of [Sir Ronald A. Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher). The package provides Fisher's resampling test with flexible test statistics, pairwise multi-group comparisons with multiple-testing correction, binomial proportion tests, and a unified interface to classical parametric and non-parametric hypothesis tests.
+A comprehensive Python toolkit for **re-randomisation statistics**. The package builds on the resampling and exact-test methods originally developed by [Ronald A. Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), providing Fisher's resampling test with flexible test statistics, pairwise multi-group comparisons with multiple-testing correction, binomial proportion tests, and a unified interface to classical parametric and non-parametric hypothesis tests.
 
 ## Features
 
@@ -326,10 +326,13 @@ Downstream lab projects that depend on reRandomStats:
   repo TBD) — pre-registered natural-experiment test of heat-aggression
   on European soccer. Will consume reRandomStats v0.2.0 as the
   canonical stats backend.
+- **[WINGS](https://github.com/zerotonin/WINGS)** — *Wolbachia* Infection
+  Numerical Growth Simulation. Uses reRandomStats for the re-randomisation
+  and exact-test comparisons underlying its infection-dynamics analyses.
 
 ## Acknowledgements
 
-We acknowledge [Sir Ronald Aylmer Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher) for his pioneering work on the re-randomisation test and his foundational contributions to the field of statistics.
+The methods implemented here rest on the statistical work of [Ronald A. Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), who developed the re-randomisation test and the exact test that bear his name and was a major contributor to modern statistics. We acknowledge that technical debt while noting plainly that Fisher also promoted eugenics and held views we reject; we credit the mathematics, not the man's politics.
 
 ## Maintainer
 
