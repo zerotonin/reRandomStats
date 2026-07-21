@@ -38,6 +38,12 @@ class GetNofK:
             length, exhaustive mode falls back to resampling.
         resampling_n: Default number of random draws when
             *combination_n* triggers resampling mode.
+        seed: Seed for this instance's private random generator.
+            ``None`` (the default) seeds from OS entropy, so results
+            vary between runs exactly as before.  Pass an integer when
+            a reported p-value has to be reproducible — resampling
+            draws a finite sample of the permutation space, so two
+            unseeded runs of the same comparison differ slightly.
 
     Attributes:
         combined_data: Concatenation of both data sets.
@@ -54,7 +60,13 @@ class GetNofK:
         mode: Literal["combinations", "resampling", "resample_unique"] = "resampling",
         max_len_possible_4_perms: int = 10,
         resampling_n: int = 100_000,
+        seed: int | None = None,
     ) -> None:
+        # A private generator rather than the global `random` module, so a
+        # seeded test cannot be perturbed by unrelated code drawing from the
+        # shared stream, and seeding here cannot disturb the caller's.
+        self.seed = seed
+        self._rng = random.Random(seed)
         self.data_set_a: List = list(data_set_a)
         self.data_set_b: List = list(data_set_b)
         self.combination_n = combination_n
@@ -118,7 +130,7 @@ class GetNofK:
         tries = 0
         desperation = False
         while len(combis) < self.resampling_n and not desperation:
-            combis.add(tuple(sorted(random.sample(all_indices, self.short_len))))
+            combis.add(tuple(sorted(self._rng.sample(all_indices, self.short_len))))
             tries += 1
             if tries > self.resampling_n * 10:
                 desperation = True
@@ -136,7 +148,7 @@ class GetNofK:
         """
         all_indices = list(range(self.combined_len))
         return [
-            tuple(sorted(random.sample(all_indices, self.short_len)))
+            tuple(sorted(self._rng.sample(all_indices, self.short_len)))
             for _ in range(self.resampling_n)
         ]
 

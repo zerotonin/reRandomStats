@@ -35,6 +35,13 @@ class FisherResamplingTest:
             ``'medianDiff'``, or ``'sumDiff'``.
         combination_n: ``'all'`` for exhaustive permutation or an
             integer for random resampling draws.
+        seed: Seed for the resampling draws.  ``None`` (the default)
+            keeps the historical behaviour, in which repeated runs of
+            the same comparison give slightly different p-values —
+            random resampling covers only a finite sample of the
+            permutation space.  Pass an integer when the p-value goes
+            into a manuscript and has to be reproducible; exhaustive
+            mode (``combination_n='all'``) is deterministic regardless.
 
     Attributes:
         p_value: Two-sided p-value after :meth:`main` has been called.
@@ -54,11 +61,13 @@ class FisherResamplingTest:
         data_b: Sequence[float],
         func: Literal["meanDiff", "medianDiff", "sumDiff"],
         combination_n: Union[int, str] = 10_000,
+        seed: int | None = None,
     ) -> None:
         self.data_a = data_a
         self.data_b = data_b
         self.func = func
         self.combination_n = combination_n
+        self.seed = seed
 
         self.p_value: float | None = None
         self.original_test_result: float | None = None
@@ -70,7 +79,8 @@ class FisherResamplingTest:
 
     def get_shuffled_indices(self) -> None:
         """Build the combinatorial index sets via :class:`GetNofK`."""
-        self.n_of_k = GetNofK(self.data_a, self.data_b, self.combination_n)
+        self.n_of_k = GetNofK(self.data_a, self.data_b, self.combination_n,
+                              seed=self.seed)
         self.n_of_k.main()
         self.resample_n = self.n_of_k.combination_n
 

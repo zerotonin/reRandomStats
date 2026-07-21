@@ -57,6 +57,9 @@ class MultiGroupTest:
             :func:`statsmodels.stats.multipletests`.
         combination_set: Optional list of ``(groupA, groupB)`` tuples
             restricting which pairs are tested.
+        seed: Passed to :class:`FisherResamplingTest` so a whole
+            pairwise sweep is reproducible.  ``None`` (the default)
+            keeps the historical run-to-run variation.
 
     Attributes:
         df: :class:`pandas.DataFrame` with results (available after
@@ -80,6 +83,7 @@ class MultiGroupTest:
         combination_n: Union[int, str] = 10_000,
         correction_type: str = "fdr_bh",
         combination_set: Sequence[Tuple[str, str]] = (),
+        seed: int | None = None,
     ) -> None:
         self.data = data
         self.group = group
@@ -87,6 +91,7 @@ class MultiGroupTest:
         self.correction_type = correction_type
         self.combination_n = combination_n
         self.combination_set = combination_set
+        self.seed = seed
 
         # populated by main()
         self.group_names: Tuple[str, ...] = ()
@@ -215,7 +220,8 @@ class MultiGroupTest:
         if family == "Fisher":
             if name == "exact":
                 return FisherExactTest((), ())
-            return FisherResamplingTest([], [], name, self.combination_n)
+            return FisherResamplingTest([], [], name, self.combination_n,
+                                        seed=self.seed)
         elif family == "Binomial":
             return MultipleBinomialTests((), (), name)
         elif family == "hypo":
