@@ -75,15 +75,27 @@ def broken_stick_fit(
     y: np.ndarray,
     x_range: tuple[float, float] | None = None,
     n_grid: int = 200,
+    constrain: bool = True,
 ) -> dict:
-    """Fit a two-segment piecewise-linear model with one breakpoint.
+    """Fit a continuous two-segment (segmented) regression with one breakpoint.
 
-    Model: ``y = α_below + β_below·x`` for ``x ≤ ψ``; ``y = α_above +
-    β_above·x`` for ``x > ψ``.  Biological constraint enforced:
-    ``slope_above > slope_below`` and ``slope_above > 0`` (the
-    "flat-ish below, steeper above" pattern typical of threshold
-    physiological responses).  Fits that violate this constraint are
-    returned with ``converged=False`` and a ``rejected_reason`` string.
+    Model (Muggeo 2003), in hinge form::
+
+        y = a + b₁·x + δ·(x − ψ)₊        δ = b₂ − b₁,  (·)₊ = max(0, ·)
+
+    so the two segments share the value ``a + b₁·ψ`` at the breakpoint
+    ``ψ`` and the fitted line is **continuous**.  ``b₁`` is the slope
+    below ``ψ`` and ``b₂ = b₁ + δ`` the slope above it.  Four parameters
+    are estimated: ``a``, ``b₁``, ``δ`` and ``ψ``.
+
+    With ``constrain=True`` (default) the biological constraint
+    ``slope_above > slope_below`` and ``slope_above > 0`` is enforced —
+    the "flat-ish below, steeper above" pattern typical of threshold
+    physiological responses.  Fits that violate it are returned with
+    ``converged=False`` and a ``rejected_reason`` string.  With
+    ``constrain=False`` the unconstrained optimum is returned as-is,
+    which is the sensitivity fit used to show the constraint does not
+    manufacture the result.
 
     The breakpoint is located by grid search over ``n_grid`` candidates
     in ``x_range``, refined by ``scipy.optimize.minimize_scalar`` on
@@ -99,19 +111,24 @@ def broken_stick_fit(
     ``breakpoint_ci_truncated=True``.
 
     Args:
-        x:       Predictor array.  NaN entries dropped.
-        y:       Response array.  Must align with ``x``.
-        x_range: Search bounds for the breakpoint.  Default
-                 ``(percentile_10, percentile_90)`` of ``x``.
-        n_grid:  Grid resolution for the initial breakpoint search.
-                 Default 200.
+        x:         Predictor array.  NaN entries dropped.
+        y:         Response array.  Must align with ``x``.
+        x_range:   Search bounds for the breakpoint.  Default
+                   ``(percentile_10, percentile_90)`` of ``x``.
+        n_grid:    Grid resolution for the initial breakpoint search.
+                   Default 200.
+        constrain: Enforce ``slope_above > slope_below > ...`` (see
+                   above).  Default True.
 
     Returns:
-        Dict with the breakpoint, both segment slopes and intercepts,
-        ``r_squared``, ``n``, ``n_below``, ``n_above``, ``converged``,
-        ``breakpoint_ci_lo``, ``breakpoint_ci_hi``, ``breakpoint_se``
-        (derived from half-CI-width / 1.96), ``breakpoint_ci_truncated``,
-        and ``rejected_reason`` (``None`` if the fit converged).
+        Dict with the breakpoint, both segment slopes and intercepts
+        (``intercept_above = a − δ·ψ``, so that drawing each segment
+        from its own intercept/slope pair reproduces the continuous
+        line), ``r_squared``, ``n``, ``n_below``, ``n_above``,
+        ``converged``, ``breakpoint_ci_lo``, ``breakpoint_ci_hi``,
+        ``breakpoint_se`` (half-CI-width / 1.96),
+        ``breakpoint_ci_truncated``, and ``rejected_reason`` (``None``
+        if the fit converged).
 
     References:
         Muggeo VMR (2003) Estimating regression models with unknown
@@ -130,18 +147,20 @@ def broken_stick_fit(
     if x_range[0] >= x_range[1]:
         return {"breakpoint": np.nan, "converged": False, "n": n}
 
-    def rss_at_bp(bp: float) -> float:
+    def fit_at_bp(bp: float) -> tuple[np.ndarray | None, float]:
+        """OLS on the hinge design at a fixed ψ; (β, RSS) or (None, inf)."""
         left, right = x <= bp, x > bp
         if left.sum() < 10 or right.sum() < 10:
-            return np.inf
+            return None, np.inf
+        X = np.column_stack([np.ones(n), x, np.maximum(x - bp, 0.0)])
         try:
-            Xl = np.column_stack([np.ones(left.sum()), x[left]])
-            cl, *_ = np.linalg.lstsq(Xl, y[left], rcond=None)
-            Xr = np.column_stack([np.ones(right.sum()), x[right]])
-            cr, *_ = np.linalg.lstsq(Xr, y[right], rcond=None)
+            beta, *_ = np.linalg.lstsq(X, y, rcond=None)
         except np.linalg.LinAlgError:
-            return np.inf
-        return np.sum((y[left] - Xl @ cl) ** 2) + np.sum((y[right] - Xr @ cr) ** 2)
+            return None, np.inf
+        return beta, float(np.sum((y - X @ beta) ** 2))
+
+    def rss_at_bp(bp: float) -> float:
+        return fit_at_bp(bp)[1]
 
     grid = np.linspace(x_range[0], x_range[1], n_grid)
     rss_vals = np.array([rss_at_bp(bp) for bp in grid])
@@ -153,59 +172,70 @@ def broken_stick_fit(
     hi = grid[min(len(grid) - 1, best_idx + 2)]
     result = minimize_scalar(rss_at_bp, bounds=(lo, hi), method="bounded")
     bp = float(result.x)
-    final_rss = float(result.fun)
 
+    beta, final_rss = fit_at_bp(bp)
+    if beta is None:
+        return {"breakpoint": np.nan, "converged": False, "n": n}
+    a, b1, delta = (float(v) for v in beta)
     left, right = x <= bp, x > bp
-    Xl = np.column_stack([np.ones(left.sum()), x[left]])
-    cl, *_ = np.linalg.lstsq(Xl, y[left], rcond=None)
-    Xr = np.column_stack([np.ones(right.sum()), x[right]])
-    cr, *_ = np.linalg.lstsq(Xr, y[right], rcond=None)
 
     ss_tot = float(np.sum((y - np.mean(y)) ** 2))
     r_sq = 1.0 - final_rss / ss_tot if ss_tot > 0 else np.nan
 
-    slope_below, slope_above = float(cl[1]), float(cr[1])
-    valid = slope_above > slope_below and slope_above > 0
+    slope_below, slope_above = b1, b1 + delta
+    intercept_below, intercept_above = a, a - delta * bp
+    valid = (slope_above > slope_below and slope_above > 0) if constrain else True
 
     # ── Profile-RSS 95 % CI on the breakpoint ───────────────────
-    p_linear = 4  # two intercepts, two slopes
-    df_resid = n - p_linear
+    p_model = 4  # a, b1, delta, psi
+    df_resid = n - p_model
     ci_lo = ci_hi = bp_se = np.nan
     truncated = False
     if df_resid > 0 and final_rss > 0 and valid:
         f_crit = float(_f_dist.ppf(0.95, 1, df_resid))
         rss_thresh = final_rss * (1.0 + f_crit / df_resid)
-        ok = rss_vals <= rss_thresh
-        if ok.any():
+
+        def _profile_ci(g: np.ndarray, r: np.ndarray) -> tuple[float, float, bool, bool]:
+            """Threshold crossings of an RSS profile; flags mark edge hits."""
+            ok = r <= rss_thresh
+            if not ok.any():
+                return np.nan, np.nan, False, False
             lo_idx = int(np.argmax(ok))
             hi_idx = int(len(ok) - 1 - np.argmax(ok[::-1]))
 
-            def _interp_cross(i_out: int, i_in: int) -> float:
-                ri, rj = rss_vals[i_out], rss_vals[i_in]
+            def _cross(i_out: int, i_in: int) -> float:
+                ri, rj = r[i_out], r[i_in]
                 if not (np.isfinite(ri) and np.isfinite(rj)) or ri == rj:
-                    return float(grid[i_in])
+                    return float(g[i_in])
                 t = (rss_thresh - ri) / (rj - ri)
-                return float(grid[i_out] + t * (grid[i_in] - grid[i_out]))
+                return float(g[i_out] + t * (g[i_in] - g[i_out]))
 
-            if lo_idx > 0:
-                ci_lo = _interp_cross(lo_idx - 1, lo_idx)
-            else:
-                ci_lo = float(grid[0])
-                truncated = True
-            if hi_idx < len(grid) - 1:
-                ci_hi = _interp_cross(hi_idx + 1, hi_idx)
-            else:
-                ci_hi = float(grid[-1])
-                truncated = True
-            ci_lo, ci_hi = min(ci_lo, ci_hi), max(ci_lo, ci_hi)
+            at_lo, at_hi = lo_idx == 0, hi_idx == len(g) - 1
+            lo_v = float(g[0]) if at_lo else _cross(lo_idx - 1, lo_idx)
+            hi_v = float(g[-1]) if at_hi else _cross(hi_idx + 1, hi_idx)
+            return min(lo_v, hi_v), max(lo_v, hi_v), at_lo, at_hi
+
+        # A CI narrower than one coarse grid step is under-resolved, so the
+        # profile is re-evaluated on a fine grid around the optimum; the
+        # coarse profile is kept for CIs wider than that local window.
+        fine = np.linspace(grid[max(0, best_idx - 3)],
+                           grid[min(len(grid) - 1, best_idx + 3)], n_grid)
+        f_lo, f_hi, f_edge_lo, f_edge_hi = _profile_ci(
+            fine, np.array([rss_at_bp(b) for b in fine]))
+        if np.isfinite(f_lo) and not (f_edge_lo or f_edge_hi):
+            ci_lo, ci_hi = f_lo, f_hi
+        else:
+            ci_lo, ci_hi, edge_lo, edge_hi = _profile_ci(grid, rss_vals)
+            truncated = bool(edge_lo or edge_hi)
+        if np.isfinite(ci_lo):
             bp_se = (ci_hi - ci_lo) / (2.0 * 1.96)
 
     return {
         "breakpoint": bp if valid else np.nan,
         "slope_below": slope_below,
-        "intercept_below": float(cl[0]),
+        "intercept_below": intercept_below,
         "slope_above": slope_above,
-        "intercept_above": float(cr[0]),
+        "intercept_above": intercept_above,
         "r_squared": float(r_sq) if np.isfinite(r_sq) else np.nan,
         "n": n,
         "n_below": int(left.sum()),
