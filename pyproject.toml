@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rerandomstats"
-version = "0.2.0"
+version = "0.3.0"
 description = "Re-randomisation statistics toolkit: Fisher's resampling test, multi-group comparisons with shared-core FDR / Bonferroni / Holm correction, binomial proportion tests, classical hypothesis-test dispatcher, time-stratified case-crossover estimators, model-comparison helpers (Wald two-sample-beta, LRT), and dose-response / breakpoint analysis (broken-stick + Davies + Muggeo pscore + 4PL Hill with profile-RSS CIs and Sebaugh-McCray lower bend)."
 readme = "README.md"
 license = {text = "MIT"}
