@@ -128,6 +128,47 @@ class TestBrokenStickFit:
         res = broken_stick_fit(x, y)
         assert 0.0 <= res["r_squared"] <= 1.0
 
+    def test_segments_meet_at_breakpoint(self):
+        """The fitted line must be continuous at ψ (no double knot)."""
+        x, y = _broken_stick_data(bp=22.0)
+        res = broken_stick_fit(x, y)
+        assert res["converged"]
+        psi = res["breakpoint"]
+        y_left = res["intercept_below"] + res["slope_below"] * psi
+        y_right = res["intercept_above"] + res["slope_above"] * psi
+        assert abs(y_left - y_right) < 1e-9, y_right - y_left
+
+    def test_true_breakpoint_within_profile_ci(self):
+        x, y = _broken_stick_data(bp=22.0, n=2000, noise_sd=0.1, seed=3)
+        res = broken_stick_fit(x, y)
+        assert res["converged"]
+        assert not res["breakpoint_ci_truncated"]
+        assert res["breakpoint_ci_lo"] <= 22.0 <= res["breakpoint_ci_hi"], (
+            res["breakpoint_ci_lo"], res["breakpoint"], res["breakpoint_ci_hi"])
+
+    def test_unconstrained_fits_reversed_slopes(self):
+        """b2 < b1 is rejected under the constraint, fitted without it."""
+        x, y = _broken_stick_data(slope_below=0.8, slope_above=0.05, bp=20.0)
+        strict = broken_stick_fit(x, y, constrain=True)
+        assert not strict["converged"]
+        assert strict["rejected_reason"] is not None
+        free = broken_stick_fit(x, y, constrain=False)
+        assert free["converged"]
+        assert free["rejected_reason"] is None
+        assert free["slope_above"] < free["slope_below"]
+        assert abs(free["breakpoint"] - 20.0) < 1.5, free["breakpoint"]
+
+    def test_return_key_contract(self):
+        x, y = _broken_stick_data()
+        res = broken_stick_fit(x, y)
+        expected = {
+            "breakpoint", "slope_below", "intercept_below", "slope_above",
+            "intercept_above", "r_squared", "n", "n_below", "n_above",
+            "converged", "breakpoint_ci_lo", "breakpoint_ci_hi",
+            "breakpoint_se", "breakpoint_ci_truncated", "rejected_reason",
+        }
+        assert expected <= set(res), expected - set(res)
+
 
 # ─────────────────────────────────────────────────────────────────
 #  davies_test
