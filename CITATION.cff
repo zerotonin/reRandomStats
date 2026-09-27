@@ -10,7 +10,7 @@ repository-code: "https://github.com/zerotonin/reRandomStats"
 url: "https://zerotonin.github.io/reRandomStats/"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.20387255"
+    value: "10.5281/zenodo.22885906"
     description: "Zenodo archive of reRandomStats v0.2.0"
 keywords:
   - statistics
