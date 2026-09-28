@@ -2,15 +2,21 @@ cff-version: 1.2.0
 title: "reRandomStats: Re-randomisation Statistics Toolkit"
 message: "If you use this software, please cite it as below."
 type: software
-version: "0.3.0"
-date-released: "2026-09-18"
-doi: "10.5281/zenodo.20387255"
+version: "0.4.0"
+date-released: "2026-09-29"
+doi: "10.5281/zenodo.20387254"
 license: MIT
 repository-code: "https://github.com/zerotonin/reRandomStats"
 url: "https://zerotonin.github.io/reRandomStats/"
 identifiers:
   - type: doi
+    value: "10.5281/zenodo.20387254"
+    description: "Zenodo concept DOI, all versions of reRandomStats (resolves to the latest)"
+  - type: doi
     value: "10.5281/zenodo.22885906"
+    description: "Zenodo archive of reRandomStats v0.3.0"
+  - type: doi
+    value: "10.5281/zenodo.20387255"
     description: "Zenodo archive of reRandomStats v0.2.0"
 keywords:
   - statistics
@@ -32,6 +38,8 @@ keywords:
   - Davies test
   - Hill equation
   - breakpoint detection
+  - partially paired data
+  - paired permutation test
 authors:
   - given-names: "Bart R.H."
     family-names: Geurten
@@ -57,4 +65,8 @@ abstract: >-
   fit reporting the Sebaugh-McCray lower bend.  All three new
   submodules carry verbatim numerical ports from the DigiMuh and
   ThermoStrife pipelines plus a per-subject iterator pickle-safe for
-  ProcessPoolExecutor parallelism.
+  ProcessPoolExecutor parallelism.  v0.3.0 makes the broken-stick fit a
+  continuous segmented regression.  v0.4.0 adds paired_resampling, a
+  group-level resampling test for groups that share some of their
+  subjects, with pairwise multi-group comparisons and multiplicity
+  correction.
