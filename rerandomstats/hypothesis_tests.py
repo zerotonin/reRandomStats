@@ -48,17 +48,17 @@ class HypothesisTests:
 
     Supported *func* values:
 
-    ============== ======================================================
-    Name           Description
-    ============== ======================================================
-    MannWhitneyU   Non-parametric comparison of two independent groups.
-    KruskalWallis  Non-parametric comparison (>2 groups supported).
-    ChiSquare      Test for independence on frequency data.
-    Kolmogorov     Two-sample Kolmogorov-Smirnov distribution test.
-    MoodMedian     Non-parametric median comparison.
+    =============== =====================================================
+    Name            Description
+    =============== =====================================================
+    MannWhitneyU    Non-parametric comparison of two independent groups.
+    KruskalWallis   Non-parametric comparison (>2 groups supported).
+    ChiSquare       Test for independence on frequency data.
+    Kolmogorov      Two-sample Kolmogorov-Smirnov distribution test.
+    MoodMedian      Non-parametric median comparison.
     WilcoxonRankSum Wilcoxon rank-sum (equivalent to Mann-Whitney).
-    IndependentT   Parametric t-test for independent samples.
-    ============== ======================================================
+    IndependentT    Parametric t-test for independent samples.
+    =============== =====================================================
 
     Args:
         data_a: First sample.

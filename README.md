@@ -5,7 +5,7 @@
 [![Release](https://github.com/zerotonin/rerandomstats/actions/workflows/release.yml/badge.svg)](https://github.com/zerotonin/rerandomstats/releases)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22885906.svg)](https://doi.org/10.5281/zenodo.22885906)
 ```
 ╔══════════════════════════════════════════════════════════════════╗
@@ -34,6 +34,10 @@ A comprehensive Python toolkit for **re-randomisation statistics**. The package 
 - **Case-crossover estimators** (`rerandomstats.case_crossover`) — time-stratified case-crossover conditional logit (Maclure 1991; Lee et al. 2023) with stratified-permutation backup, closed-form daylight-hours covariate, within-event temporal-contrast test (hot-day-vs-hot-week), and a Burke-2015 σ-rescaled effect translator for cross-study comparability. Promoted from ThermoStrife v0.1.1.
 - **Model comparison** (`rerandomstats.model_comparison`) — two-sample Wald z-test on independently-estimated coefficients (`wald_two_sample_beta`), nested-model likelihood-ratio test (`likelihood_ratio_test`), single-method correction (`correct_pvalues`) and array helper (`correct_pvalues_array`), and dual-method BH + Bonferroni report (`benjamini_hochberg`). **All four correction helpers route through one `statsmodels.stats.multitest.multipletests` call** — the package's shared-algorithmic-source invariant prevents drift between BH implementations.
 - **Dose-response and breakpoint analysis** (`rerandomstats.dose_response`) — broken-stick segmented regression with profile-RSS 95 % CI on the breakpoint (`broken_stick_fit`), the Davies (1987 / 2002) and Muggeo (2016) Pseudo-Score breakpoint-existence tests (`davies_test`, `pscore_test`), 4-parameter Hill / logistic fit with Sebaugh–McCray (2003) lower-bend point (`hill_fit`), and a per-subject iterator (`per_subject_segmented`) that applies any of the four fitters across a panel of subjects. Pickle-safe for `concurrent.futures.ProcessPoolExecutor` parallelism. Ported verbatim from the DigiMuh dairy-cow heat-stress pipeline.
+
+### New in v0.4.0 — groups that share subjects
+
+- **Partially paired resampling** (`rerandomstats.paired_resampling`) — `PartiallyPairedResamplingTest` compares two groups at group level (difference of means, medians or sums) when some subjects appear in both: a shared subject's two values are swapped together, unshared subjects are shuffled between the groups, so repeated subjects are not counted as independent. `MultiGroupPairedTest` runs all pairwise comparisons with multiple-testing correction and reports how many subjects were paired in each. The rearrangement scheme follows Einsporn & Habtzghi (2013, *J Data Sci* 11:767-779); the p-value follows Phipson & Smyth (2010).
 
 ## Installation
 
@@ -94,6 +98,51 @@ mgt = MultiGroupTest(
 results_df = mgt.main()
 print(results_df)
 ```
+
+### Groups that share subjects (v0.4.0)
+
+When the same subjects turn up in more than one group — animals followed
+over several seasons, patients before and after — shuffling every value
+freely treats correlated measurements as independent.  Pass the subject
+identifiers and the null distribution respects the pairing, while the
+question stays at group level.
+
+```python
+from rerandomstats import MultiGroupPairedTest
+
+# one value per subject and year; some subjects appear in several years
+values   = [75.1, 76.0, 74.2, 77.3, 76.8, 77.9, 75.0, 78.4, 79.1]
+years    = ['2021', '2021', '2021', '2022', '2022', '2022', '2023', '2023', '2023']
+subjects = ['cow1', 'cow2', 'cow3', 'cow1', 'cow2', 'cow4', 'cow3', 'cow4', 'cow5']
+
+table = MultiGroupPairedTest(
+    data=values,
+    group=years,
+    subject=subjects,
+    func='medianDiff',
+    combination_n=20_000,
+    correction_type='fdr_bh',
+    seed=1,
+).main()
+print(table[['groupA', 'groupB', 'n_paired', 'statistic', 'p value corrected']])
+```
+
+In each rearrangement a subject present in both groups swaps its two
+values with probability one half, and the subjects present in one group
+only are re-partitioned at random between the groups. This is the
+scheme of Einsporn & Habtzghi (2013). Their statistic weights a paired
+and an unpaired mean difference; the statistic here is the plain
+difference between the two groups, so say "rearrangement scheme of", not
+"test of", when you cite it.
+
+References for this test:
+
+- Einsporn RL, Habtzghi D (2013) Combining paired and two-sample data using a permutation test. *Journal of Data Science* 11(4):767–779. [doi:10.6339/JDS.2013.11(4).1164](https://doi.org/10.6339/JDS.2013.11(4).1164)
+- Phipson B, Smyth GK (2010) Permutation P-values should never be zero: calculating exact P-values when permutations are randomly drawn. *Statistical Applications in Genetics and Molecular Biology* 9(1). [doi:10.2202/1544-6115.1585](https://doi.org/10.2202/1544-6115.1585)
+- Benjamini Y, Hochberg Y (1995) Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society Series B* 57(1):289–300. [doi:10.1111/j.2517-6161.1995.tb02031.x](https://doi.org/10.1111/j.2517-6161.1995.tb02031.x)
+- Derrick B, White P (2022) Review of the partially overlapping samples framework: paired observations and independent observations in two samples. *The Quantitative Methods for Psychology* 18(1):55–65. [doi:10.20982/tqmp.18.1.p055](https://doi.org/10.20982/tqmp.18.1.p055)
+
+Related permutation approaches with other statistics: Amro & Pauly (2017, *J Stat Comput Simul* 87(6):1148–1159), Amro, Konietschke & Pauly (2019, *Stat Med* 38(17):3243–3255), Johnson & Richter (2022, *Comput Stat* 37(2):739–750).
 
 ### Fisher's exact test
 
@@ -265,20 +314,26 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 If you use this software in your research, please cite the **version
 you used**. Full metadata is in [`CITATION.cff`](CITATION.cff) and
-on the GitHub repo's "Cite this repository" button. The latest
-version DOI is:
+on the GitHub repo's "Cite this repository" button.
+
+The DOI below is the concept DOI: it covers all versions and always
+resolves to the latest one. Each release also has its own DOI, listed
+on the Zenodo record under "Versions" (v0.3.0:
+[10.5281/zenodo.22885906](https://doi.org/10.5281/zenodo.22885906),
+v0.2.0:
+[10.5281/zenodo.20387255](https://doi.org/10.5281/zenodo.20387255)).
 
 > Geurten, B. R. H. (2026). *reRandomStats: Re-randomisation
-> Statistics Toolkit* (Version 0.2.0) [Software]. Zenodo.
-> https://doi.org/10.5281/zenodo.20387255
+> Statistics Toolkit* (Version 0.4.0) [Software]. Zenodo.
+> https://doi.org/10.5281/zenodo.20387254
 
 ```bibtex
-@software{geurten_rerandomstats_v020,
+@software{geurten_rerandomstats,
   author    = {Geurten, Bart R. H.},
   title     = {{reRandomStats}: Re-randomisation Statistics Toolkit},
   year      = {2026},
-  version   = {0.2.0},
-  doi       = {10.5281/zenodo.20387255},
+  version   = {0.4.0},
+  doi       = {10.5281/zenodo.20387254},
   url       = {https://github.com/zerotonin/reRandomStats},
   license   = {MIT},
 }

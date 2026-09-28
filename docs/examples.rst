@@ -41,6 +41,78 @@ testing using the Benjamini-Hochberg procedure:
    result = mgt.main()
    print(result.to_string(index=False))
 
+Groups That Share Subjects
+--------------------------
+
+When the same subjects appear in more than one group — a herd followed
+over several summers, a cohort before and after — the two values of a
+repeat subject are correlated, and shuffling every value freely between
+the groups is not a valid null distribution.  Pass the subject
+identifiers: the question stays at group level (here, the difference of
+the two medians), while repeat subjects are kept paired.
+
+.. code-block:: python
+
+   import numpy as np
+   from rerandomstats import MultiGroupPairedTest
+
+   rng = np.random.default_rng(1)
+   level = rng.normal(75, 3, 40)                  # each cow's own level
+
+   values, years, cows = [], [], []
+   for year, shift in (('2021', 0.0), ('2022', 0.0), ('2023', 1.5)):
+       # 40 cows present every year ...
+       values += list(level + shift + rng.normal(0, 0.5, 40))
+       years  += [year] * 40
+       cows   += [f'cow{i}' for i in range(40)]
+       # ... and 15 cows seen in this year only
+       values += list(rng.normal(75 + shift, 3, 15))
+       years  += [year] * 15
+       cows   += [f'{year}-only{i}' for i in range(15)]
+
+   table = MultiGroupPairedTest(
+       data=values, group=years, subject=cows,
+       func='medianDiff', combination_n=20_000,
+       correction_type='fdr_bh', seed=1,
+   ).main()
+   print(table[['groupA', 'groupB', 'n_paired', 'n_only_A', 'n_only_B',
+                'statistic', 'p value corrected', 'sig. level']]
+         .to_string(index=False))
+
+For a single comparison use ``PartiallyPairedResamplingTest`` with
+``data_a``, ``data_b``, ``subject_a`` and ``subject_b``.
+
+In each rearrangement a cow present in both years swaps her two values
+with probability one half, and the cows present in one year only are
+re-partitioned at random between the two years.  This is the scheme of
+Einsporn & Habtzghi (2013).  Their statistic weights a paired and an
+unpaired mean difference; the statistic here is the plain difference
+between the two groups.
+
+References:
+
+- Einsporn RL, Habtzghi D (2013) Combining paired and two-sample data
+  using a permutation test.  *Journal of Data Science* 11(4):767–779.
+  `doi:10.6339/JDS.2013.11(4).1164 <https://doi.org/10.6339/JDS.2013.11(4).1164>`_
+- Phipson B, Smyth GK (2010) Permutation P-values should never be zero:
+  calculating exact P-values when permutations are randomly drawn.
+  *Statistical Applications in Genetics and Molecular Biology* 9(1).
+  `doi:10.2202/1544-6115.1585 <https://doi.org/10.2202/1544-6115.1585>`_
+- Benjamini Y, Hochberg Y (1995) Controlling the false discovery rate: a
+  practical and powerful approach to multiple testing.  *Journal of the
+  Royal Statistical Society Series B* 57(1):289–300.
+  `doi:10.1111/j.2517-6161.1995.tb02031.x <https://doi.org/10.1111/j.2517-6161.1995.tb02031.x>`_
+- Derrick B, White P (2022) Review of the partially overlapping samples
+  framework: paired observations and independent observations in two
+  samples.  *The Quantitative Methods for Psychology* 18(1):55–65.
+  `doi:10.20982/tqmp.18.1.p055 <https://doi.org/10.20982/tqmp.18.1.p055>`_
+
+Related permutation approaches with other statistics: Amro & Pauly
+(2017, *Journal of Statistical Computation and Simulation*
+87(6):1148–1159), Amro, Konietschke & Pauly (2019, *Statistics in
+Medicine* 38(17):3243–3255) and Johnson & Richter (2022, *Computational
+Statistics* 37(2):739–750).
+
 Fisher's Exact Test
 -------------------
 

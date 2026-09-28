@@ -65,6 +65,10 @@ from rerandomstats.model_comparison import (
     wald_two_sample_beta,
 )
 from rerandomstats.multi_group_test import MultiGroupTest
+from rerandomstats.paired_resampling import (
+    MultiGroupPairedTest,
+    PartiallyPairedResamplingTest,
+)
 from rerandomstats.pretty_table import write_pretty_table
 from rerandomstats.resample_n_of_k import GetNofK
 
@@ -75,6 +79,8 @@ __all__ = [
     "BinomialStats",
     "MultipleBinomialTests",
     "MultiGroupTest",
+    "PartiallyPairedResamplingTest",
+    "MultiGroupPairedTest",
     "GetNofK",
     "DataIO",
     "write_pretty_table",
