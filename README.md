@@ -5,9 +5,8 @@
 [![Release](https://github.com/zerotonin/rerandomstats/actions/workflows/release.yml/badge.svg)](https://github.com/zerotonin/rerandomstats/releases)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20387254.svg)](https://doi.org/10.5281/zenodo.20387254)
-
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22885906.svg)](https://doi.org/10.5281/zenodo.22885906)
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║  reRandomStats                                                   ║
