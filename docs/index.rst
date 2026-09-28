@@ -59,6 +59,17 @@ New in v0.2.0 — three submodules:
   and a per-subject iterator that applies any of the four to a panel
   of subjects (pickle-safe for ``concurrent.futures.ProcessPoolExecutor``)
 
+New in v0.4.0 — groups that share subjects:
+
+- **paired_resampling** — ``PartiallyPairedResamplingTest`` compares two
+  groups at group level when some subjects are in both, with a null
+  distribution in which a shared subject swaps its two values together
+  and unshared subjects are shuffled between the groups (rearrangement
+  scheme of Einsporn & Habtzghi 2013; p-value after Phipson & Smyth
+  2010).  ``MultiGroupPairedTest`` runs all pairwise comparisons with
+  multiplicity correction (Benjamini & Hochberg 1995 by default).  See
+  the Examples page for a worked case and the references.
+
 Quick Start
 -----------
 

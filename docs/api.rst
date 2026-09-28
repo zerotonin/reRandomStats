@@ -41,6 +41,27 @@ Multi-Group Testing
    :undoc-members:
    :show-inheritance:
 
+Resampling for Partially Paired Groups (v0.4.0)
+-----------------------------------------------
+
+Group-level resampling test for two groups that share some of their
+subjects, and its pairwise multi-group counterpart with multiplicity
+correction.  The statistic is the difference of the group means,
+medians or sums; the null distribution swaps the two values of a shared
+subject together and shuffles unshared subjects between the groups.
+
+The rearrangement scheme is that of Einsporn & Habtzghi (2013); the
+statistic is not theirs (they weight a paired and an unpaired mean
+difference), it is the plain difference between the two groups.  The
+p-value is computed as in Phipson & Smyth (2010), and the default
+multiplicity correction is that of Benjamini & Hochberg (1995).  Full
+references are given in the module documentation below.
+
+.. automodule:: rerandomstats.paired_resampling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Case-Crossover Estimators (v0.2.0)
 ----------------------------------
 
